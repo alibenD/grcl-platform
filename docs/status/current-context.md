@@ -35,6 +35,7 @@ multi-repository orchestration, and generated artifacts need a stable workspace-
 - Code implementation is paused.
 - Module skeleton implementation requires explicit user confirmation.
 - Runtime capability exchange is a design decision, not an implemented runtime feature.
+- Active goal execution is tracked in `docs/status/goal-execution-queue.md`.
 - Architecture design, ADR writing, and task planning should use GPT-5.5 high effort when
   available.
 - Future implementation tasks should use implementation subagents plus independent audit subagents
@@ -92,18 +93,19 @@ candidate execution plan and must not be implemented until explicitly accepted.
 - [Runtime Capability Schema](../architecture/runtime-capability-schema.md)
 - [MCU Runtime Profiles](../architecture/mcu-runtime-profiles.md)
 - [Development Environment](../architecture/development-environment.md)
+- [Container Workspace Strategy](../architecture/container-workspace-strategy.md)
+- [Conformance And CI Strategy](../architecture/conformance-and-ci-strategy.md)
 - [Agentic Delivery Governance](../architecture/agentic-delivery-governance.md)
 - [Review And Verification Governance](../architecture/review-and-verification-governance.md)
 - [Dependency Analysis](../architecture/dependency-analysis.md)
 - [Agentic Delivery Templates](../templates/agentic-delivery/README.md)
+- [Goal Execution Queue](goal-execution-queue.md)
 
 ## Open Questions
 
 - Decide when to accept or revise the module skeleton plan.
 - Decide when to create the first `grcl-c` module skeleton.
 - Decide when and how to migrate, mirror, or leave external the current `grcl` C++/ROS2 prototype.
-- Decide the first Docker image boundary for Ubuntu native, ROS2, and future MCU cross-build
-  validation.
 
 ## Do Not Do Yet
 

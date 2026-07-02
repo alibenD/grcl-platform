@@ -5,6 +5,7 @@ This directory contains platform-level architecture, ADRs, diagrams, and impleme
 ## Status
 
 - [Current Context](status/current-context.md)
+- [Goal Execution Queue](status/goal-execution-queue.md)
 - [Workspace Bootstrap](status/workspace-bootstrap.md)
 
 ## Architecture
@@ -20,6 +21,8 @@ This directory contains platform-level architecture, ADRs, diagrams, and impleme
 - [Backend SPI Contract](architecture/backend-spi-contract.md)
 - [Language SDK Strategy](architecture/language-sdk-strategy.md)
 - [Development Environment](architecture/development-environment.md)
+- [Container Workspace Strategy](architecture/container-workspace-strategy.md)
+- [Conformance And CI Strategy](architecture/conformance-and-ci-strategy.md)
 - [Agentic Delivery Governance](architecture/agentic-delivery-governance.md)
 - [Review And Verification Governance](architecture/review-and-verification-governance.md)
 - [SDK Platform Governance](architecture/sdk-platform-governance.md)

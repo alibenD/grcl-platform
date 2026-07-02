@@ -29,6 +29,9 @@ Planned images:
 - `mcu-cross`
 - `docs-ci`
 
+Detailed container boundaries are defined in
+[Container Workspace Strategy](container-workspace-strategy.md).
+
 Planned scripts:
 
 - `scripts/dev-shell.sh`
@@ -133,6 +136,9 @@ topology obvious.
 | runtime capability schema tests | Ubuntu container |
 | MCU profile static checks | MCU cross image |
 | conformance tests | CI matrix |
+
+Detailed conformance layers and CI stages are defined in
+[Conformance And CI Strategy](conformance-and-ci-strategy.md).
 
 ## Rule
 

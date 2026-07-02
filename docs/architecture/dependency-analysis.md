@@ -16,8 +16,9 @@ Repository topology
           -> MCU runtime profiles
             -> backend SPI
               -> language SDK strategy
-                -> conformance plan
-                  -> implementation tasks
+                -> conformance and CI strategy
+                  -> container workspace strategy
+                    -> implementation tasks
 ```
 
 ## Critical Dependencies
@@ -33,6 +34,7 @@ Repository topology
 | wire protocol | runtime hello, capability exchange, channel negotiation result |
 | SDK governance | manifest, permission, resource, audit, conformance policy |
 | Docker/CI | module topology, verification matrix, artifact root policy |
+| module skeleton execution | conformance and CI strategy, container workspace strategy, agentic delivery governance |
 
 ## Current Blockers
 
@@ -46,6 +48,10 @@ Repository topology
 - Docker/Ubuntu verification environment is not initialized in this repository.
 - Build artifact path policy exists as architecture documentation, but scripts enforcing
   `GRCL_PLATFORM_ARTIFACT_ROOT` do not exist yet.
+- Conformance and CI strategy exists as architecture documentation, but no schemas, fixtures,
+  scripts, or CI jobs exist yet.
+- Container workspace strategy exists as architecture documentation, but no Dockerfiles or
+  dev-shell scripts exist yet.
 - Current `github.com/alibenD/grcl` is still an external implementation repository, not migrated.
 
 ## Implementation Dependency Graph
@@ -59,7 +65,7 @@ Repository topology
 | MCU profile enforcement | profile schema and controlled storage | profile validators and static limits |
 | backend SPI | lifecycle and capability query | backend registration and dispatch tables |
 | language SDK wrappers | `grcl-c` lifecycle and node handles | C++/Python wrapper skeletons |
-| dev containers | module layout, verification matrix, artifact root policy | Dockerfiles and scripts |
+| dev containers | module layout, verification matrix, artifact root policy, container workspace strategy | Dockerfiles and scripts |
 | conformance suite | core contract and schemas | cross-module validation |
 
 ## Recommended Next Planning Sequence
@@ -71,8 +77,11 @@ Repository topology
 5. Define MCU runtime profile schema.
 6. Define backend SPI boundary.
 7. Define language SDK binding policies at file/API level.
-8. Define conformance and CI matrix.
-9. Only then implement module skeletons.
+8. Define conformance and CI matrix. Completed as
+   [Conformance And CI Strategy](conformance-and-ci-strategy.md).
+9. Define container workspace and Docker image boundaries. Completed as
+   [Container Workspace Strategy](container-workspace-strategy.md).
+10. Only then implement module skeletons.
 
 ## Implementation Plan Output
 

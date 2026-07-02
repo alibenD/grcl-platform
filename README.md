@@ -39,6 +39,7 @@ must create it on demand before writing outputs.
 ## Document Entry Points
 
 - [Current Context](docs/status/current-context.md)
+- [Goal Execution Queue](docs/status/goal-execution-queue.md)
 - [Workspace Bootstrap](docs/status/workspace-bootstrap.md)
 - [Architecture Overview](docs/architecture/system-overview.md)
 - [Repository Topology](docs/architecture/repository-topology.md)
@@ -52,6 +53,8 @@ must create it on demand before writing outputs.
 - [Backend SPI Contract](docs/architecture/backend-spi-contract.md)
 - [Language SDK Strategy](docs/architecture/language-sdk-strategy.md)
 - [Development Environment](docs/architecture/development-environment.md)
+- [Container Workspace Strategy](docs/architecture/container-workspace-strategy.md)
+- [Conformance And CI Strategy](docs/architecture/conformance-and-ci-strategy.md)
 - [Agentic Delivery Governance](docs/architecture/agentic-delivery-governance.md)
 - [Review And Verification Governance](docs/architecture/review-and-verification-governance.md)
 - [SDK Platform Governance](docs/architecture/sdk-platform-governance.md)
