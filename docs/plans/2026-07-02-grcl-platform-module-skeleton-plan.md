@@ -211,18 +211,42 @@ Add profile examples consistent with `docs/architecture/mcu-profile-schema.md`.
 ## Task 5: Add Development Environment Scaffolding
 
 **Files:**
+- Create: `scripts/env.sh`
 - Create: `scripts/test-docs.sh`
 - Create: `scripts/check-links.py`
 - Create: `docker/ubuntu-ros-humble/README.md`
 - Create: `docker/mcu-cross/README.md`
 
-- [ ] **Step 1: Add docs test script**
+- [ ] **Step 1: Add shared environment helper**
+
+`scripts/env.sh` must resolve the repository root and the artifact root without writing build
+outputs into the source tree:
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+GRCL_PLATFORM_REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+GRCL_PLATFORM_ARTIFACT_ROOT="${GRCL_PLATFORM_ARTIFACT_ROOT:-$(cd "$GRCL_PLATFORM_REPO_ROOT/.." && pwd)/.grcl-platform-artifacts}"
+
+export GRCL_PLATFORM_REPO_ROOT
+export GRCL_PLATFORM_ARTIFACT_ROOT
+```
+
+Expected default local artifact root when the repo is cloned at `/Users/aliben/Project/grcl-platform`:
+
+```text
+/Users/aliben/Project/.grcl-platform-artifacts
+```
+
+- [ ] **Step 2: Add docs test script**
 
 `scripts/test-docs.sh` must run:
 
 ```bash
 #!/usr/bin/env bash
 set -euo pipefail
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/env.sh"
 git diff --check
 python3 scripts/check-links.py
 rg -n "T[B]D|T[O]DO|fill[ ]in|implement[ ]later|place[ ]holder" README.md AGENTS.md docs docker scripts src tests manifests
@@ -230,14 +254,32 @@ rg -n "T[B]D|T[O]DO|fill[ ]in|implement[ ]later|place[ ]holder" README.md AGENTS
 
 The final `rg` command is expected to return no matches.
 
-- [ ] **Step 2: Add internal link checker**
+- [ ] **Step 3: Add internal link checker**
 
 `scripts/check-links.py` must check relative Markdown links and exit non-zero on missing files.
 
-- [ ] **Step 3: Add environment README files**
+- [ ] **Step 4: Add environment README files**
 
 Document that Docker images are not implemented yet, and that macOS is host/orchestration while
 Ubuntu containers are the ROS2 validation target.
+
+- [ ] **Step 5: Document artifact root policy**
+
+`docker/README.md` and `scripts/README.md` must state that build products go under
+`GRCL_PLATFORM_ARTIFACT_ROOT`, not repository-root `build/`, `install/`, or `log/`.
+
+- [ ] **Step 6: Add future build script requirements**
+
+Future `scripts/test-native.sh` and `scripts/test-ros2.sh` must pass explicit colcon bases:
+
+```bash
+--build-base "$GRCL_PLATFORM_ARTIFACT_ROOT/colcon/native/build"
+--install-base "$GRCL_PLATFORM_ARTIFACT_ROOT/colcon/native/install"
+--log-base "$GRCL_PLATFORM_ARTIFACT_ROOT/colcon/native/log"
+```
+
+ROS2 variants must use the `colcon/ros2/` subtree. CMake variants must use `cmake/<module>/<mode>`
+under the artifact root.
 
 ## Task 6: Verify And Commit
 

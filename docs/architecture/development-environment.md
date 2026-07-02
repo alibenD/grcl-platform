@@ -37,6 +37,74 @@ Planned scripts:
 - `scripts/test-ros2.sh`
 - `scripts/test-conformance.sh`
 
+## Build Artifact Policy
+
+`grcl-platform` is cloned directly under `/Users/aliben/Project/grcl-platform`, not as a
+`workspace/src` child. Build scripts must therefore avoid repository-root build products. The
+source repository is the source tree only.
+
+Default local artifact root:
+
+```text
+/Users/aliben/Project/.grcl-platform-artifacts
+```
+
+Portable default expression for scripts:
+
+```bash
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+GRCL_PLATFORM_ARTIFACT_ROOT="${GRCL_PLATFORM_ARTIFACT_ROOT:-$(cd "$REPO_ROOT/.." && pwd)/.grcl-platform-artifacts}"
+```
+
+Required artifact layout:
+
+```text
+$GRCL_PLATFORM_ARTIFACT_ROOT/
+  colcon/
+    native/
+      build/
+      install/
+      log/
+    ros2/
+      build/
+      install/
+      log/
+  cmake/
+    grcl-c/
+      debug/
+      release/
+  python/
+    venv/
+    wheels/
+    cache/
+  docs/
+    link-check/
+```
+
+Colcon commands must use explicit bases:
+
+```bash
+colcon build \
+  --build-base "$GRCL_PLATFORM_ARTIFACT_ROOT/colcon/native/build" \
+  --install-base "$GRCL_PLATFORM_ARTIFACT_ROOT/colcon/native/install" \
+  --log-base "$GRCL_PLATFORM_ARTIFACT_ROOT/colcon/native/log"
+```
+
+CMake commands must use explicit out-of-source build directories:
+
+```bash
+cmake -S "$REPO_ROOT/src/grcl-c" -B "$GRCL_PLATFORM_ARTIFACT_ROOT/cmake/grcl-c/debug"
+```
+
+CI must use a runner-local temp directory, for example:
+
+```bash
+GRCL_PLATFORM_ARTIFACT_ROOT="${RUNNER_TEMP:-/tmp}/grcl-platform-artifacts"
+```
+
+Repository-local `build/`, `install/`, and `log/` are ignored as a safety net, but their presence is
+considered accidental local pollution rather than the intended workflow.
+
 ## Verification Matrix
 
 | Check | Environment |
@@ -53,3 +121,5 @@ Planned scripts:
 Do not claim ROS2 runtime verification from macOS unless the command actually runs in a configured
 Ubuntu/ROS environment.
 
+Do not claim a build script is acceptable unless it writes all build products under
+`GRCL_PLATFORM_ARTIFACT_ROOT` or an explicitly provided equivalent out-of-source artifact root.

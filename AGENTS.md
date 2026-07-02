@@ -35,3 +35,15 @@ These rules are repository-local and define how agents should work in `grcl-plat
 - Do not mark a task completed without fresh verification evidence.
 - If verification cannot run locally, record the exact environmental blocker.
 
+## Build Artifact Rules
+
+- Do not run builds that write `build/`, `install/`, `log/`, virtual environments, wheels, or cache
+  directories into the repository root by default.
+- Local scripts must use an out-of-source artifact root. The default local artifact root is the
+  sibling directory `../.grcl-platform-artifacts` relative to this repository.
+- Scripts must allow `GRCL_PLATFORM_ARTIFACT_ROOT` to override the default artifact root.
+- Colcon commands must pass explicit `--build-base`, `--install-base`, and `--log-base` paths under
+  the artifact root.
+- CMake commands must use explicit `-B` build directories under the artifact root.
+- CI should use `$RUNNER_TEMP/grcl-platform-artifacts` or an equivalent runner-local temp
+  directory.

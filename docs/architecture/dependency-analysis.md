@@ -32,7 +32,7 @@ Repository topology
 | backend SPI | runtime host contract and capability query shape |
 | wire protocol | runtime hello, capability exchange, channel negotiation result |
 | SDK governance | manifest, permission, resource, audit, conformance policy |
-| Docker/CI | module topology and verification matrix |
+| Docker/CI | module topology, verification matrix, artifact root policy |
 
 ## Current Blockers
 
@@ -44,6 +44,8 @@ Repository topology
 - Runtime capability schema exists as architecture documentation, but no C structs, wire frames,
   or management API output exist yet.
 - Docker/Ubuntu verification environment is not initialized in this repository.
+- Build artifact path policy exists as architecture documentation, but scripts enforcing
+  `GRCL_PLATFORM_ARTIFACT_ROOT` do not exist yet.
 - Current `github.com/alibenD/grcl` is still an external implementation repository, not migrated.
 
 ## Implementation Dependency Graph
@@ -57,7 +59,7 @@ Repository topology
 | MCU profile enforcement | profile schema and controlled storage | profile validators and static limits |
 | backend SPI | lifecycle and capability query | backend registration and dispatch tables |
 | language SDK wrappers | `grcl-c` lifecycle and node handles | C++/Python wrapper skeletons |
-| dev containers | module layout and verification matrix | Dockerfiles and scripts |
+| dev containers | module layout, verification matrix, artifact root policy | Dockerfiles and scripts |
 | conformance suite | core contract and schemas | cross-module validation |
 
 ## Recommended Next Planning Sequence
