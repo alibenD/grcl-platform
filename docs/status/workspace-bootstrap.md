@@ -50,6 +50,15 @@ When starting a Codex session in this workspace:
 4. Read `src/grcl-platform/docs/status/current-context.md`.
 5. Read the active plan referenced by the current-context file before editing.
 
+Architecture design, ADR writing, and task planning should use GPT-5.5 high effort when available.
+Implementation-stage work must follow
+`src/grcl-platform/docs/architecture/agentic-delivery-governance.md`.
+
+The main agent manages the task queue. Implementation subagents receive file-based task briefs under
+`.local/agentic-runs/<plan-id>/<task-id>/`. After each implementation subagent completes, a separate
+independent audit subagent must compare the implementation against the task plan, architecture
+documents, changed files, and verification evidence before the main agent proceeds.
+
 Generated artifacts belong under `artifacts/`. The directory is generated on demand and may be
 absent or deleted.
 ```

@@ -6,6 +6,11 @@ This document defines how GRCL Platform uses delegated review, local audit, and 
 evidence. It exists to prevent a timed-out or skipped review from being treated as proof that a
 goal is complete.
 
+For implementation-stage work, this document is used together with
+[Agentic Delivery Governance](agentic-delivery-governance.md). The delivery governance defines the
+main-agent, implementation-subagent, and independent-audit-subagent workflow. This document defines
+how review evidence is evaluated and reported.
+
 ## Core Rule
 
 A delegated subagent review is useful evidence only when it returns a completed result that is
@@ -14,6 +19,12 @@ completion evidence.
 
 If delegated review does not complete, the main agent must perform an explicit substitute
 completion audit before claiming that the affected goal, plan, or milestone is complete.
+
+For implementation tasks, substitute audit is not a normal replacement for the required independent
+audit subagent. If the audit subagent fails to return, the main agent may run a local substitute
+audit only to determine whether the task is blocked or safe to re-dispatch. The main agent must not
+advance to the next implementation task unless an independent audit has completed, or the user
+explicitly approves bypassing the gate for that task.
 
 ## Delegated Review States
 
@@ -72,6 +83,8 @@ Before a goal or plan can be called complete:
 - documentation hygiene checks must pass.
 - any delegated review dependency must either have completed and been inspected, or must be
   replaced by a documented substitute audit.
+- implementation tasks must have a completed independent audit report unless the user explicitly
+  approved a bypass.
 
 If these conditions are not met, the work is incomplete even if most files look reasonable.
 

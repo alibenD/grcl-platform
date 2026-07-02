@@ -52,9 +52,11 @@ must create it on demand before writing outputs.
 - [Backend SPI Contract](docs/architecture/backend-spi-contract.md)
 - [Language SDK Strategy](docs/architecture/language-sdk-strategy.md)
 - [Development Environment](docs/architecture/development-environment.md)
+- [Agentic Delivery Governance](docs/architecture/agentic-delivery-governance.md)
 - [Review And Verification Governance](docs/architecture/review-and-verification-governance.md)
 - [SDK Platform Governance](docs/architecture/sdk-platform-governance.md)
 - [Dependency Analysis](docs/architecture/dependency-analysis.md)
+- [Agentic Delivery Templates](docs/templates/agentic-delivery/README.md)
 - [Task Plan](docs/plans/2026-07-02-grcl-platform-architecture-plan.md)
 - [Module Skeleton Plan](docs/plans/2026-07-02-grcl-platform-module-skeleton-plan.md)
 

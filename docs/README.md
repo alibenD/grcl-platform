@@ -20,9 +20,14 @@ This directory contains platform-level architecture, ADRs, diagrams, and impleme
 - [Backend SPI Contract](architecture/backend-spi-contract.md)
 - [Language SDK Strategy](architecture/language-sdk-strategy.md)
 - [Development Environment](architecture/development-environment.md)
+- [Agentic Delivery Governance](architecture/agentic-delivery-governance.md)
 - [Review And Verification Governance](architecture/review-and-verification-governance.md)
 - [SDK Platform Governance](architecture/sdk-platform-governance.md)
 - [Dependency Analysis](architecture/dependency-analysis.md)
+
+## Templates
+
+- [Agentic Delivery Templates](templates/agentic-delivery/README.md)
 
 ## ADRs
 

@@ -35,6 +35,10 @@ multi-repository orchestration, and generated artifacts need a stable workspace-
 - Code implementation is paused.
 - Module skeleton implementation requires explicit user confirmation.
 - Runtime capability exchange is a design decision, not an implemented runtime feature.
+- Architecture design, ADR writing, and task planning should use GPT-5.5 high effort when
+  available.
+- Future implementation tasks should use implementation subagents plus independent audit subagents
+  according to the agentic delivery governance document.
 
 ## Key Decisions
 
@@ -51,6 +55,10 @@ multi-repository orchestration, and generated artifacts need a stable workspace-
 - ROS2 must not be described as exposing an rmw-level runtime middleware graph. ROS2 exposes a
   node graph to users while DDS/RTPS implementations provide lower-level participant and endpoint
   discovery.
+- Workspace `artifacts/` is generated on demand and is not a pre-created or repository-owned
+  directory.
+- Implementation-stage work requires file-based task exchange plus an independent audit subagent
+  gate before the main agent may proceed to the next task.
 
 ## Workspace Layout
 
@@ -84,13 +92,13 @@ candidate execution plan and must not be implemented until explicitly accepted.
 - [Runtime Capability Schema](../architecture/runtime-capability-schema.md)
 - [MCU Runtime Profiles](../architecture/mcu-runtime-profiles.md)
 - [Development Environment](../architecture/development-environment.md)
+- [Agentic Delivery Governance](../architecture/agentic-delivery-governance.md)
 - [Review And Verification Governance](../architecture/review-and-verification-governance.md)
 - [Dependency Analysis](../architecture/dependency-analysis.md)
+- [Agentic Delivery Templates](../templates/agentic-delivery/README.md)
 
 ## Open Questions
 
-- Confirm whether `artifacts/` should always be treated as on-demand generated state rather than a
-  pre-created workspace directory.
 - Decide when to accept or revise the module skeleton plan.
 - Decide when to create the first `grcl-c` module skeleton.
 - Decide when and how to migrate, mirror, or leave external the current `grcl` C++/ROS2 prototype.
@@ -101,6 +109,8 @@ candidate execution plan and must not be implemented until explicitly accepted.
 
 - Do not implement runtime capability exchange.
 - Do not create runtime, SDK, backend, or build-system code without an accepted implementation plan.
+- Do not execute implementation tasks without a file-based task brief and an independent audit
+  subagent gate unless the user explicitly approves a bypass.
 - Do not migrate `github.com/alibenD/grcl` into this repository without explicit confirmation.
 - Do not assume macOS verifies ROS2 runtime behavior.
 - Do not treat session history, subagent timeout, or unverified delegated review as completion

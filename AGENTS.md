@@ -47,8 +47,30 @@ These rules are repository-local and define how agents should work in `grcl-plat
 
 - Every non-trivial implementation effort must have a task plan in `docs/plans/`.
 - A task plan must include dependencies, sequencing, validation, and explicit user review points.
+- Architecture design, ADR writing, and task planning should use the highest-reasoning available
+  model policy, with GPT-5.5 high effort as the preferred baseline when available.
 - Do not mark a task completed without fresh verification evidence.
 - If verification cannot run locally, record the exact environmental blocker.
+
+## Agentic Delivery Rules
+
+- Follow [Agentic Delivery Governance](docs/architecture/agentic-delivery-governance.md) for
+  implementation-stage task execution.
+- The main agent owns task queue management, context curation, subagent dispatch, audit gates, and
+  final status updates.
+- Implementation tasks should be dispatched to isolated subagents with self-contained task briefs.
+- Implementation subagents may use GPT-5.4 medium effort by default for narrow tasks, but the main
+  agent must escalate model capability for ABI, protocol, concurrency, cross-module, safety, or
+  architecture-sensitive work.
+- Every implementation subagent result must be followed by an independent audit subagent that
+  compares the implementation against the task plan, architecture documents, changed files, and
+  verification evidence.
+- The main agent must not proceed to the next implementation task until the independent audit
+  returns `accepted` or an explicitly justified `accepted_with_notes`.
+- If audit returns `rejected`, the main agent must create a narrow fix task and repeat the
+  implementation and audit loop.
+- Use file-based task exchange under `.local/agentic-runs/<plan-id>/<task-id>/`; do not rely on
+  chat history alone for subagent context.
 
 ## Delegated Review And Completion Audit Rules
 
