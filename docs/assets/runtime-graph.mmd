@@ -1,0 +1,29 @@
+flowchart TD
+    RP["RuntimeParticipant"]
+    Cap["RuntimeCapabilityRecord"]
+    Avail["RuntimeAvailabilityRecord"]
+    Health["RuntimeHealthRecord"]
+    Session["RuntimeSession"]
+    Route["RuntimeRoute"]
+    Projection["GraphProjectionMode"]
+    Result["CapabilityNegotiationResult"]
+    Node["Node"]
+    Endpoint["Endpoint"]
+    Channel["Channel"]
+    Type["Type"]
+    QoS["QoS"]
+
+    RP --> Cap
+    RP --> Avail
+    RP --> Health
+    RP --> Node
+    Node --> Endpoint
+    Endpoint --> Type
+    Endpoint --> QoS
+    Session --> RP
+    Session --> Route
+    Session --> Projection
+    Session --> Result
+    Session --> Channel
+    Channel --> Endpoint
+

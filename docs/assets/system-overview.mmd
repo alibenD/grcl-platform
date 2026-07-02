@@ -1,0 +1,23 @@
+flowchart TD
+    App["Applications / Robot Features / Third-Party SDKs"]
+    SDK["Language SDKs: grcl-cpp / grcl-py / grcl-rs / grcl-c"]
+    Core["grcl-c Core Contract"]
+    SPI["Backend SPI and Runtime Host Contracts"]
+    Native["Native Runtime"]
+    ROS2["ROS2 Adapter Runtime"]
+    MCU["MCU / RTOS Runtime Profiles"]
+    Gateway["Gateway Runtime"]
+    Sim["Simulator Runtime"]
+    Tools["Tools / CLI / Diagnostics / Conformance"]
+
+    App --> SDK
+    SDK --> Core
+    Core --> SPI
+    SPI --> Native
+    SPI --> ROS2
+    SPI --> MCU
+    SPI --> Gateway
+    SPI --> Sim
+    Tools --> Core
+    Tools --> SPI
+

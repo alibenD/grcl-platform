@@ -1,0 +1,33 @@
+flowchart TD
+    Platform["grcl-platform"]
+    Docs["docs: architecture / ADR / plans"]
+    Core["src/grcl-c"]
+    Cpp["src/grcl-cpp"]
+    Py["src/grcl-py"]
+    IDL["src/grcl-idl"]
+    Native["src/grcl-runtime-native"]
+    ROS2["src/grcl-runtime-ros2"]
+    MCU["src/grcl-runtime-mcu"]
+    Gateway["src/grcl-gateway"]
+    Tools["src/grcl-tools"]
+    Tests["tests: conformance / integration"]
+
+    Platform --> Docs
+    Platform --> Core
+    Platform --> Cpp
+    Platform --> Py
+    Platform --> IDL
+    Platform --> Native
+    Platform --> ROS2
+    Platform --> MCU
+    Platform --> Gateway
+    Platform --> Tools
+    Platform --> Tests
+    Cpp --> Core
+    Py --> Core
+    Native --> Core
+    ROS2 --> Core
+    MCU --> Core
+    Gateway --> Core
+    Tools --> Core
+
