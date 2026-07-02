@@ -39,21 +39,30 @@ Planned scripts:
 
 ## Build Artifact Policy
 
-`grcl-platform` is cloned directly under `/Users/aliben/Project/grcl-platform`, not as a
-`workspace/src` child. Build scripts must therefore avoid repository-root build products. The
-source repository is the source tree only.
+`grcl-platform` is used through an explicit workspace layout:
+
+```text
+grcl-platform_ws/
+  artifacts/
+  src/
+    grcl-platform/
+```
+
+The repository is the source tree only. Build scripts must write generated products to the
+workspace-local `artifacts/` directory unless `GRCL_PLATFORM_ARTIFACT_ROOT` overrides it.
 
 Default local artifact root:
 
 ```text
-/Users/aliben/Project/.grcl-platform-artifacts
+/Users/aliben/Project/grcl-platform_ws/artifacts
 ```
 
 Portable default expression for scripts:
 
 ```bash
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-GRCL_PLATFORM_ARTIFACT_ROOT="${GRCL_PLATFORM_ARTIFACT_ROOT:-$(cd "$REPO_ROOT/.." && pwd)/.grcl-platform-artifacts}"
+WORKSPACE_ROOT="$(cd "$REPO_ROOT/../.." && pwd)"
+GRCL_PLATFORM_ARTIFACT_ROOT="${GRCL_PLATFORM_ARTIFACT_ROOT:-$WORKSPACE_ROOT/artifacts}"
 ```
 
 Required artifact layout:
@@ -103,7 +112,9 @@ GRCL_PLATFORM_ARTIFACT_ROOT="${RUNNER_TEMP:-/tmp}/grcl-platform-artifacts"
 ```
 
 Repository-local `build/`, `install/`, and `log/` are ignored as a safety net, but their presence is
-considered accidental local pollution rather than the intended workflow.
+considered accidental local pollution rather than the intended workflow. The visible workspace
+artifact path is preferred over hidden sibling directories so a fresh checkout makes the build
+topology obvious.
 
 ## Verification Matrix
 

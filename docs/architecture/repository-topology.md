@@ -7,6 +7,25 @@ GRCL uses `grcl-platform` as the top-level modular monorepo during architecture 
 The current `github.com/alibenD/grcl` repository remains an implementation repository and is
 treated as a future `grcl-cpp` candidate.
 
+## Local Workspace Topology
+
+Local development should distinguish the repository root from the workspace root:
+
+```text
+grcl-platform_ws/
+  artifacts/
+  src/
+    grcl-platform/
+```
+
+The repository root is `grcl-platform_ws/src/grcl-platform`. The workspace root is
+`grcl-platform_ws`. Build, test, coverage, generated files, logs, and other non-source artifacts
+must be written to `grcl-platform_ws/artifacts` by default, or to
+`GRCL_PLATFORM_ARTIFACT_ROOT` when that environment variable is explicitly set.
+
+This mirrors the ROS-style workspace separation that the project expects for cross-repository
+development, while avoiding in-repository build pollution.
+
 ## Intended Module Topology
 
 ```text
@@ -47,4 +66,3 @@ grcl-platform/
 ## Diagram
 
 See [repository-topology.mmd](../assets/repository-topology.mmd).
-

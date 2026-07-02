@@ -3,7 +3,7 @@ build/
 install/
 log/
 .local/
-.grcl-platform-artifacts/
+artifacts/
 .cache/
 .pytest_cache/
 __pycache__/

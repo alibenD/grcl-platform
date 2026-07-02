@@ -15,6 +15,22 @@ and is treated here as the future `grcl-cpp` module candidate, not as the whole 
 - Primary current output: architecture documents and implementation planning
 - Implementation requires user confirmation after reviewing the task plan
 
+## Recommended Local Layout
+
+Use an explicit workspace layout for local development:
+
+```text
+grcl-platform_ws/
+  artifacts/
+  src/
+    grcl-platform/
+```
+
+Work from `grcl-platform_ws/src/grcl-platform` for repository edits. Build and test scripts must
+write generated files under `grcl-platform_ws/artifacts` by default, unless
+`GRCL_PLATFORM_ARTIFACT_ROOT` is set explicitly. This keeps generated artifacts outside the Git
+repository while making the artifact location visible at the workspace level.
+
 ## Document Entry Points
 
 - [Architecture Overview](docs/architecture/system-overview.md)
