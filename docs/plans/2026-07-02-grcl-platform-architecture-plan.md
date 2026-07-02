@@ -4,8 +4,8 @@
 > (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use
 > checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Establish the GRCL Platform architecture baseline, then implement modules only after user
-review confirms the architecture and dependency plan.
+**Goal:** Establish the GRCL Platform architecture baseline and provide a reviewable implementation
+roadmap; module implementation starts only after user confirmation.
 
 **Architecture:** Use `grcl-platform` as a modular monorepo during architecture stabilization.
 Keep `grcl-c` as the core contract, keep language SDKs over `grcl-c`, and require runtime
@@ -45,82 +45,86 @@ set.
 If the user prefers multi-repo or a different module split, update `docs/adr/ADR-0001-*` and
 `docs/architecture/repository-topology.md` before any implementation work.
 
-## Task 2: Complete GRCL-C Contract Design
+## Task 2: Review GRCL-C Contract Design
 
 **Files:**
-- Modify: `docs/architecture/grcl-c-contract-boundary.md`
-- Create: `docs/architecture/grcl-c-api-shape.md`
-- Create: `docs/adr/ADR-0005-grcl-c-handle-and-lifecycle-contract.md`
+- Read: `docs/architecture/grcl-c-contract-boundary.md`
+- Read: `docs/architecture/grcl-c-api-shape.md`
+- Read: `docs/adr/ADR-0005-grcl-c-handle-and-lifecycle-contract.md`
 
-- [ ] **Step 1: Define the first handle set**
+- [ ] **Step 1: Validate the first handle set**
 
-Define the initial `grcl-c` handle set for runtime, node, endpoint, publisher, subscription,
-executor, allocator, storage, type support, backend, and transport.
+Confirm that the initial `grcl-c` handle set covers runtime, node, endpoint, publisher,
+subscription, executor, allocator, storage, type support, backend, and transport.
 
-- [ ] **Step 2: Define lifecycle and ownership**
+- [ ] **Step 2: Validate lifecycle and ownership**
 
-Define create/destroy, init/fini, controlled-storage, and ownership rules.
+Confirm create/destroy, init-with-storage, controlled-storage, and ownership rules are sufficient
+for first implementation.
 
-- [ ] **Step 3: Define error and result model**
+- [ ] **Step 3: Validate error and result model**
 
-Define result code categories and diagnostic propagation.
+Confirm result categories separate caller, resource, compatibility, runtime, and graph/session
+errors.
 
-- [ ] **Step 4: Define ABI versioning**
+- [ ] **Step 4: Validate ABI versioning**
 
-Define options struct size/version rules and compatibility expectations.
+Confirm struct-size and versioning rules are acceptable before writing headers.
 
-## Task 3: Complete Runtime Capability Schema
-
-**Files:**
-- Modify: `docs/architecture/runtime-capability-graph.md`
-- Create: `docs/architecture/runtime-capability-schema.md`
-- Create: `docs/adr/ADR-0006-runtime-capability-schema.md`
-
-- [ ] **Step 1: Define `RuntimeCapabilityRecord`**
-
-Define protocol, transport, QoS, encoding, memory, executor, graph, diagnostics, and security
-capability sections.
-
-- [ ] **Step 2: Define `RuntimeAvailabilityRecord`**
-
-Define resource availability fields that can change at runtime.
-
-- [ ] **Step 3: Define `RuntimeHealthRecord`**
-
-Define lease, heartbeat, degraded, reconnecting, recovered, and faulted states.
-
-- [ ] **Step 4: Define negotiation result schema**
-
-Define `accepted`, `degraded_accepted`, and `rejected_incompatible` payloads.
-
-## Task 4: Complete MCU Runtime Profile Design
+## Task 3: Review Runtime Capability Schema
 
 **Files:**
-- Modify: `docs/architecture/mcu-runtime-profiles.md`
-- Create: `docs/architecture/mcu-profile-schema.md`
-- Create: `docs/adr/ADR-0007-mcu-runtime-profile-contract.md`
+- Read: `docs/architecture/runtime-capability-graph.md`
+- Read: `docs/architecture/runtime-capability-schema.md`
+- Read: `docs/adr/ADR-0006-runtime-capability-schema.md`
 
-- [ ] **Step 1: Define `baremetal-min`**
+- [ ] **Step 1: Validate `RuntimeCapabilityRecord`**
+
+Confirm protocol, transport, QoS, encoding, memory, executor, graph, diagnostics, and security
+sections are sufficient for cross-runtime negotiation.
+
+- [ ] **Step 2: Validate `RuntimeAvailabilityRecord`**
+
+Confirm availability fields stay separate from stable capability fields.
+
+- [ ] **Step 3: Validate `RuntimeHealthRecord`**
+
+Confirm health states cover lease, heartbeat, degraded, reconnecting, recovered, and faulted
+behavior.
+
+- [ ] **Step 4: Validate negotiation result schema**
+
+Confirm `accepted`, `degraded_accepted`, and `rejected_incompatible` payloads expose effective
+capability, reasons, downgrade suggestion, and diagnostic code.
+
+## Task 4: Review MCU Runtime Profile Design
+
+**Files:**
+- Read: `docs/architecture/mcu-runtime-profiles.md`
+- Read: `docs/architecture/mcu-profile-schema.md`
+- Read: `docs/adr/ADR-0007-mcu-runtime-profile-contract.md`
+
+- [ ] **Step 1: Validate `baremetal-min`**
 
 Define required graph, memory, transport, executor, diagnostics, and unsupported capabilities.
 
-- [ ] **Step 2: Define `rtos-basic`**
+- [ ] **Step 2: Validate `rtos-basic`**
 
 Define FreeRTOS-like requirements and extension points.
 
-- [ ] **Step 3: Define `rtos-posix-lite`**
+- [ ] **Step 3: Validate `rtos-posix-lite`**
 
 Define NuttX/Zephyr-like POSIX subset expectations.
 
-- [ ] **Step 4: Define Linux/gateway/sim profiles**
+- [ ] **Step 4: Validate Linux/gateway/sim profiles**
 
 Define `linux-full`, `gateway-full`, and `sim-full` obligations.
 
-## Task 5: Complete Backend SPI Design
+## Task 5: Review Backend SPI Design
 
 **Files:**
-- Create: `docs/architecture/backend-spi-contract.md`
-- Create: `docs/adr/ADR-0008-backend-spi-contract.md`
+- Read: `docs/architecture/backend-spi-contract.md`
+- Read: `docs/adr/ADR-0008-backend-spi-contract.md`
 
 - [ ] **Step 1: Define backend responsibilities**
 
@@ -135,11 +139,11 @@ Define how backends expose supported subsets to `grcl-c`.
 Define how ROS2 adapter backend projects GRCL runtime participant state without assuming ROS2
 already exposes it.
 
-## Task 6: Complete Language SDK Design
+## Task 6: Review Language SDK Design
 
 **Files:**
-- Create: `docs/architecture/language-sdk-strategy.md`
-- Create: `docs/adr/ADR-0009-language-sdk-binding-contract.md`
+- Read: `docs/architecture/language-sdk-strategy.md`
+- Read: `docs/adr/ADR-0009-language-sdk-binding-contract.md`
 
 - [ ] **Step 1: Define C++ SDK wrapper policy**
 
@@ -153,12 +157,12 @@ Define direct C binding or private native shim over `grcl-c`, not public `grcl-c
 
 Define test scenarios that compare C, C++, and Python behavior through the same core contract.
 
-## Task 7: Complete Development Environment Design
+## Task 7: Review Development Environment Design
 
 **Files:**
-- Create: `docs/architecture/development-environment.md`
-- Create: `docker/README.md`
-- Create: `scripts/README.md`
+- Read: `docs/architecture/development-environment.md`
+- Read: `docker/README.md`
+- Read: `scripts/README.md`
 
 - [ ] **Step 1: Define macOS host role**
 
@@ -175,10 +179,10 @@ Define native Linux, ROS2 backend, docs checks, conformance checks, and future M
 ## Task 8: Produce User Review Package
 
 **Files:**
-- Modify: `docs/README.md`
-- Modify: `README.md`
-- Modify: `docs/architecture/dependency-analysis.md`
-- Modify: this plan file
+- Read: `docs/README.md`
+- Read: `README.md`
+- Read: `docs/architecture/dependency-analysis.md`
+- Read: this plan file
 
 - [ ] **Step 1: Ensure all entry points link correctly**
 
@@ -204,3 +208,15 @@ Expected: no output and exit code 0.
 
 Do not implement module code until the user confirms the architecture plan.
 
+## Post-Review Implementation Sequence
+
+The following sequence is blocked until user confirmation:
+
+1. Create module skeleton directories and module-local README files.
+2. Add `grcl-c` public header skeletons from `grcl-c-api-shape.md`.
+3. Add schema test vectors for runtime capability records.
+4. Add MCU profile descriptor examples and validators.
+5. Add backend SPI header/function-table design.
+6. Add language SDK wrapper skeletons that compile against `grcl-c`.
+7. Add Docker/Ubuntu verification environment.
+8. Add conformance test harness.

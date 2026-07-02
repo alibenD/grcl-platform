@@ -37,11 +37,28 @@ Repository topology
 ## Current Blockers
 
 - No `grcl-c` module exists yet.
-- No detailed `grcl-c` handle/API schema exists yet.
-- No profile schema exists for MCU/RTOS targets.
-- No capability record schema exists.
+- Detailed `grcl-c` handle/API schema exists as architecture documentation, but no header or
+  module implementation exists yet.
+- MCU/RTOS profile schema exists as architecture documentation, but no conformance tests or module
+  implementation exist yet.
+- Runtime capability schema exists as architecture documentation, but no C structs, wire frames,
+  or management API output exist yet.
 - Docker/Ubuntu verification environment is not initialized in this repository.
 - Current `github.com/alibenD/grcl` is still an external implementation repository, not migrated.
+
+## Implementation Dependency Graph
+
+| Phase | Must Exist Before Phase Starts | Produces |
+|---|---|---|
+| module skeletons | repository topology accepted | directories, module READMEs, package metadata |
+| `grcl-c` headers | API shape accepted | public C headers, ABI version constants |
+| `grcl-c` lifecycle tests | headers and result model | lifecycle conformance tests |
+| runtime capability structs | capability schema accepted | C structs and serialization test vectors |
+| MCU profile enforcement | profile schema and controlled storage | profile validators and static limits |
+| backend SPI | lifecycle and capability query | backend registration and dispatch tables |
+| language SDK wrappers | `grcl-c` lifecycle and node handles | C++/Python wrapper skeletons |
+| dev containers | module layout and verification matrix | Dockerfiles and scripts |
+| conformance suite | core contract and schemas | cross-module validation |
 
 ## Recommended Next Planning Sequence
 
@@ -55,3 +72,10 @@ Repository topology
 8. Define conformance and CI matrix.
 9. Only then implement module skeletons.
 
+## Implementation Plan Output
+
+The first implementation plan derived from this dependency analysis is:
+
+- [GRCL Platform Module Skeleton Plan](../plans/2026-07-02-grcl-platform-module-skeleton-plan.md)
+
+It is blocked until user confirmation.
