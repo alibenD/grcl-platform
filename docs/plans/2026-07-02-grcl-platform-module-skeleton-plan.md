@@ -287,6 +287,7 @@ under the artifact root.
 - Modify: `README.md`
 - Modify: `docs/README.md`
 - Modify: `docs/architecture/dependency-analysis.md`
+- Read: `docs/architecture/review-and-verification-governance.md`
 
 - [ ] **Step 1: Update navigation**
 
@@ -312,7 +313,14 @@ bash scripts/test-docs.sh
 
 Expected: exit code 0.
 
-- [ ] **Step 4: Commit**
+- [ ] **Step 4: Apply delegated review fallback gate**
+
+If a delegated subagent review is used while executing this plan and does not return a completed
+result, run the substitute completion audit from
+`docs/architecture/review-and-verification-governance.md`. Record the audit evidence before
+claiming completion.
+
+- [ ] **Step 5: Commit**
 
 Run:
 

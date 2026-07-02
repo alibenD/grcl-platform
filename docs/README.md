@@ -15,6 +15,7 @@ This directory contains platform-level architecture, ADRs, diagrams, and impleme
 - [Backend SPI Contract](architecture/backend-spi-contract.md)
 - [Language SDK Strategy](architecture/language-sdk-strategy.md)
 - [Development Environment](architecture/development-environment.md)
+- [Review And Verification Governance](architecture/review-and-verification-governance.md)
 - [SDK Platform Governance](architecture/sdk-platform-governance.md)
 - [Dependency Analysis](architecture/dependency-analysis.md)
 

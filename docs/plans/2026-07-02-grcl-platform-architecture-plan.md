@@ -182,6 +182,7 @@ Define native Linux, ROS2 backend, docs checks, conformance checks, and future M
 - Read: `docs/README.md`
 - Read: `README.md`
 - Read: `docs/architecture/dependency-analysis.md`
+- Read: `docs/architecture/review-and-verification-governance.md`
 - Read: this plan file
 
 - [ ] **Step 1: Ensure all entry points link correctly**
@@ -207,6 +208,13 @@ Expected: no output and exit code 0.
 - [ ] **Step 3: Stop for user review**
 
 Do not implement module code until the user confirms the architecture plan.
+
+- [ ] **Step 4: Apply delegated review fallback gate**
+
+If a delegated subagent review is used for this plan and does not return a completed result, run
+the substitute completion audit defined in
+`docs/architecture/review-and-verification-governance.md`. Do not treat timeout or shutdown as
+positive evidence.
 
 ## Post-Review Implementation Sequence
 

@@ -29,6 +29,7 @@ and is treated here as the future `grcl-cpp` module candidate, not as the whole 
 - [Backend SPI Contract](docs/architecture/backend-spi-contract.md)
 - [Language SDK Strategy](docs/architecture/language-sdk-strategy.md)
 - [Development Environment](docs/architecture/development-environment.md)
+- [Review And Verification Governance](docs/architecture/review-and-verification-governance.md)
 - [SDK Platform Governance](docs/architecture/sdk-platform-governance.md)
 - [Dependency Analysis](docs/architecture/dependency-analysis.md)
 - [Task Plan](docs/plans/2026-07-02-grcl-platform-architecture-plan.md)

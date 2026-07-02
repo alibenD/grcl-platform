@@ -35,6 +35,20 @@ These rules are repository-local and define how agents should work in `grcl-plat
 - Do not mark a task completed without fresh verification evidence.
 - If verification cannot run locally, record the exact environmental blocker.
 
+## Delegated Review And Completion Audit Rules
+
+- A delegated subagent review only counts as evidence after it returns a completed result and the
+  main agent inspects its findings or changes.
+- A timed-out, shutdown, interrupted, or non-returning subagent produces no completion evidence.
+- If delegated review was intended but does not complete, the main agent must run an explicit
+  substitute completion audit before claiming the affected goal, plan, or milestone is complete.
+- The substitute audit must derive requirements from the objective, user request, active plan, and
+  repository rules, then map each requirement to current-state evidence.
+- Documentation-only architecture work must at minimum run git status, diff hygiene, document
+  inventory, internal link checks, and draft-marker scans before completion is claimed.
+- Follow [Review And Verification Governance](docs/architecture/review-and-verification-governance.md)
+  for delegated review states, substitute audit requirements, and final reporting rules.
+
 ## Build Artifact Rules
 
 - Do not run builds that write `build/`, `install/`, `log/`, virtual environments, wheels, or cache
