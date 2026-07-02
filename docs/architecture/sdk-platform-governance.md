@@ -28,11 +28,20 @@ whole-machine, or hardware-facing extension capabilities.
 | `control-candidate` | lab-only control logic requiring safety review |
 | `production-control` | signed, audited, conformance-passing control extension |
 
-## Open Design Items
+## Baseline Decisions
 
-- Manifest schema.
-- Permission policy language.
-- Runtime enforcement points.
-- Registry metadata.
-- Simulation and fault-injection gates.
+- SDK extensions must declare manifests before being considered stable.
+- SDKs that touch control, planning, voice, or hardware-facing behavior require explicit capability
+  and permission policy.
+- Stable SDK claims require conformance tests, provenance, and audit evidence.
+- A private registry or internal catalog should precede any public marketplace.
+- SDK quality levels are risk classes, not marketing labels.
 
+## Remaining Design Gates
+
+- Manifest schema requires a dedicated schema artifact.
+- Permission policy language requires a later ADR because it affects runtime enforcement and SDK
+  compatibility.
+- Runtime enforcement points must be mapped to `grcl-c`, backend SPI, and management APIs.
+- Registry metadata, signing, and provenance require release-governance planning.
+- Simulation and fault-injection gates require simulator profile and conformance suite artifacts.

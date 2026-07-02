@@ -28,12 +28,18 @@ Transport and Platform Layer
 - Tools and management APIs must observe runtime graph state, node graph state, and negotiation
   results.
 
-## Open Design Items
+## Baseline Decisions
 
-- Exact `grcl-c` handle set.
-- Runtime lifecycle state machine.
-- Backend SPI method set.
-- Capability record schema.
-- Executor profile mapping for MCU/RTOS.
-- Management API transport and authentication.
+- The initial `grcl-c` handle set is defined in [GRCL-C API Shape](grcl-c-api-shape.md).
+- Runtime lifecycle starts with create/init-with-storage, start, stop, and destroy.
+- Backend responsibilities are defined in [Backend SPI Contract](backend-spi-contract.md).
+- Runtime capability, availability, health, graph projection, and negotiation result schemas are
+  defined in [Runtime Capability Schema](runtime-capability-schema.md).
+- MCU/RTOS executor profile constraints are defined through profile descriptors in
+  [MCU Profile Schema](mcu-profile-schema.md).
 
+## Remaining Design Gates
+
+- Management API transport and authentication remain design gates for a later management-plane ADR.
+- Final executor scheduling semantics require implementation feedback from `baremetal-min`,
+  `rtos-basic`, and `linux-full` skeletons.

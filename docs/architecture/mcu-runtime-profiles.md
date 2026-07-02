@@ -40,11 +40,19 @@ Each profile must declare:
 - NuttX
 - Linux
 
-## Open Design Items
+## Baseline Decisions
 
-- Exact profile schema.
-- Static manifest format.
-- RTOS adapter contract.
-- Transport adapter contract.
-- Benchmark acceptance criteria.
+- The first profile descriptor schema is defined in [MCU Profile Schema](mcu-profile-schema.md).
+- `baremetal-min` and constrained RTOS profiles must not be required to maintain a full distributed
+  graph cache.
+- Unsupported capabilities fail fast through local creation checks or capability negotiation.
+- Static manifest and gateway representation are first-class graph projection modes.
+- FreeRTOS-like and NuttX/Zephyr-like adapters are planned as separate backend/profile adapters.
 
+## Remaining Design Gates
+
+- Static manifest file format requires a schema artifact before implementation claims support.
+- RTOS adapter and transport adapter function-table details require a backend SPI implementation
+  plan.
+- Benchmark acceptance criteria require measured targets from at least one MCU or simulator profile
+  and must not be invented from documentation alone.

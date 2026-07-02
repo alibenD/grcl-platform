@@ -40,11 +40,23 @@ near-real-time profiles that declare this constraint.
 - `grcl-py` binds `grcl-c` directly or through a private shim.
 - Future Rust or other SDKs must bind the shared core contract.
 
-## Open Design Items
+## Baseline Decisions
 
-- Exact naming scheme for handles and options.
-- ABI versioning strategy.
-- Capability query function shape.
-- Type support ABI.
-- Controlled-storage object layout constraints.
+- Public C symbols use the `grcl_` prefix.
+- Opaque handle types use the `_t` suffix.
+- Options structs use the `_options_t` suffix.
+- Public structs crossing ABI boundaries include `struct_size`.
+- Version-bearing structs include `abi_version` when they can cross a binary compatibility
+  boundary.
+- Runtime capability query and negotiation are explicit `grcl-c` API surfaces.
+- `grcl_storage_t` describes caller-provided storage regions and capacities.
 
+The detailed first API shape is defined in [GRCL-C API Shape](grcl-c-api-shape.md).
+
+## Implementation Gates
+
+Before writing public headers, the implementation plan must map each header to the API shape
+document and verify that no C++ or ROS2 types leak into public C headers.
+
+Type support ABI details are allowed to start as opaque type identity and generated-operation hooks
+in the first skeleton phase. Final serialization and codegen ABI requires a later IDL-specific ADR.

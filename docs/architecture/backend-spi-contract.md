@@ -55,11 +55,20 @@ metadata, and GRCL-owned state.
 The MCU backend must implement only the declared profile. Unsupported capabilities must fail fast
 through capability negotiation or local object creation, not by partial runtime behavior.
 
-## Open Contract Items
+## Baseline Decisions
 
-- exact C function table shape
-- backend registration lifetime
-- error propagation from backend to core
-- management event schema
-- transport ownership and zero-copy handoff rules
+- Backend implementations are internal to the `grcl-c` core contract boundary.
+- Backend registration must expose runtime profile, capability record, graph projection support,
+  memory/entity limits, diagnostics level, and security capabilities.
+- ROS2 backend projection is owned by the adapter and cannot rely on ROS2/rmw exposing a GRCL
+  runtime participant graph.
+- MCU backends implement declared profiles rather than full GRCL by default.
 
+## Remaining Contract Gates
+
+- Exact C function-table shape requires the first `grcl-c` backend SPI header plan.
+- Backend registration lifetime requires lifecycle tests.
+- Error propagation from backend to core must preserve `grcl_result_t` categories and diagnostic
+  detail separation.
+- Management event schema requires a later management-plane ADR.
+- Transport ownership and zero-copy handoff rules require native and MCU transport design input.

@@ -27,7 +27,9 @@ approval.
 | GQ-005 | Update navigation and dependency documents | GQ-002, GQ-003, GQ-004 | complete | `README.md`, `docs/README.md`, `docs/status/current-context.md`, dependency docs |
 | GQ-006 | Validate documentation hygiene | GQ-005 | complete | `git diff --check`, inline link check, unfinished-marker scan, old-path scan passed |
 | GQ-007 | Commit and push queue iteration | GQ-006 | complete | commit containing this queue state |
-| GQ-008 | User review gate for module skeleton implementation | GQ-007 | blocked_on_user | module skeleton plan remains unexecuted |
+| GQ-008 | Audit remaining open design items | GQ-007 | complete | open items converted to baseline decisions or explicit design gates |
+| GQ-009 | Validate and commit open-design closure | GQ-008 | complete | documentation gates passed; commit containing this queue state |
+| GQ-010 | User review gate for module skeleton implementation | GQ-009 | blocked_on_user | module skeleton plan remains unexecuted |
 
 ## Execution Rules
 
