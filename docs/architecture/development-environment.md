@@ -43,13 +43,19 @@ Planned scripts:
 
 ```text
 grcl-platform_ws/
-  artifacts/
+  AGENTS.md
+  artifacts/        # generated on demand; may be absent or deleted
   src/
     grcl-platform/
 ```
 
-The repository is the source tree only. Build scripts must write generated products to the
-workspace-local `artifacts/` directory unless `GRCL_PLATFORM_ARTIFACT_ROOT` overrides it.
+The workspace root is the preferred Codex session root because Docker containers can mount the whole
+workspace and build scripts can access source and artifact paths without repeated permission
+escalation. The repository remains the source tree only.
+
+Build scripts must write generated products to the workspace-local `artifacts/` directory unless
+`GRCL_PLATFORM_ARTIFACT_ROOT` overrides it. `artifacts/` is generated state, may be absent or
+deleted, and must be created on demand by scripts before writing outputs.
 
 Default local artifact root:
 
@@ -63,6 +69,7 @@ Portable default expression for scripts:
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 WORKSPACE_ROOT="$(cd "$REPO_ROOT/../.." && pwd)"
 GRCL_PLATFORM_ARTIFACT_ROOT="${GRCL_PLATFORM_ARTIFACT_ROOT:-$WORKSPACE_ROOT/artifacts}"
+mkdir -p "$GRCL_PLATFORM_ARTIFACT_ROOT"
 ```
 
 Required artifact layout:

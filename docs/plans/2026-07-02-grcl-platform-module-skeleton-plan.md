@@ -229,6 +229,7 @@ set -euo pipefail
 GRCL_PLATFORM_REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 GRCL_PLATFORM_WORKSPACE_ROOT="$(cd "$GRCL_PLATFORM_REPO_ROOT/../.." && pwd)"
 GRCL_PLATFORM_ARTIFACT_ROOT="${GRCL_PLATFORM_ARTIFACT_ROOT:-$GRCL_PLATFORM_WORKSPACE_ROOT/artifacts}"
+mkdir -p "$GRCL_PLATFORM_ARTIFACT_ROOT"
 
 export GRCL_PLATFORM_REPO_ROOT
 export GRCL_PLATFORM_WORKSPACE_ROOT
@@ -241,6 +242,9 @@ Expected default local artifact root when the repo is checked out at
 ```text
 /Users/aliben/Project/grcl-platform_ws/artifacts
 ```
+
+The artifact directory is generated state. It must be created by scripts on demand and may be
+deleted between runs.
 
 - [ ] **Step 2: Add docs test script**
 

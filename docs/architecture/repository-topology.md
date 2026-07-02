@@ -13,7 +13,8 @@ Local development should distinguish the repository root from the workspace root
 
 ```text
 grcl-platform_ws/
-  artifacts/
+  AGENTS.md
+  artifacts/        # generated on demand; may be absent or deleted
   src/
     grcl-platform/
 ```
@@ -25,6 +26,10 @@ must be written to `grcl-platform_ws/artifacts` by default, or to
 
 This mirrors the ROS-style workspace separation that the project expects for cross-repository
 development, while avoiding in-repository build pollution.
+
+Long-running Codex sessions should open at the workspace root rather than the repository root. This
+keeps Docker workspace mounts, future sibling repositories, and generated artifacts inside one
+sandbox boundary. Repository commands should still target `src/grcl-platform` explicitly.
 
 ## Intended Module Topology
 

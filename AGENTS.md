@@ -5,11 +5,26 @@ These rules are repository-local and define how agents should work in `grcl-plat
 ## Source Of Truth
 
 - Do not rely on conversation history as the authoritative engineering record.
+- New sessions should recover current state from `docs/status/current-context.md`.
 - System-level decisions must be recorded in `docs/adr/`.
 - Current architecture specifications must be recorded in `docs/architecture/`.
 - Implementation sequencing must be recorded in `docs/plans/`.
 - If a decision affects an implementation repository, update this repository first, then update the
   implementation repository.
+
+## Session Bootstrap
+
+- Prefer opening long-running Codex sessions at the workspace root:
+  `/Users/aliben/Project/grcl-platform_ws`.
+- The repository root is `/Users/aliben/Project/grcl-platform_ws/src/grcl-platform`.
+- When running from the workspace root, use `git -C src/grcl-platform ...` for repository commands.
+- Read the workspace-root `AGENTS.md`, this file, `README.md`, and
+  `docs/status/current-context.md` before resuming architecture or implementation planning.
+- The workspace-root session boundary is preferred because Docker containers, future multi-repo
+  source trees, and generated artifacts need access to the whole workspace without repeated
+  permission escalation.
+- If prior chat history conflicts with repository documents, treat repository documents as the
+  baseline and ask for confirmation before editing.
 
 ## Current Development Mode
 
@@ -57,6 +72,8 @@ These rules are repository-local and define how agents should work in `grcl-plat
   `grcl-platform_ws/src/grcl-platform`.
 - Local scripts must use an out-of-source artifact root. The default local artifact root is the
   workspace-local directory `grcl-platform_ws/artifacts`.
+- The artifact directory is generated state. It may be absent or deleted, and scripts must create it
+  on demand before writing outputs.
 - Scripts must allow `GRCL_PLATFORM_ARTIFACT_ROOT` to override the default artifact root.
 - Colcon commands must pass explicit `--build-base`, `--install-base`, and `--log-base` paths under
   the artifact root.

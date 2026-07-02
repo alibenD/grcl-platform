@@ -10,3 +10,6 @@ The intended direction is:
 - Future MCU cross-build images must be separate from ROS2 runtime images.
 - Build products must be written under `GRCL_PLATFORM_ARTIFACT_ROOT`, not the repository root.
 - Local default artifact root is the workspace-local directory `grcl-platform_ws/artifacts`.
+- `artifacts/` is generated on demand and may be absent before a script runs.
+- Local Docker development should mount the workspace root `grcl-platform_ws`, not only
+  `src/grcl-platform`, so containers can access source and artifact paths through the same boundary.

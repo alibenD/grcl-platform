@@ -17,22 +17,29 @@ and is treated here as the future `grcl-cpp` module candidate, not as the whole 
 
 ## Recommended Local Layout
 
-Use an explicit workspace layout for local development:
+Use an explicit workspace layout for local development and long-running Codex sessions:
 
 ```text
 grcl-platform_ws/
-  artifacts/
+  AGENTS.md
+  artifacts/        # generated on demand; may be absent or deleted
   src/
     grcl-platform/
 ```
 
-Work from `grcl-platform_ws/src/grcl-platform` for repository edits. Build and test scripts must
-write generated files under `grcl-platform_ws/artifacts` by default, unless
-`GRCL_PLATFORM_ARTIFACT_ROOT` is set explicitly. This keeps generated artifacts outside the Git
-repository while making the artifact location visible at the workspace level.
+Prefer opening Codex at `grcl-platform_ws` so Docker mounts, generated artifacts, and future
+multi-repository orchestration share one workspace boundary. The Git repository remains
+`grcl-platform_ws/src/grcl-platform`; repository commands from the workspace root should use
+`git -C src/grcl-platform ...`.
+
+Build and test scripts must write generated files under `grcl-platform_ws/artifacts` by default,
+unless `GRCL_PLATFORM_ARTIFACT_ROOT` is set explicitly. `artifacts/` is generated state and scripts
+must create it on demand before writing outputs.
 
 ## Document Entry Points
 
+- [Current Context](docs/status/current-context.md)
+- [Workspace Bootstrap](docs/status/workspace-bootstrap.md)
 - [Architecture Overview](docs/architecture/system-overview.md)
 - [Repository Topology](docs/architecture/repository-topology.md)
 - [Runtime Layering](docs/architecture/runtime-layering.md)

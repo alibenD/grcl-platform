@@ -2,6 +2,11 @@
 
 This directory contains platform-level architecture, ADRs, diagrams, and implementation plans.
 
+## Status
+
+- [Current Context](status/current-context.md)
+- [Workspace Bootstrap](status/workspace-bootstrap.md)
+
 ## Architecture
 
 - [System Overview](architecture/system-overview.md)
