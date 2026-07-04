@@ -30,7 +30,7 @@ design-only goal closed G2-F and produced the G3 Backend SPI API Shape v0.1 base
 completed the first runnable `grcl-c` lifecycle, bounded-storage, capability negotiation, and
 diagnostics core with a private null/native-test backend. No post-M1 implementation milestone is
 authorized from the roadmap alone. G5 Conformance Harness v0.1 planning is complete and records a
-local contract-drift harness scope; G5 implementation still requires a separate user-approved
+local contract-drift harness scope. G5 implementation is active under a separate user-approved
 implementation window.
 
 ## Model And Effort Policy
@@ -155,7 +155,7 @@ G5 excludes:
 Current G5 status:
 
 - G5 planning status: `complete`
-- G5 implementation status: `pending_user_approval`
+- G5 implementation status: `active`
 - G5 plan:
   [G5 Conformance Harness Plan](../plans/2026-07-04-g5-conformance-harness-plan.md)
 
@@ -171,8 +171,8 @@ Before each later goal starts, the main agent must create or update a goal-speci
 
 Do not execute later goals from this roadmap alone. The roadmap establishes dependency order; each
 goal still needs a task plan or task briefs before implementation. M1 completion does not authorize
-G5 implementation, SDK, simulator, ROS2, MCU, gateway, management-plane, CI, Docker, or external
-migration work. G5 planning completion does not authorize G5 implementation.
+SDK, simulator, ROS2, MCU, gateway, management-plane, CI, Docker, or external migration work. G5
+implementation approval authorizes only local contract-drift harness work inside the G5 plan.
 
 ## Current Decision State
 
@@ -180,8 +180,7 @@ Management-plane concept work is no longer the blocking path for core middleware
 preserved as future input for G10. G1 is complete under the already authorized task-brief and
 independent-audit workflow. G2-F closeout and G3 Backend SPI API Shape v0.1 design baseline are
 complete. M1 First Runnable GRCL-C Core With Null/Native Backend is complete, locally verified, and
-independently audited with notes. G5 Conformance Harness v0.1 planning is complete and should be
-the next implementation milestone if the user approves implementation. No further auto-advance is
-authorized from this roadmap state alone: any post-M1 implementation, including G5 implementation,
-requires a new approved goal window with task briefs, TDD plan, implementation subagent, and
-independent audit.
+independently audited with notes. G5 Conformance Harness v0.1 planning is complete, and G5
+implementation is active under the user-approved goal window. No further auto-advance is authorized
+from this roadmap state alone: any non-G5 post-M1 implementation requires a new approved goal
+window with task briefs, TDD plan, implementation subagent, and independent audit.

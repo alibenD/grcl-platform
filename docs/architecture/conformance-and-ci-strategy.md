@@ -79,12 +79,15 @@ Before any documentation-only architecture iteration is called complete:
 
 ```bash
 git diff --check
-python3 scripts/check-links.py
-rg -n "T[B]D|T[O]DO|fill[ ]in|implement[ ]later|place[ ]holder" README.md AGENTS.md docs docker scripts src tests manifests
+python3 scripts/check-docs.py
+find . -maxdepth 1 \( -name build -o -name install -o -name log \) -print
 ```
 
-Until `scripts/check-links.py` exists, the main agent may use an inline Python link checker and
-report that the permanent script has not been implemented yet.
+`scripts/check-docs.py` is the durable local documentation conformance entrypoint for G5-B. It
+checks Markdown links in `README.md`, `AGENTS.md`, and `docs/**/*.md`, rejects unfinished durable
+documentation markers, verifies that the three durable status documents agree on M1/G5 execution
+state, and writes its generated report only under `GRCL_PLATFORM_ARTIFACT_ROOT/g5/docs/` or the
+workspace artifact root default.
 
 ## Artifact Ownership
 

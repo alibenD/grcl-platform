@@ -6,20 +6,19 @@ Drive GRCL Platform through dependency-ordered contract-artifact delivery with d
 task briefs, implementation subagents, and independent audit gates. G1 is closed. The authorized
 continuous implementation window for G2-C through G2-E is also closed after audit acceptance. The
 user-approved M1 Autonomous Goal Runner window for the first runnable `grcl-c` core with a
-null/native-test backend is complete. G5 Conformance Harness v0.1 planning is complete; G5
-implementation remains pending explicit user approval.
+null/native-test backend is complete. G5 Conformance Harness v0.1 planning is complete, and the
+user-approved G5 implementation window is active.
 
 ## Boundaries
 
 - Workspace root: `/Users/aliben/Project/grcl-platform_ws`
 - Repository root: `/Users/aliben/Project/grcl-platform_ws/src/grcl-platform`
-- Code implementation: M1 is limited to the approved first runnable `grcl-c` core with
-  null/native-test backend under task briefs plus independent audit; post-M1 implementation goals
-  remain paused
+- Code implementation: G5 is limited to local contract-drift checks under task briefs plus
+  independent audit; non-G5 post-M1 implementation goals remain paused
 - Completed work: M1 first runnable `grcl-c` core with null/native-test backend, using task briefs,
   implementation subagents, independent audit subagents, and TDD-style verification
-- Allowed work now: explicitly requested documentation/status cleanup or user-approved planning for
-  a new implementation window
+- Allowed work now: G5 task-brief execution for local docs, schemas, C ABI, capability fixture, MCU
+  profile fixture, and M1 harness integration checks
 - Blocked post-M1 work without a new user-approved goal window: publish/subscribe, service/client,
   executor scheduling, transport, ROS2, MCU, SDK, management plane, auth, remote management, event
   streams, Docker, CI, external `grcl` migration, and repo-wide build-system policy
@@ -81,6 +80,9 @@ implementation remains pending explicit user approval.
 | GQ-054 | File G5 goal-specific plan | GQ-053 | complete | `docs/plans/2026-07-04-g5-conformance-harness-plan.md` |
 | GQ-055 | Update conformance design home and durable status for G5 planning | GQ-054 | complete | `docs/architecture/conformance-and-ci-strategy.md`, `docs/status/current-context.md`, `docs/status/middleware-goal-roadmap.md`, this queue, README navigation |
 | GQ-056 | Validate and commit G5 planning closeout | GQ-055 | complete | `git diff --check`, unfinished-marker scan, stale-status scan, and changed-file scope scan passed for the G5 planning files |
+| GQ-057 | Authorize G5 implementation window | GQ-056 | complete | user selected option 2 and approved goal-driven G5 implementation under the local contract-drift scope |
+| GQ-058 | Execute G5-B documentation checks and G5-C runtime capability fixture checks | GQ-057 | complete | G5-B and G5-C audit status `accepted_with_notes` under `.local/agentic-runs/2026-07-04-g5-conformance-harness/`; docs and runtime capability fixture checks pass |
+| GQ-059 | Execute G5-D MCU profile fixture checks and G5-E C ABI/header checks | GQ-058 | pending | next parallel batch after B/C commit |
 
 ## Execution Rules
 
@@ -95,8 +97,8 @@ implementation remains pending explicit user approval.
 - G2-F and G3 design baseline work was separately authorized as documentation-only work.
 - M1 Autonomous Goal Runner is complete. It may not auto-advance into any post-M1 implementation
   milestone without a new user-approved goal window.
-- G5 Conformance Harness v0.1 planning is complete. It does not authorize G5 implementation,
-  scripts, task briefs, CI, Docker, repo-wide build-system changes, SDK wrappers, pub/sub, graph,
+- G5 Conformance Harness v0.1 implementation is authorized only for local contract-drift checks.
+  It does not authorize CI, Docker, repo-wide build-system changes, SDK wrappers, pub/sub, graph,
   transport, ROS2, MCU runtime, simulator, or management-plane implementation.
 - If a future task becomes implementation work, use file-based task briefs and independent audit
   subagents according to `docs/architecture/agentic-delivery-governance.md`.
@@ -113,6 +115,6 @@ closed. G3 Backend SPI API Shape v0.1 design baseline is recorded in the canonic
 document. M1 first runnable `grcl-c` core with null/native-test backend is complete: M1-B through
 M1-F passed independent audit, and M1-G passed independent audit with notes after verifying the full
 local harness, artifact-root behavior, report/audit inventory, and forbidden-scope scans. G5
-Conformance Harness v0.1 planning is complete and selects the local contract-drift harness as the
-next recommended implementation milestone. No post-M1 implementation milestone is authorized from
+Conformance Harness v0.1 planning is complete, and G5 implementation is now authorized only for the
+local contract-drift harness scope. No non-G5 post-M1 implementation milestone is authorized from
 this queue state alone.

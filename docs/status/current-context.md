@@ -65,11 +65,12 @@ multi-repository orchestration, and generated artifacts need a stable workspace-
   [G5 Conformance Harness Plan](../plans/2026-07-04-g5-conformance-harness-plan.md). G5 is scoped
   as a local contract-drift harness for docs, schemas, C ABI, capability fixtures, MCU profile
   fixtures, and M1 harness integration.
-- G5 implementation is not authorized yet. It requires a new user-approved implementation window,
-  task briefs, TDD-style verification, implementation subagents, and independent audit subagents.
-- No post-M1 implementation milestone is authorized. The next milestone requires explicit user
-  approval, a goal-specific plan or task briefs, TDD-style verification, implementation subagent
-  execution, and independent audit.
+- G5 implementation is authorized under the user-approved goal window. It must stay inside the G5
+  local contract-drift harness scope and use task briefs, TDD-style verification, implementation
+  subagents, and independent audit subagents.
+- No post-M1 implementation milestone other than G5 Conformance Harness v0.1 is authorized. Any
+  non-G5 milestone requires explicit user approval, a goal-specific plan or task briefs, TDD-style
+  verification, implementation subagent execution, and independent audit.
 - Management-plane concept modeling is deferred as future G10 input unless explicitly reprioritized.
 - Runtime capability exchange is a design decision, not an implemented runtime feature.
 - Active goal execution is tracked in `docs/status/goal-execution-queue.md`.
@@ -200,11 +201,9 @@ goals still require their own goal-specific plan and task briefs before executio
   executor scheduling, transport, ROS2, MCU, SDK wrappers, management plane, auth, remote
   management, event streams, Docker, CI, repo-wide build-system policy, or external `grcl`
   migration.
-- Do not treat G5 planning approval as G5 implementation approval. Do not create G5 task briefs,
-  scripts, runners, schema validation code, C ABI check code, CI files, Dockerfiles, build-system
+- Do not treat G5 implementation approval as authorization for CI files, Dockerfiles, build-system
   files, SDK wrappers, pub/sub behavior, graph behavior, transport behavior, ROS2 behavior, MCU
-  runtime behavior, simulator behavior, or management-plane behavior without a new explicit
-  implementation authorization.
+  runtime behavior, simulator behavior, or management-plane behavior.
 
 ## Continuous Execution Contract
 
@@ -218,9 +217,9 @@ The user later authorized the M1 Autonomous Goal Runner window, and that window 
 main agent may not auto-advance into any post-M1 implementation milestone without a new
 user-approved goal window.
 
-The user later authorized G5 Conformance Harness v0.1 planning. That planning goal is complete, but
-it does not authorize implementation. G5 implementation must start from a new user-approved
-implementation window and file-based task briefs.
+The user later authorized G5 Conformance Harness v0.1 planning, and then authorized G5
+implementation under the goal-driven delivery model. G5 implementation is limited to local
+contract-drift checks and must use file-based task briefs plus independent audit.
 
 Stop conditions for this continuous window:
 
