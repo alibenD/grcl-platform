@@ -91,7 +91,8 @@ user has authorized goal-driven G6 implementation.
 | GQ-063 | Choose G6 Python binding substrate before implementation | GQ-062 | complete | user selected Option A: `ctypes`/private dynamic-library shim boundary with package distribution deferred |
 | GQ-064 | Execute G6-C `grcl-cpp` minimal RAII boundary skeleton | GQ-063 | complete | G6-C audit status `accepted_with_notes` in `.local/agentic-runs/2026-07-04-g6-language-sdk-wrapper-skeletons/g6-c-grcl-cpp-raii-boundary/audit-report.md` |
 | GQ-065 | Execute G6-D `grcl-py` minimal ownership boundary skeleton | GQ-063 | complete | G6-D audit status `accepted` in `.local/agentic-runs/2026-07-04-g6-language-sdk-wrapper-skeletons/g6-d-grcl-py-ownership-boundary/audit-report.md` |
-| GQ-066 | Execute G6-E SDK boundary drift checks and conformance integration | GQ-064, GQ-065 | pending | blocked until G6-C/G6-D skeleton batch is verified and committed |
+| GQ-066 | Execute G6-E SDK boundary drift checks and conformance integration | GQ-064, GQ-065 | complete | G6-E audit status `accepted` in `.local/agentic-runs/2026-07-04-g6-language-sdk-wrapper-skeletons/g6-e-sdk-boundary-drift-checks/audit-report.md`; local runner now includes SDK boundary drift checks |
+| GQ-067 | Execute G6-F closeout verification and durable status update | GQ-066 | pending | blocked until G6-E batch is verified and committed |
 
 ## Execution Rules
 

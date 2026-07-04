@@ -42,42 +42,86 @@ class StatusExpectation:
     patterns: tuple[re.Pattern[str], ...]
 
 
-STATUS_EXPECTATIONS = (
-    StatusExpectation(
-        label="M1 complete",
-        patterns=(
-            re.compile(r"\bM1\b.*\bcomplete\b", re.IGNORECASE),
-            re.compile(r"\bFirst Runnable GRCL-C Core\b.*\bcomplete\b", re.IGNORECASE),
+STATUS_EXPECTATIONS_BY_FILE = {
+    "current-context.md": (
+        StatusExpectation(
+            label="M1 complete",
+            patterns=(
+                re.compile(r"\bM1\b.*\bcomplete\b", re.IGNORECASE),
+                re.compile(r"\bFirst Runnable GRCL-C Core\b.*\bcomplete\b", re.IGNORECASE),
+            ),
+        ),
+        StatusExpectation(
+            label="G5 complete",
+            patterns=(
+                re.compile(r"\bG5\b.*\bplanning\b.*\bcomplete\b", re.IGNORECASE),
+                re.compile(r"\bG5\b.*\bimplementation\b.*\bcomplete\b", re.IGNORECASE),
+            ),
+        ),
+        StatusExpectation(
+            label="G6 planning complete",
+            patterns=(
+                re.compile(r"\bG6\b.*\bplanning\b.*\bcomplete\b", re.IGNORECASE),
+                re.compile(r"\bG6 planning status:\s*`?complete`?", re.IGNORECASE),
+            ),
+        ),
+        StatusExpectation(
+            label="G6 option A selected",
+            patterns=(
+                re.compile(r"\bOption A\b", re.IGNORECASE),
+                re.compile(r"\bctypes\b.*\bprivate dynamic-library shim\b", re.IGNORECASE),
+            ),
+        ),
+        StatusExpectation(
+            label="G6 implementation authorized or active",
+            patterns=(
+                re.compile(r"\bG6\b.*\bimplementation\b.*\bauthorized\b", re.IGNORECASE),
+                re.compile(r"\bG6\b.*\bimplementation\b.*\bactive\b", re.IGNORECASE),
+                re.compile(r"\bG6 implementation status:\s*`?(?:authorized|active|pending user approval)`?", re.IGNORECASE),
+            ),
         ),
     ),
-    StatusExpectation(
-        label="G5 planning complete",
-        patterns=(
-            re.compile(r"\bG5\b.*\bplanning\b.*\bcomplete\b", re.IGNORECASE),
-            re.compile(r"\bG5 planning status:\s*`?complete`?", re.IGNORECASE),
+    "goal-execution-queue.md": (
+        StatusExpectation(
+            label="G6 implementation authorized or active",
+            patterns=(
+                re.compile(r"\bG6\b.*\bimplementation\b.*\bauthorized\b", re.IGNORECASE),
+                re.compile(r"\bG6\b.*\bimplementation\b.*\bactive\b", re.IGNORECASE),
+                re.compile(r"\bG6\b.*\bimplementation\b.*\bauthorized\b.*\bactive\b", re.IGNORECASE),
+            ),
         ),
     ),
-    StatusExpectation(
-        label="G5 implementation active",
-        patterns=(
-            re.compile(r"\bG5\b.*\bimplementation\b.*\bactive\b", re.IGNORECASE),
-            re.compile(r"\bG5\b.*\bimplementation window\b.*\bactive\b", re.IGNORECASE),
-            re.compile(r"\bG5 implementation status:\s*`?active`?", re.IGNORECASE),
-            re.compile(r"\bG5\b.*\bimplementation\b.*\bauthorized\b.*\bgoal window\b", re.IGNORECASE),
-            re.compile(r"\bG5\b.*\bimplementation\b.*\bauthorized\b.*\bgoal-driven\b", re.IGNORECASE),
+    "middleware-goal-roadmap.md": (
+        StatusExpectation(
+            label="M1 complete",
+            patterns=(
+                re.compile(r"\bM1\b.*\bcomplete\b", re.IGNORECASE),
+                re.compile(r"\bFirst Runnable GRCL-C Core\b.*\bcomplete\b", re.IGNORECASE),
+            ),
+        ),
+        StatusExpectation(
+            label="G5 complete",
+            patterns=(
+                re.compile(r"\bG5\b.*\bplanning\b.*\bcomplete\b", re.IGNORECASE),
+                re.compile(r"\bG5\b.*\bimplementation\b.*\bcomplete\b", re.IGNORECASE),
+            ),
+        ),
+        StatusExpectation(
+            label="G6 planning complete",
+            patterns=(
+                re.compile(r"\bG6\b.*\bplanning\b.*\bcomplete\b", re.IGNORECASE),
+                re.compile(r"\bM2\b.*\bCross-Language SDK Boundary Baseline\b", re.IGNORECASE),
+            ),
+        ),
+        StatusExpectation(
+            label="G6 option A selected",
+            patterns=(
+                re.compile(r"\bOption A\b", re.IGNORECASE),
+                re.compile(r"\bctypes\b.*\bprivate dynamic-library shim\b", re.IGNORECASE),
+            ),
         ),
     ),
-    StatusExpectation(
-        label="non-G5 post-M1 implementation unauthorized",
-        patterns=(
-            re.compile(r"\bnon-G5 post-M1\b.*\bunauthorized\b", re.IGNORECASE),
-            re.compile(r"\bnon-G5 post-M1\b.*\bpaused\b", re.IGNORECASE),
-            re.compile(r"\bNo post-M1 implementation milestone\b.*\bauthorized\b", re.IGNORECASE),
-            re.compile(r"\bNo further auto-advance\b.*\bnon-G5 post-M1\b.*\brequires a new approved goal window\b", re.IGNORECASE),
-            re.compile(r"\bnon-G5 post-M1 implementation\b.*\brequires a new approved goal window\b", re.IGNORECASE),
-        ),
-    ),
-)
+}
 
 
 def iter_doc_paths() -> list[Path]:
@@ -146,9 +190,10 @@ def check_status_consistency() -> tuple[list[str], list[str]]:
     satisfied_labels: list[str] = []
     for status_path in STATUS_PATHS:
         rel_path = status_path.relative_to(REPO_ROOT)
+        expectations = STATUS_EXPECTATIONS_BY_FILE.get(status_path.name, ())
         text = status_path.read_text(encoding="utf-8")
         normalized = " ".join(text.split())
-        for expectation in STATUS_EXPECTATIONS:
+        for expectation in expectations:
             if any(pattern.search(normalized) for pattern in expectation.patterns):
                 satisfied_labels.append(f"{rel_path}: {expectation.label}")
                 continue

@@ -33,12 +33,12 @@ run_stage() {
   stage_label=$1
   shift
 
-  printf '==> [%s/5] %s\n' "$stage_index" "$stage_label"
+  printf '==> [%s/6] %s\n' "$stage_index" "$stage_label"
   if "$@"; then
-    printf 'PASS [%s/5] %s\n' "$stage_index" "$stage_label"
+    printf 'PASS [%s/6] %s\n' "$stage_index" "$stage_label"
   else
     status=$?
-    printf 'FAIL [%s/5] %s (exit %s)\n' "$stage_index" "$stage_label" "$status" >&2
+    printf 'FAIL [%s/6] %s (exit %s)\n' "$stage_index" "$stage_label" "$status" >&2
     exit "$status"
   fi
 }
@@ -60,6 +60,9 @@ run_stage "C ABI/header checks" \
 run_stage "M1 runnable harness" \
   src/grcl-c/tests/run_m1_tests.sh
 
+run_stage "SDK boundary drift checks" \
+  python3 scripts/check-sdk-boundaries.py
+
 summary_path="$runner_output_root/runner-summary.txt"
 cat >"$summary_path" <<EOF
 local conformance runner: ok
@@ -71,6 +74,7 @@ stages:
 - MCU profile fixtures
 - C ABI/header checks
 - M1 runnable harness
+- SDK boundary drift checks
 EOF
 
 printf 'PASS conformance runner (%s)\n' "$summary_path"

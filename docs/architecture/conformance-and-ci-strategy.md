@@ -77,6 +77,20 @@ G5-G closeout verification completed the local harness. It used the refined non-
 G5-G task brief so normal `grcl_runtime_*` identifiers and intentional conformance-checker pattern
 definitions were not treated as pass/fail evidence. The G5 closeout passed independent audit.
 
+## G6 Local SDK Boundary Drift Checks
+
+G6 adds a narrow local stage to `scripts/run-conformance.sh` once the `grcl-cpp` and `grcl-py`
+wrapper skeletons are present. The stage runs `scripts/check-sdk-boundaries.py`, writes its report
+under `GRCL_PLATFORM_ARTIFACT_ROOT/g6/sdk-boundaries/`, and serves as a local drift guard for the
+wrapper boundary. It is not a CI rollout, package-distribution decision, or claim that the SDKs are
+fully stable.
+
+The G6 drift check rejects backend-private or runtime-internal references from SDK wrapper source
+files, rejects public references to `rcl`, `rmw`, `rclcpp`, socket APIs, pthread APIs, Docker, CI,
+and repo-wide build-system declarations, verifies that `grcl-cpp` includes public `grcl/c/*.h`
+headers instead of copying ABI declarations, and verifies that `grcl-py` routes through its
+private native boundary rather than treating `grcl-cpp` as the semantic source.
+
 ## Required Local Commands
 
 Before any documentation-only architecture iteration is called complete:
