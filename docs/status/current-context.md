@@ -80,8 +80,15 @@ multi-repository orchestration, and generated artifacts need a stable workspace-
   audit, and G6-E SDK boundary drift checks passed independent audit. The local conformance runner
   now includes documentation, schema fixture, C ABI/header, M1 harness, and SDK boundary drift
   stages.
-- post-G6 implementation remains unauthorized unless a new user-approved goal window records
-  a goal-specific plan, allowed files, verification strategy, implementation subagents, and
+- M3 Core Middleware Contract And Native In-Process Backend is active under a user-approved plan:
+  [M3 Core Middleware Native Backend Plan](../plans/2026-07-04-m3-core-middleware-native-backend-plan.md).
+  M3 is limited to `grcl-c` core middleware contracts, backend SPI v0.2 design, an in-process
+  native backend, TDD implementation batches, C examples, and local conformance integration.
+  Design review has passed after architecture review `accepted_with_notes`, ABI/SPI re-review
+  `accepted_with_notes`, and test-plan re-review `accepted`; M3-C API/SPI header contract is the
+  active implementation batch.
+- post-M3 implementation remains unauthorized unless a new user-approved goal window records a
+  goal-specific plan, allowed files, verification strategy, implementation subagents, and
   independent audit gates.
 - Management-plane concept modeling is deferred as future G10 input unless explicitly reprioritized.
 - Runtime capability exchange is a design decision, not an implemented runtime feature.
@@ -161,6 +168,7 @@ demand by scripts before writing build, test, coverage, log, or generated files.
 - [M1 First Runnable GRCL-C Core Plan](../plans/2026-07-04-m1-first-runnable-core-plan.md)
 - [G5 Conformance Harness Plan](../plans/2026-07-04-g5-conformance-harness-plan.md)
 - [G6 Language SDK Wrapper Skeletons Plan](../plans/2026-07-04-g6-language-sdk-wrapper-skeletons-plan.md)
+- [M3 Core Middleware Native Backend Plan](../plans/2026-07-04-m3-core-middleware-native-backend-plan.md)
 
 The architecture plan records the current system design baseline. The module skeleton plan is the
 accepted G1 execution baseline for the current batch closeout. The middleware goal roadmap records
@@ -239,6 +247,13 @@ The user later authorized G6 Language SDK Wrapper Skeletons planning, selected P
 Option A, and then authorized goal-driven G6 implementation. That G6 implementation window is now
 complete after G6-F closeout verification and independent audit acceptance. The main agent may not
 auto-advance into G7 or any later milestone without a new user-approved goal window.
+
+The user later authorized M3 Core Middleware Contract And Native In-Process Backend. M3 may proceed
+through design, subagent design review, TDD implementation batches, independent audits, examples,
+local conformance integration, and closeout inside the approved M3 scope. M3 does not authorize
+ROS2, DDS, sockets, shared memory, multi-process transport, simulator backend, MCU runtime,
+gateway, management plane, auth, remote management, event streams, CI, Docker, package manager,
+CMake, colcon, IDL/codegen, external `grcl` migration, or C++/Python example acceptance.
 
 Stop conditions for this continuous window:
 

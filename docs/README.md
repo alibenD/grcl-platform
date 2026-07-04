@@ -14,6 +14,7 @@ creating parallel index or review-pack files.
 | Review backend and adapter direction | [Backend SPI Contract](architecture/backend-spi-contract.md) | [Runtime Layering](architecture/runtime-layering.md), [ADR-0008](adr/ADR-0008-backend-spi-contract.md) |
 | Review SDK direction | [Language SDK Strategy](architecture/language-sdk-strategy.md) | [SDK Platform Governance](architecture/sdk-platform-governance.md), [ADR-0003](adr/ADR-0003-language-sdks-over-grcl-c.md) |
 | Review M2/G6 SDK boundary baseline | [Language SDK Strategy](architecture/language-sdk-strategy.md) | [G6 Language SDK Wrapper Skeletons Plan](plans/2026-07-04-g6-language-sdk-wrapper-skeletons-plan.md), [SDK Platform Governance](architecture/sdk-platform-governance.md) |
+| Review M3 core middleware design | [GRCL-C API Shape](architecture/grcl-c-api-shape.md) | [Backend SPI Contract](architecture/backend-spi-contract.md), [M3 Core Middleware Native Backend Plan](plans/2026-07-04-m3-core-middleware-native-backend-plan.md) |
 | Run the local conformance harness | [Conformance And CI Strategy](architecture/conformance-and-ci-strategy.md) | `../scripts/run-conformance.sh`, [G5 Conformance Harness Plan](plans/2026-07-04-g5-conformance-harness-plan.md) |
 | Recover current execution state | [Current Context](status/current-context.md) | [Goal Execution Queue](status/goal-execution-queue.md), [Middleware Goal Roadmap](status/middleware-goal-roadmap.md) |
 | Audit a completed task | [Goal Execution Queue](status/goal-execution-queue.md) | `.local/agentic-runs/<plan-id>/<task-id>/ledger.md` and audit reports |
@@ -110,6 +111,7 @@ Plans are execution artifacts. Read them after the relevant architecture documen
 - [GRCL-C ABI Contract Plan](plans/2026-07-03-grcl-c-abi-contract-plan.md)
 - [G5 Conformance Harness Plan](plans/2026-07-04-g5-conformance-harness-plan.md)
 - [G6 Language SDK Wrapper Skeletons Plan](plans/2026-07-04-g6-language-sdk-wrapper-skeletons-plan.md)
+- [M3 Core Middleware Native Backend Plan](plans/2026-07-04-m3-core-middleware-native-backend-plan.md)
 
 Current recovery and queue state:
 

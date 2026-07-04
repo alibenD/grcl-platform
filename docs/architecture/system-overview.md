@@ -48,7 +48,7 @@ The architecture has six design layers:
 
 ## Non-Goals For The Current Phase
 
-- Do not implement runtime code in this repository yet.
+- Do not expand runtime code outside the active M3 in-process native backend scope.
 - Do not migrate the current `github.com/alibenD/grcl` C++ package until repository topology is
   reviewed.
 - Do not create a public SDK marketplace before manifest, permissions, conformance, and signing
@@ -62,13 +62,13 @@ See [system-overview.mmd](../assets/system-overview.mmd).
 
 | Subsystem | Owns | Does not own | Related ADRs | Current goal stage |
 |---|---|---|---|---|
-| `grcl-c` core contract | Public C ABI, opaque handles, result model, options structs, lifecycle declarations, storage, capability query declarations | Runtime behavior, backend implementation, SDK convenience APIs | [ADR-0002](../adr/ADR-0002-grcl-c-as-core-contract.md), [ADR-0005](../adr/ADR-0005-grcl-c-handle-and-lifecycle-contract.md), [ADR-0010](../adr/ADR-0010-grcl-c-capability-abi-representation.md) | G2-F closeout complete |
+| `grcl-c` core contract | Public C ABI, opaque handles, result model, options structs, lifecycle declarations, storage, capability query declarations, M3 core messaging API shape | Backend implementation, SDK convenience APIs, transport internals | [ADR-0002](../adr/ADR-0002-grcl-c-as-core-contract.md), [ADR-0005](../adr/ADR-0005-grcl-c-handle-and-lifecycle-contract.md), [ADR-0010](../adr/ADR-0010-grcl-c-capability-abi-representation.md) | M3 design active |
 | Runtime capability and graph | Capability, availability, health, graph projection, negotiation schema, runtime participant model | Wire protocol, management transport, backend-specific discovery internals | [ADR-0004](../adr/ADR-0004-runtime-capability-exchange-and-scoped-graph.md), [ADR-0006](../adr/ADR-0006-runtime-capability-schema.md), [ADR-0010](../adr/ADR-0010-grcl-c-capability-abi-representation.md) | G1 schema artifacts complete; G2 ABI mapping complete |
-| Backend SPI | Backend registration shape, lifecycle hooks, capability hooks, graph/diagnostics hooks, adapter containment | ROS2 public API design, runtime implementation, transport internals | [ADR-0008](../adr/ADR-0008-backend-spi-contract.md) | G3 design baseline complete; G4 implementation pending |
+| Backend SPI | Backend registration shape, lifecycle hooks, capability hooks, M3 in-process messaging hooks, graph/diagnostics hooks, adapter containment | ROS2 public API design, transport internals, SDK semantics | [ADR-0008](../adr/ADR-0008-backend-spi-contract.md) | M3 SPI v0.2 design active |
 | MCU/RTOS profiles | Profile descriptors, subset rules, storage and executor constraints | Full desktop runtime requirements | [ADR-0007](../adr/ADR-0007-mcu-runtime-profile-contract.md) | G1 fixtures complete; runtime implementation pending |
-| Language SDKs | C++, Python, and future SDK layering over `grcl-c` handles | Independent runtime semantics or backend-private type exposure | [ADR-0003](../adr/ADR-0003-language-sdks-over-grcl-c.md), [ADR-0009](../adr/ADR-0009-language-sdk-binding-contract.md) | G6 planning complete; implementation gated |
+| Language SDKs | C++, Python, and future SDK layering over `grcl-c` handles | Independent runtime semantics or backend-private type exposure | [ADR-0003](../adr/ADR-0003-language-sdks-over-grcl-c.md), [ADR-0009](../adr/ADR-0009-language-sdk-binding-contract.md) | G6 wrapper skeletons complete; M3 C examples only |
 | Management plane | Future read-only snapshot contract, CLI/debug/dashboard data shape, diagnostics visibility | v1 auth, remote control, event streams, SDK permission enforcement | future G10 ADR | G10 deferred |
-| Conformance | Header hygiene, schema fixtures, C ABI compile-only checks, local contract-drift gates, future CI-oriented gates | Runtime claims without corresponding runnable evidence | architecture decision docs only | G5 local harness complete |
+| Conformance | Header hygiene, schema fixtures, C ABI compile-only checks, local contract-drift gates, M3 example validation, future CI-oriented gates | Runtime claims without corresponding runnable evidence | architecture decision docs only | G5/G6 local harness complete; M3 stage planned |
 
 ## Design Traceability
 
@@ -78,9 +78,9 @@ See [system-overview.mmd](../assets/system-overview.mmd).
 | Capability ABI representation | [GRCL-C Capability ABI Representation](grcl-c-capability-abi-representation.md) | [ADR-0010](../adr/ADR-0010-grcl-c-capability-abi-representation.md) | `capability.h`, `runtime.h`, `schemas/capability-negotiation-result.schema.yaml` |
 | Runtime capability schema | [Runtime Capability Schema](runtime-capability-schema.md) | [ADR-0006](../adr/ADR-0006-runtime-capability-schema.md) | `schemas/runtime-capability-record.schema.yaml`, `tests/conformance/runtime-capability/*.yaml` |
 | Runtime graph projection | [Runtime Capability Graph](runtime-capability-graph.md) | [ADR-0004](../adr/ADR-0004-runtime-capability-exchange-and-scoped-graph.md) | `docs/assets/runtime-graph.mmd`, capability graph fields |
-| Backend boundary | [Backend SPI Contract](backend-spi-contract.md) | [ADR-0008](../adr/ADR-0008-backend-spi-contract.md) | G3 SPI ownership and function-table design; future G4 backend artifacts |
+| Backend boundary | [Backend SPI Contract](backend-spi-contract.md) | [ADR-0008](../adr/ADR-0008-backend-spi-contract.md) | G3 SPI ownership and function-table design; M3 SPI v0.2 planned operation table |
 | MCU profile subsets | [MCU Runtime Profiles](mcu-runtime-profiles.md) | [ADR-0007](../adr/ADR-0007-mcu-runtime-profile-contract.md) | `schemas/mcu-profile.schema.yaml`, `tests/conformance/mcu-profiles/*.yaml` |
-| SDK layering | [Language SDK Strategy](language-sdk-strategy.md) | [ADR-0003](../adr/ADR-0003-language-sdks-over-grcl-c.md), [ADR-0009](../adr/ADR-0009-language-sdk-binding-contract.md) | future G6 SDK wrapper skeletons |
+| SDK layering | [Language SDK Strategy](language-sdk-strategy.md) | [ADR-0003](../adr/ADR-0003-language-sdks-over-grcl-c.md), [ADR-0009](../adr/ADR-0009-language-sdk-binding-contract.md) | `src/grcl-cpp/include/grcl/cpp/*.hpp`, `src/grcl-py/grcl_py/*.py`, `scripts/check-sdk-boundaries.py` |
 | Management snapshot | [Management Plane Concept And Scope](management-plane-concept-and-scope.md) | future G10 ADR | future snapshot schema and tool output shape |
 
 ## Review Path

@@ -32,7 +32,8 @@ diagnostics core with a private null/native-test backend. G5 Conformance Harness
 and provides the local contract-drift harness. G6 Language SDK Wrapper Skeletons is complete as M2
 Cross-Language SDK Boundary Baseline: `grcl-cpp` and `grcl-py` wrapper skeletons exist, Python
 binding Option A is recorded, and SDK boundary drift checks are integrated into the local
-conformance runner. No post-G6 implementation milestone is authorized from the roadmap alone.
+conformance runner. M3 Core Middleware Contract And Native In-Process Backend is active under a
+goal-specific plan and is limited to local in-process native backend behavior for C examples.
 
 ## Model And Effort Policy
 
@@ -83,6 +84,7 @@ bar for the task, and must record the chosen policy in each task brief.
 | G4 | Null/Native Test Backend v0.1 | superseded at the minimum runnable-core level by M1; any expanded backend work needs a new plan | M1 closeout verified create/start/stop/destroy, capability query, negotiation, diagnostics, and bounded-storage negative paths against a null/native-test backend |
 | G5 | Conformance Harness v0.1 | local docs, schema, C ABI, capability fixture, MCU profile fixture, and M1 harness checks | Local checks can fail on contract drift before SDK, simulator, ROS2, MCU runtime, management-plane, CI, or release work expands |
 | G6 | Language SDK Wrapper Skeletons | `grcl-cpp` and `grcl-py` wrappers over `grcl-c` handles | SDK skeletons wrap core handles without independent lifecycle semantics |
+| M3 | Core Middleware Contract And Native In-Process Backend | sub/pub, service/client, executor pull, local runtime params, C examples, native in-process backend | C examples run through local backend and conformance without transport or ROS2 scope |
 | G7 | Simulator Runtime v0.1 | deterministic simulator backend for graph, capability, diagnostics, and snapshot validation | Middleware semantics can be tested without ROS2 or hardware |
 | G8 | ROS2 Adapter Design And Skeleton | ROS2 backend skeleton, graph projection rules, `rcl`/`rmw`/`rclcpp` containment | ROS2 types remain backend-private; GRCL runtime participant mapping is explicit |
 | G9 | MCU And Gateway Profile Runtime | profile-limited MCU adapters and gateway representation path | MCU profiles avoid full-graph assumptions; gateway representation is testable |
@@ -205,6 +207,29 @@ goal still needs a task plan or task briefs before implementation. G6 completion
 simulator, ROS2, MCU, gateway, management-plane, CI, Docker, package/build policy, external
 migration, or expanded SDK behavior beyond the completed wrapper skeleton baseline.
 
+## M3 Scope
+
+M3 Core Middleware Contract And Native In-Process Backend includes:
+
+- `grcl-c` node, publisher, subscription, service, client, executor, type-support, and local
+  runtime parameter contract.
+- backend SPI v0.2 append-only operation table design.
+- in-process native backend routing for local pub/sub and service/client examples.
+- runtime-local parameter table.
+- C examples and local conformance integration.
+
+M3 excludes ROS2, DDS, sockets, shared memory, multi-process transport, simulator backend, MCU
+runtime, gateway, management plane, auth, remote management, event streams, CI, Docker, package
+manager, CMake, colcon, IDL/codegen, external `grcl` migration, and C++/Python example acceptance.
+
+Current M3 status:
+
+- M3 planning status: `complete`
+- M3 design review status: `complete`
+- M3 implementation status: `active at M3-C API/SPI header contract`
+- M3 plan:
+  [M3 Core Middleware Native Backend Plan](../plans/2026-07-04-m3-core-middleware-native-backend-plan.md)
+
 ## Current Decision State
 
 Management-plane concept work is no longer the blocking path for core middleware progress. It is
@@ -213,6 +238,6 @@ independent-audit workflow. G2-F closeout and G3 Backend SPI API Shape v0.1 desi
 complete. M1 First Runnable GRCL-C Core With Null/Native Backend is complete, locally verified, and
 independently audited with notes. G5 Conformance Harness v0.1 is complete after independent audit
 acceptance. G6 Language SDK Wrapper Skeletons is complete after task briefs, TDD-style verification,
-implementation subagents, and independent audit. No further auto-advance is authorized from this
-roadmap state alone: any post-G6 implementation requires a new approved goal window with task
-briefs, TDD plan, implementation subagent, and independent audit.
+implementation subagents, and independent audit. M3 Core Middleware Contract And Native In-Process
+Backend is active under a goal-specific plan. No further auto-advance beyond M3 is authorized from
+this roadmap state alone.

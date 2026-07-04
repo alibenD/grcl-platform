@@ -7,15 +7,16 @@ boundary that backend implementations must satisfy so the `grcl-c` core contract
 ROS2, MCU/RTOS, gateway, and simulator runtimes without allowing any one backend to define public
 GRCL semantics by accident.
 
-G3 produces this SPI shape as a design baseline. It does not implement a backend and does not add
-runtime behavior.
+G3 produced the first SPI shape as a design baseline. M1 materialized lifecycle, capability, and
+diagnostics hooks through a private null/native-test backend. M3 extends the SPI design to local
+in-process messaging while preserving backend containment.
 
 ## Backend Families
 
 | Backend | Role | First implementation goal |
 |---|---|---|
 | null/native-test | deterministic local backend used to validate lifecycle and capability contracts | completed in M1 minimum runnable-core scope |
-| native | Linux/native transport and local runtime behavior | after a future approved post-M1 plan |
+| native | in-process native routing for M3, later Linux/native transport work | M3 for in-process routing only |
 | ros2 | ROS2 adapter and GRCL graph projection over ROS2 behavior | G8 |
 | mcu | profile-limited bare-metal/RTOS runtime | G9 |
 | gateway | downstream runtime representation and capability translation | G9/G10 input |
@@ -108,20 +109,196 @@ Rules:
   if `start_runtime` fails.
 - `get_diagnostics` uses a caller-provided output buffer. A zero capacity query may be used to ask
   for the required record count.
-- Node, endpoint, executor, transport, graph-delta, and channel operations are not required in M1.
-  Later goals may extend the operation table through trailing fields guarded by `struct_size`.
+- Node, endpoint, executor, service/client, parameter, transport, graph-delta, and channel
+  operations were not required in M1. M3 may extend the operation table through trailing fields
+  guarded by `struct_size`.
+
+## M3 SPI v0.2 Append-Only Extension
+
+M3 extends `grcl_backend_ops_t` by appending operation pointers after the existing M1 fields. The
+core must check `ops->struct_size` before calling any appended pointer so older lifecycle-only
+backends remain detectable and can return unsupported results instead of being called through
+missing hooks.
+
+The v0.2 extension covers only local in-process behavior:
+
+- node create and destroy notification.
+- publisher, subscription, service, and client create and destroy notification.
+- publish bytes and subscription take bytes.
+- client request send, service request take, service response send, and client response take.
+- executor spin once.
+- runtime-local parameter set, get, and list.
+
+The exact append order for M3-C is:
+
+```c
+typedef struct grcl_backend_node_state grcl_backend_node_state_t;
+typedef struct grcl_backend_publisher_state grcl_backend_publisher_state_t;
+typedef struct grcl_backend_subscription_state grcl_backend_subscription_state_t;
+typedef struct grcl_backend_service_state grcl_backend_service_state_t;
+typedef struct grcl_backend_client_state grcl_backend_client_state_t;
+typedef struct grcl_backend_executor_state grcl_backend_executor_state_t;
+
+struct grcl_backend_ops {
+  /* M1 fields stay first and unchanged through get_diagnostics. */
+
+  grcl_result_t (*create_node)(
+    grcl_backend_runtime_state_t * backend_state,
+    const grcl_node_t * node,
+    const grcl_node_options_t * options,
+    grcl_backend_node_state_t ** out_backend_node);
+  grcl_result_t (*destroy_node)(
+    grcl_backend_runtime_state_t * backend_state,
+    grcl_backend_node_state_t * backend_node);
+  grcl_result_t (*create_publisher)(
+    grcl_backend_runtime_state_t * backend_state,
+    grcl_backend_node_state_t * backend_node,
+    const grcl_publisher_t * publisher,
+    const grcl_publisher_options_t * options,
+    grcl_backend_publisher_state_t ** out_backend_publisher);
+  grcl_result_t (*destroy_publisher)(
+    grcl_backend_runtime_state_t * backend_state,
+    grcl_backend_publisher_state_t * backend_publisher);
+  grcl_result_t (*create_subscription)(
+    grcl_backend_runtime_state_t * backend_state,
+    grcl_backend_node_state_t * backend_node,
+    const grcl_subscription_t * subscription,
+    const grcl_subscription_options_t * options,
+    grcl_backend_subscription_state_t ** out_backend_subscription);
+  grcl_result_t (*destroy_subscription)(
+    grcl_backend_runtime_state_t * backend_state,
+    grcl_backend_subscription_state_t * backend_subscription);
+  grcl_result_t (*publish_bytes)(
+    grcl_backend_runtime_state_t * backend_state,
+    grcl_backend_publisher_state_t * backend_publisher,
+    const void * payload,
+    size_t payload_size);
+  grcl_result_t (*subscription_take_bytes)(
+    grcl_backend_runtime_state_t * backend_state,
+    grcl_backend_subscription_state_t * backend_subscription,
+    void * out_payload,
+    size_t payload_capacity,
+    size_t * out_payload_size);
+  grcl_result_t (*create_service)(
+    grcl_backend_runtime_state_t * backend_state,
+    grcl_backend_node_state_t * backend_node,
+    const grcl_service_t * service,
+    const grcl_service_options_t * options,
+    grcl_backend_service_state_t ** out_backend_service);
+  grcl_result_t (*destroy_service)(
+    grcl_backend_runtime_state_t * backend_state,
+    grcl_backend_service_state_t * backend_service);
+  grcl_result_t (*create_client)(
+    grcl_backend_runtime_state_t * backend_state,
+    grcl_backend_node_state_t * backend_node,
+    const grcl_client_t * client,
+    const grcl_client_options_t * options,
+    grcl_backend_client_state_t ** out_backend_client);
+  grcl_result_t (*destroy_client)(
+    grcl_backend_runtime_state_t * backend_state,
+    grcl_backend_client_state_t * backend_client);
+  grcl_result_t (*client_send_request_bytes)(
+    grcl_backend_runtime_state_t * backend_state,
+    grcl_backend_client_state_t * backend_client,
+    const void * request_payload,
+    size_t request_payload_size,
+    grcl_request_id_t * out_request_id);
+  grcl_result_t (*service_take_request_bytes)(
+    grcl_backend_runtime_state_t * backend_state,
+    grcl_backend_service_state_t * backend_service,
+    void * out_request_payload,
+    size_t request_payload_capacity,
+    size_t * out_request_payload_size,
+    grcl_request_id_t * out_request_id);
+  grcl_result_t (*service_send_response_bytes)(
+    grcl_backend_runtime_state_t * backend_state,
+    grcl_backend_service_state_t * backend_service,
+    grcl_request_id_t request_id,
+    const void * response_payload,
+    size_t response_payload_size);
+  grcl_result_t (*client_take_response_bytes)(
+    grcl_backend_runtime_state_t * backend_state,
+    grcl_backend_client_state_t * backend_client,
+    grcl_request_id_t request_id,
+    void * out_response_payload,
+    size_t response_payload_capacity,
+    size_t * out_response_payload_size);
+  grcl_result_t (*create_executor)(
+    grcl_backend_runtime_state_t * backend_state,
+    const grcl_executor_t * executor,
+    const grcl_executor_options_t * options,
+    grcl_backend_executor_state_t ** out_backend_executor);
+  grcl_result_t (*destroy_executor)(
+    grcl_backend_runtime_state_t * backend_state,
+    grcl_backend_executor_state_t * backend_executor);
+  grcl_result_t (*executor_add_node)(
+    grcl_backend_runtime_state_t * backend_state,
+    grcl_backend_executor_state_t * backend_executor,
+    grcl_backend_node_state_t * backend_node);
+  grcl_result_t (*executor_remove_node)(
+    grcl_backend_runtime_state_t * backend_state,
+    grcl_backend_executor_state_t * backend_executor,
+    grcl_backend_node_state_t * backend_node);
+  grcl_result_t (*executor_spin_once)(
+    grcl_backend_runtime_state_t * backend_state,
+    grcl_backend_executor_state_t * backend_executor,
+    uint64_t timeout_ns);
+  grcl_result_t (*runtime_param_set)(
+    grcl_backend_runtime_state_t * backend_state,
+    const grcl_param_record_t * param);
+  grcl_result_t (*runtime_param_get)(
+    grcl_backend_runtime_state_t * backend_state,
+    const char * name,
+    grcl_param_record_t * out_param,
+    void * value_buffer,
+    size_t value_buffer_capacity,
+    size_t * out_value_size);
+  grcl_result_t (*runtime_param_list)(
+    grcl_backend_runtime_state_t * backend_state,
+    char * out_names,
+    size_t names_capacity,
+    size_t * out_names_size,
+    size_t * out_param_count);
+};
+```
+
+Rules:
+
+- The core owns public handles and validates public options.
+- The backend owns backend-private queues, topic maps, service maps, request correlation, and
+  parameter storage.
+- Backend callbacks receive core-owned opaque object handles only as identity tokens. They must not
+  dereference private core structs.
+- Backend-private state typedefs belong in `backend.h` as incomplete structs. The native backend
+  provides the definitions privately.
+- Before calling any M3 field, the core must verify both field presence and non-null function
+  pointer:
+  `ops->struct_size >= offsetof(grcl_backend_ops_t, field) + sizeof(ops->field)` and
+  `ops->field != NULL`.
+- Missing or null M3 fields must return `GRCL_ERROR_UNSUPPORTED_CAPABILITY` from the public
+  `grcl-c` API. The core must not call through a missing backend hook.
+- The in-process native backend may copy bytes into backend-owned memory. It must not expose
+  transport handles, sockets, pthread handles, ROS2/DDS handles, simulator objects, or C++ types.
+- M3 does not add plugin loading, dynamic backend selection, network transport, shared memory,
+  zero-copy handoff, background worker threads, or blocking waits.
+
+The v0.2 append order is grouped by dependency: node state, pub/sub endpoints, service/client
+endpoints, executor state, then runtime-local params. M3-C may add helper macros for field-presence
+checks, but those helpers must be private to the core unless an explicit public ABI need appears.
 
 ## Required SPI Areas
 
 | Area | Required responsibilities for G3 design | Deferred responsibilities |
 |---|---|---|
 | registration | backend descriptor, family id, ABI version, operation table sizing | dynamic plugin loading, registry, signing |
-| runtime lifecycle | create, start, stop, destroy hooks mapped to public lifecycle | publish/subscribe behavior, transport sessions |
+| runtime lifecycle | create, start, stop, destroy hooks mapped to public lifecycle | transport sessions |
 | capability | fill `grcl_runtime_capability_record_t`, negotiate `grcl_runtime_capability_request_t` | full descriptor iterators, wire-format capability exchange |
 | diagnostics | return backend diagnostic records without expanding `grcl_result_t` | management-plane snapshot schema |
 | graph | report graph projection support and backend-owned graph deltas when available | full distributed graph cache |
 | memory/storage | consume core-provided allocator/storage policy and report bounded-capacity failures | backend-specific zero-copy handoff |
 | scheduling | expose whether polling or executor hooks are supported | final executor scheduling semantics |
+| local messaging | local topic queues, request/reply queues, executor pull dispatch, runtime-local params | network transport, ROS2 projection, distributed graph, distributed params |
+| local params capability | report runtime-local param limits through M3 append-only capability fields | distributed param descriptors, constraints, callbacks |
 
 ## Runtime Lifecycle Contract
 
@@ -211,6 +388,31 @@ The completed M1 closeout verifies this target through `src/grcl-c/tests/run_m1_
 C11/C++17 header smoke coverage and runnable lifecycle, capability, negotiation, diagnostics, and
 bounded-storage negative tests.
 
+## M3 Native In-Process Backend Target
+
+M3 introduces a complete in-process native backend sufficient for core examples. "Complete" in M3
+means complete for local C examples, not complete as a production transport backend.
+
+| Scenario | Required result |
+|---|---|
+| create two nodes in one runtime | nodes are core-owned and backend observes private node state |
+| create publisher and subscription with matching topic and type id | endpoints are accepted |
+| publish bytes, spin once, take bytes | copied payload is delivered deterministically |
+| publish with mismatched type id | no compatible subscription receives data |
+| send service request, spin, service take, service respond, spin, client take | request id correlation is preserved |
+| set/get/list local runtime params | backend-owned param table copies values and reports capacity errors |
+| run C examples | examples compile and run without build-system rollout |
+
+Capability reporting for M3 runtime-local params uses `GRCL_CAPABILITY_SUMMARY_FLAG_RUNTIME_LOCAL_PARAMS`
+and these append-only fields in `grcl_runtime_capability_record_t`: `max_parameters`,
+`parameter_name_buffer_bytes`, and `parameter_value_buffer_bytes`. The native backend must set those
+fields only for runtime-local param support. It must not imply node-scoped params, distributed
+params, callbacks, constraints, or watchers.
+
+M3 must not implement sockets, shared memory, ROS2, simulator runtime, MCU runtime, gateway,
+management snapshots, auth, remote management, event streams, package/build policy, or external
+`grcl` migration.
+
 ## Baseline Decisions
 
 - Backend implementations are internal to the `grcl-c` core contract boundary.
@@ -232,4 +434,5 @@ bounded-storage negative tests.
 - Transport ownership and zero-copy handoff rules remain deferred until native and MCU transport
   design goals.
 - Publish/subscribe, service/client, executor scheduling, and graph delta semantics remain outside
-  the completed M1 minimum target.
+  the completed M1 minimum target and enter scope only through the approved M3 in-process native
+  backend goal.

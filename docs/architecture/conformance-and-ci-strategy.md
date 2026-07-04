@@ -91,6 +91,17 @@ and repo-wide build-system declarations, verifies that `grcl-cpp` includes publi
 headers instead of copying ABI declarations, and verifies that `grcl-py` routes through its
 private native boundary rather than treating `grcl-cpp` as the semantic source.
 
+## M3 Local Core Middleware Conformance
+
+M3 adds a local core middleware stage only after the M3 C tests and C examples pass independently.
+The stage must validate that the in-process native backend supports the approved local contract:
+pub/sub bytes delivery, service/client request/reply, executor pull dispatch, runtime-local params,
+and deterministic cleanup.
+
+M3 conformance is still local. It must not claim transport interoperability, ROS2 behavior, MCU
+runtime behavior, simulator behavior, distributed graph behavior, distributed params, SDK stability,
+CI rollout, Docker support, package distribution, or release readiness.
+
 ## Required Local Commands
 
 Before any documentation-only architecture iteration is called complete:
@@ -119,6 +130,10 @@ workspace root as `src/grcl-platform/scripts/run-conformance.sh` or from the rep
 defaults generated outputs to `/Users/aliben/Project/grcl-platform_ws/artifacts`, runs the six local
 stages in order, stops on the first failure, and keeps runner-owned summary metadata under
 `GRCL_PLATFORM_ARTIFACT_ROOT/g5/conformance/`.
+
+After M3 implementation passes independent audit, the runner should add an M3 core middleware stage
+after SDK boundary drift checks. Until then, the six-stage runner remains the current executable
+baseline.
 
 ## Artifact Ownership
 

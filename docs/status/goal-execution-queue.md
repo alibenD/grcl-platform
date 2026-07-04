@@ -9,21 +9,23 @@ user-approved M1 Autonomous Goal Runner window for the first runnable `grcl-c` c
 null/native-test backend is complete. G5 Conformance Harness v0.1 planning is complete, and the
 user-approved G5 implementation window is complete after G5-G independent audit acceptance. G6
 Language SDK Wrapper Skeletons is complete after G6-C/G6-D/G6-E independent audit acceptance and
-G6-F closeout.
+G6-F closeout. M3 Core Middleware Contract And Native In-Process Backend is active under the
+user-approved plan.
 
 ## Boundaries
 
 - Workspace root: `/Users/aliben/Project/grcl-platform_ws`
 - Repository root: `/Users/aliben/Project/grcl-platform_ws/src/grcl-platform`
-- Code implementation: G6 SDK wrapper skeleton implementation is complete; later implementation
-  milestones require a new user-approved goal window
+- Code implementation: M3 is active but implementation batches must wait until M3 design review
+  passes
 - Completed work: M1 first runnable `grcl-c` core with null/native-test backend, using task briefs,
   implementation subagents, independent audit subagents, and TDD-style verification
-- Allowed work now: recovery, review, or new goal planning; no auto-advance into G7 or later
-  milestones
-- Blocked post-G6 work without a new user-approved goal window: publish/subscribe, service/client,
-  executor scheduling, transport, ROS2, MCU, SDK, management plane, auth, remote management, event
-  streams, Docker, CI, external `grcl` migration, and repo-wide build-system policy
+- Allowed work now: M3 design filing, M3 design review, then M3 TDD implementation batches after
+  review acceptance
+- Blocked outside M3 without a new user-approved goal window: ROS2, DDS, sockets, shared memory,
+  multi-process transport, simulator backend, MCU runtime, gateway, management plane, auth, remote
+  management, event streams, Docker, CI, external `grcl` migration, IDL/codegen, C++/Python
+  example acceptance, and repo-wide build-system policy
 
 ## Carry-Forward Gate
 
@@ -93,6 +95,16 @@ G6-F closeout.
 | GQ-065 | Execute G6-D `grcl-py` minimal ownership boundary skeleton | GQ-063 | complete | G6-D audit status `accepted` in `.local/agentic-runs/2026-07-04-g6-language-sdk-wrapper-skeletons/g6-d-grcl-py-ownership-boundary/audit-report.md` |
 | GQ-066 | Execute G6-E SDK boundary drift checks and conformance integration | GQ-064, GQ-065 | complete | G6-E audit status `accepted` in `.local/agentic-runs/2026-07-04-g6-language-sdk-wrapper-skeletons/g6-e-sdk-boundary-drift-checks/audit-report.md`; local runner now includes SDK boundary drift checks |
 | GQ-067 | Execute G6-F closeout verification and durable status update | GQ-066 | complete | G6-F audit status `accepted` in `.local/agentic-runs/2026-07-04-g6-language-sdk-wrapper-skeletons/g6-f-closeout/audit-report.md`; full closeout verification passed |
+| GQ-068 | File M3 core middleware native backend plan and design baseline | GQ-067 | complete | `docs/plans/2026-07-04-m3-core-middleware-native-backend-plan.md`; canonical design docs updated; `git diff --check` and `python3 scripts/check-docs.py` passed |
+| GQ-069 | Run M3 architecture, ABI, and test-plan design reviews | GQ-068 | complete | architecture review `accepted_with_notes`; ABI/SPI re-review `accepted_with_notes`; test-plan re-review `accepted` under `.local/agentic-runs/2026-07-04-m3-core-middleware-native-backend/` |
+| GQ-070 | Execute M3-C API and SPI header contract batch | GQ-069 | in_progress | requires M3-C task brief, TDD implementation subagent, and independent audit |
+| GQ-071 | Execute M3-D core object ownership batch | GQ-070 | pending | requires M3-C audit acceptance |
+| GQ-072 | Execute M3-E pub/sub routing batch | GQ-071 | pending | requires M3-D audit acceptance |
+| GQ-073 | Execute M3-F service/client routing batch | GQ-072 | pending | requires M3-E audit acceptance |
+| GQ-074 | Execute M3-G local runtime params batch | GQ-073 | pending | requires M3-F audit acceptance |
+| GQ-075 | Execute M3-H native backend capability update batch | GQ-074 | pending | requires M3-G audit acceptance |
+| GQ-076 | Execute M3-I C examples batch | GQ-075 | pending | requires M3-H audit acceptance |
+| GQ-077 | Execute M3-J conformance integration and closeout | GQ-076 | pending | requires M3-I audit acceptance |
 
 ## Execution Rules
 
@@ -114,6 +126,10 @@ G6-F closeout.
   extension framework selection, pub/sub, graph, transport, ROS2, MCU runtime, simulator,
   management-plane implementation, auth, remote management, event streams, or external `grcl`
   migration.
+- M3 Core Middleware Contract And Native In-Process Backend is active. It authorizes only the
+  approved M3 scope after design review gates pass: in-process native backend, C API/SPI contract,
+  executor pull, pub/sub bytes, service/client bytes, local runtime params, C tests, C examples,
+  and local conformance integration.
 - If a future task becomes implementation work, use file-based task briefs and independent audit
   subagents according to `docs/architecture/agentic-delivery-governance.md`.
 - If validation fails, update this queue with the failure and fix task before claiming completion.
@@ -131,4 +147,5 @@ M1-F passed independent audit, and M1-G passed independent audit with notes afte
 local harness, artifact-root behavior, report/audit inventory, and forbidden-scope scans. G5
 Conformance Harness v0.1 is complete after G5-G independent audit acceptance. G6 Language SDK
 Wrapper Skeletons is complete after G6-C/G6-D/G6-E independent audit acceptance and G6-F closeout
-verification. No post-G6 implementation milestone is authorized from this queue state alone.
+verification. M3 Core Middleware Contract And Native In-Process Backend is active under GQ-068
+through GQ-077. No post-M3 implementation milestone is authorized from this queue state alone.
