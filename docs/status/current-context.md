@@ -70,9 +70,16 @@ multi-repository orchestration, and generated artifacts need a stable workspace-
   subagents. G5 provides the local `scripts/run-conformance.sh` contract-drift harness covering
   documentation checks, runtime capability fixtures, MCU profile fixtures, C ABI/header checks, and
   the M1 runnable harness.
-- No post-M1 implementation milestone other than G5 Conformance Harness v0.1 is authorized. Any
-  non-G5 milestone requires explicit user approval, a goal-specific plan or task briefs, TDD-style
-  verification, implementation subagent execution, and independent audit.
+- G6 Language SDK Wrapper Skeletons planning is complete in
+  [G6 Language SDK Wrapper Skeletons Plan](../plans/2026-07-04-g6-language-sdk-wrapper-skeletons-plan.md).
+  It records M2 Cross-Language SDK Boundary Baseline, future task breakdown, allowed file sets,
+  verification strategy, and the Python binding substrate gate.
+- No post-G5 implementation milestone is authorized. G6 implementation requires explicit user
+  approval, the Python binding substrate decision, file-based task briefs, TDD-style verification,
+  implementation subagent execution, and independent audit.
+- non-G5 post-M1 implementation remains unauthorized unless a new user-approved goal window records
+  a goal-specific plan, allowed files, verification strategy, implementation subagents, and
+  independent audit gates.
 - Management-plane concept modeling is deferred as future G10 input unless explicitly reprioritized.
 - Runtime capability exchange is a design decision, not an implemented runtime feature.
 - Active goal execution is tracked in `docs/status/goal-execution-queue.md`.
@@ -150,6 +157,7 @@ demand by scripts before writing build, test, coverage, log, or generated files.
 - [Middleware Goal Roadmap](middleware-goal-roadmap.md)
 - [M1 First Runnable GRCL-C Core Plan](../plans/2026-07-04-m1-first-runnable-core-plan.md)
 - [G5 Conformance Harness Plan](../plans/2026-07-04-g5-conformance-harness-plan.md)
+- [G6 Language SDK Wrapper Skeletons Plan](../plans/2026-07-04-g6-language-sdk-wrapper-skeletons-plan.md)
 
 The architecture plan records the current system design baseline. The module skeleton plan is the
 accepted G1 execution baseline for the current batch closeout. The middleware goal roadmap records
@@ -223,6 +231,10 @@ The user later authorized G5 Conformance Harness v0.1 planning, and then authori
 implementation under the goal-driven delivery model. That G5 implementation window is now complete
 after G5-G independent audit acceptance. The main agent may not auto-advance into G6 or any other
 post-G5 implementation milestone without a new user-approved goal window.
+
+The user later authorized G6 Language SDK Wrapper Skeletons planning only. G6 planning is complete,
+but SDK implementation remains paused until the user approves a G6 implementation window and
+chooses the Python binding substrate.
 
 Stop conditions for this continuous window:
 

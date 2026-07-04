@@ -30,7 +30,10 @@ design-only goal closed G2-F and produced the G3 Backend SPI API Shape v0.1 base
 completed the first runnable `grcl-c` lifecycle, bounded-storage, capability negotiation, and
 diagnostics core with a private null/native-test backend. No post-M1 implementation milestone is
 authorized from the roadmap alone. G5 Conformance Harness v0.1 is complete and provides the local
-contract-drift harness. No post-G5 implementation milestone is authorized from the roadmap alone.
+contract-drift harness. G6 Language SDK Wrapper Skeletons planning is complete as M2
+Cross-Language SDK Boundary Baseline, but implementation requires a new user-approved goal window
+and a Python binding substrate decision. No post-G5 implementation milestone is authorized from the
+roadmap alone.
 
 ## Model And Effort Policy
 
@@ -158,6 +161,33 @@ Current G5 status:
 - G5 plan:
   [G5 Conformance Harness Plan](../plans/2026-07-04-g5-conformance-harness-plan.md)
 
+## G6 Scope
+
+G6 Language SDK Wrapper Skeletons is planned as M2 Cross-Language SDK Boundary Baseline. It
+includes:
+
+- `grcl-cpp` RAII wrapper skeleton over `grcl-c` handles.
+- `grcl-py` ownership wrapper skeleton over a private native boundary shaped like `grcl-c`.
+- SDK boundary drift checks.
+- local verification that composes with the G5 conformance runner.
+
+G6 excludes:
+
+- full SDK usability claims.
+- pub/sub, service/client, executor scheduling, graph behavior, transport, ROS2 adapter behavior,
+  MCU runtime behavior, simulator behavior, management-plane behavior, auth, remote management, and
+  event streams.
+- package distribution, CI, Docker, repo-wide build-system rollout, external `grcl` migration, and
+  native extension framework selection unless separately approved.
+
+Current G6 status:
+
+- G6 planning status: `complete`
+- G6 implementation status: `pending user approval`
+- G6 implementation gate: choose Python binding substrate before creating SDK source files
+- G6 plan:
+  [G6 Language SDK Wrapper Skeletons Plan](../plans/2026-07-04-g6-language-sdk-wrapper-skeletons-plan.md)
+
 ## G2-G11 Refinement Rule
 
 Before each later goal starts, the main agent must create or update a goal-specific plan that:
@@ -180,6 +210,7 @@ preserved as future input for G10. G1 is complete under the already authorized t
 independent-audit workflow. G2-F closeout and G3 Backend SPI API Shape v0.1 design baseline are
 complete. M1 First Runnable GRCL-C Core With Null/Native Backend is complete, locally verified, and
 independently audited with notes. G5 Conformance Harness v0.1 is complete after independent audit
-acceptance. No further auto-advance is authorized from this roadmap state alone: any post-G5
-implementation requires a new approved goal window with task briefs, TDD plan, implementation
-subagent, and independent audit.
+acceptance. G6 Language SDK Wrapper Skeletons planning is complete, but implementation is blocked
+on user approval and the Python binding substrate gate. No further auto-advance is authorized from
+this roadmap state alone: any post-G5 implementation requires a new approved goal window with task
+briefs, TDD plan, implementation subagent, and independent audit.
