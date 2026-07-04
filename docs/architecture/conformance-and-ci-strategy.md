@@ -80,6 +80,7 @@ Before any documentation-only architecture iteration is called complete:
 ```bash
 git diff --check
 python3 scripts/check-docs.py
+scripts/run-conformance.sh
 find . -maxdepth 1 \( -name build -o -name install -o -name log \) -print
 ```
 
@@ -88,6 +89,13 @@ checks Markdown links in `README.md`, `AGENTS.md`, and `docs/**/*.md`, rejects u
 documentation markers, verifies that the three durable status documents agree on M1/G5 execution
 state, and writes its generated report only under `GRCL_PLATFORM_ARTIFACT_ROOT/g5/docs/` or the
 workspace artifact root default.
+
+`scripts/run-conformance.sh` is the G5-F top-level local runner. It may be invoked from the
+workspace root as `src/grcl-platform/scripts/run-conformance.sh` or from the repository root as
+`scripts/run-conformance.sh`. It preserves an existing `GRCL_PLATFORM_ARTIFACT_ROOT`, otherwise
+defaults generated outputs to `/Users/aliben/Project/grcl-platform_ws/artifacts`, runs the five G5
+stages in order, stops on the first failure, and keeps runner-owned summary metadata under
+`GRCL_PLATFORM_ARTIFACT_ROOT/g5/conformance/`.
 
 ## Artifact Ownership
 

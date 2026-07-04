@@ -68,6 +68,7 @@ must create it on demand before writing outputs.
 - [Development Environment](docs/architecture/development-environment.md)
 - [Container Workspace Strategy](docs/architecture/container-workspace-strategy.md)
 - [Conformance And CI Strategy](docs/architecture/conformance-and-ci-strategy.md)
+- Local conformance runner: `scripts/run-conformance.sh`
 - [Management Plane Concept And Scope](docs/architecture/management-plane-concept-and-scope.md)
 - [Management Plane Decision Scope](docs/architecture/management-plane-decision-scope.md)
 - [Agentic Delivery Governance](docs/architecture/agentic-delivery-governance.md)
