@@ -34,9 +34,9 @@ G6 does not cover publish/subscribe, service/client, executor scheduling, transp
 ROS2 adapter behavior, simulator behavior, MCU runtime behavior, management-plane behavior, auth,
 remote management, event streams, package distribution, CI, Docker, or external `grcl` migration.
 
-The G6 implementation gate is the Python binding substrate. The recommended future implementation
-profile is a private `ctypes` or dynamic-library shim boundary with package distribution deferred,
-but implementation must stop if real shared-library production or package policy becomes required.
+The selected G6 Python binding substrate is Option A: a private `ctypes` or dynamic-library shim
+boundary with package distribution deferred. Implementation must stop if real shared-library
+production, native extension framework selection, or package policy becomes required.
 
 ## C++ SDK
 

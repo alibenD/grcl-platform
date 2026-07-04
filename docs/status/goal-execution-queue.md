@@ -8,7 +8,8 @@ continuous implementation window for G2-C through G2-E is also closed after audi
 user-approved M1 Autonomous Goal Runner window for the first runnable `grcl-c` core with a
 null/native-test backend is complete. G5 Conformance Harness v0.1 planning is complete, and the
 user-approved G5 implementation window is complete after G5-G independent audit acceptance. G6
-Language SDK Wrapper Skeletons planning is complete, but implementation is not authorized.
+Language SDK Wrapper Skeletons planning is complete, Python binding Option A is selected, but
+implementation is not authorized.
 
 ## Boundaries
 
@@ -18,8 +19,8 @@ Language SDK Wrapper Skeletons planning is complete, but implementation is not a
   independent audit; non-G5 post-M1 implementation goals remain paused
 - Completed work: M1 first runnable `grcl-c` core with null/native-test backend, using task briefs,
   implementation subagents, independent audit subagents, and TDD-style verification
-- Allowed work now: recovery, review, or a user decision on the G6 Python binding substrate; no SDK
-  implementation unless the user approves a new G6 implementation goal window
+- Allowed work now: recovery, review, or G6 implementation planning; no SDK implementation unless
+  the user approves a new G6 implementation goal window
 - Blocked post-M1 work without a new user-approved goal window: publish/subscribe, service/client,
   executor scheduling, transport, ROS2, MCU, SDK, management plane, auth, remote management, event
   streams, Docker, CI, external `grcl` migration, and repo-wide build-system policy
@@ -87,7 +88,7 @@ Language SDK Wrapper Skeletons planning is complete, but implementation is not a
 | GQ-060 | Execute G5-F top-level local conformance runner | GQ-059 | complete | G5-F audit status `accepted_with_notes`; local runner composes docs, runtime capability, MCU profile, C ABI, and M1 harness stages |
 | GQ-061 | Execute G5-G closeout verification and independent audit | GQ-060 | complete | G5-G audit status `accepted`; full local conformance runner passed from workspace root, with `/tmp` artifact override, and from repository root |
 | GQ-062 | Plan G6 Language SDK Wrapper Skeletons / M2 boundary baseline | GQ-061 | complete | `docs/plans/2026-07-04-g6-language-sdk-wrapper-skeletons-plan.md`, SDK design home, roadmap, status, and navigation updated; no SDK code implemented |
-| GQ-063 | Choose G6 Python binding substrate before implementation | GQ-062 | pending_user_decision | options recorded in the G6 plan: A `ctypes`/private dynamic-library shim boundary, B Python API skeleton only, C native extension stack with build/package planning |
+| GQ-063 | Choose G6 Python binding substrate before implementation | GQ-062 | complete | user selected Option A: `ctypes`/private dynamic-library shim boundary with package distribution deferred |
 
 ## Execution Rules
 
@@ -121,6 +122,6 @@ document. M1 first runnable `grcl-c` core with null/native-test backend is compl
 M1-F passed independent audit, and M1-G passed independent audit with notes after verifying the full
 local harness, artifact-root behavior, report/audit inventory, and forbidden-scope scans. G5
 Conformance Harness v0.1 is complete after G5-G independent audit acceptance. G6 Language SDK
-Wrapper Skeletons planning is complete, but implementation is blocked on user approval and the
-Python binding substrate decision. No post-G5 implementation milestone is authorized from this
-queue state alone.
+Wrapper Skeletons planning is complete and Python binding Option A is selected, but implementation
+is blocked on user approval. No post-G5 implementation milestone is authorized from this queue
+state alone.

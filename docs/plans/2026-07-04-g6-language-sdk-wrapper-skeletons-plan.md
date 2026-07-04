@@ -73,8 +73,9 @@ G6 does not require a new C ABI decision if wrappers only cover the M1-proven su
 
 ## User Decision Gate Before Implementation
 
-G6 planning can complete without this decision, but G6 implementation must not start until the user
-chooses a Python binding substrate.
+G6 planning completed before this decision, and the user then selected Option A as the future G6
+implementation substrate. G6 implementation still must not start until the user approves a new G6
+implementation goal window.
 
 | Option | Meaning | Trade-off |
 |---|---|---|
@@ -84,6 +85,10 @@ chooses a Python binding substrate.
 
 Recommended planning baseline: Option A for future G6 implementation, with a stop condition if the
 implementation tries to solve package distribution or shared-library production inside G6.
+
+Selected decision: Option A. `grcl-py` should use a `ctypes` or private dynamic-library shim
+boundary shaped like `grcl-c`, while package distribution, wheel production, generated shared
+libraries, and native extension framework selection remain deferred.
 
 ## Allowed Files For Future G6 Implementation
 
@@ -331,6 +336,6 @@ Independent audit must verify:
 This document completes G6 planning only. G6 implementation requires:
 
 1. user approval for a new post-G5 implementation window.
-2. resolution of the Python binding substrate gate.
+2. use of the selected Option A Python binding substrate profile.
 3. file-based task briefs under `.local/agentic-runs/2026-07-04-g6-language-sdk-wrapper-skeletons/`.
 4. implementation subagents plus independent audit subagents before queue advancement.

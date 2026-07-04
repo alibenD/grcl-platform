@@ -31,9 +31,9 @@ completed the first runnable `grcl-c` lifecycle, bounded-storage, capability neg
 diagnostics core with a private null/native-test backend. No post-M1 implementation milestone is
 authorized from the roadmap alone. G5 Conformance Harness v0.1 is complete and provides the local
 contract-drift harness. G6 Language SDK Wrapper Skeletons planning is complete as M2
-Cross-Language SDK Boundary Baseline, but implementation requires a new user-approved goal window
-and a Python binding substrate decision. No post-G5 implementation milestone is authorized from the
-roadmap alone.
+Cross-Language SDK Boundary Baseline, and Python binding Option A is selected. G6 implementation
+requires a new user-approved goal window. No post-G5 implementation milestone is authorized from
+the roadmap alone.
 
 ## Model And Effort Policy
 
@@ -184,7 +184,8 @@ Current G6 status:
 
 - G6 planning status: `complete`
 - G6 implementation status: `pending user approval`
-- G6 implementation gate: choose Python binding substrate before creating SDK source files
+- G6 Python binding substrate: Option A, `ctypes` or private dynamic-library shim boundary with
+  package distribution deferred
 - G6 plan:
   [G6 Language SDK Wrapper Skeletons Plan](../plans/2026-07-04-g6-language-sdk-wrapper-skeletons-plan.md)
 
@@ -210,7 +211,7 @@ preserved as future input for G10. G1 is complete under the already authorized t
 independent-audit workflow. G2-F closeout and G3 Backend SPI API Shape v0.1 design baseline are
 complete. M1 First Runnable GRCL-C Core With Null/Native Backend is complete, locally verified, and
 independently audited with notes. G5 Conformance Harness v0.1 is complete after independent audit
-acceptance. G6 Language SDK Wrapper Skeletons planning is complete, but implementation is blocked
-on user approval and the Python binding substrate gate. No further auto-advance is authorized from
-this roadmap state alone: any post-G5 implementation requires a new approved goal window with task
-briefs, TDD plan, implementation subagent, and independent audit.
+acceptance. G6 Language SDK Wrapper Skeletons planning is complete and Python binding Option A is
+selected, but implementation is blocked on user approval. No further auto-advance is authorized
+from this roadmap state alone: any post-G5 implementation requires a new approved goal window with
+task briefs, TDD plan, implementation subagent, and independent audit.

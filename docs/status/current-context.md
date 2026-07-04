@@ -73,9 +73,10 @@ multi-repository orchestration, and generated artifacts need a stable workspace-
 - G6 Language SDK Wrapper Skeletons planning is complete in
   [G6 Language SDK Wrapper Skeletons Plan](../plans/2026-07-04-g6-language-sdk-wrapper-skeletons-plan.md).
   It records M2 Cross-Language SDK Boundary Baseline, future task breakdown, allowed file sets,
-  verification strategy, and the Python binding substrate gate.
+  verification strategy, and the Python binding substrate gate. The user selected Option A:
+  `ctypes` or private dynamic-library shim boundary with package distribution deferred.
 - No post-G5 implementation milestone is authorized. G6 implementation requires explicit user
-  approval, the Python binding substrate decision, file-based task briefs, TDD-style verification,
+  approval, the selected Option A Python binding profile, file-based task briefs, TDD-style verification,
   implementation subagent execution, and independent audit.
 - non-G5 post-M1 implementation remains unauthorized unless a new user-approved goal window records
   a goal-specific plan, allowed files, verification strategy, implementation subagents, and
@@ -233,8 +234,8 @@ after G5-G independent audit acceptance. The main agent may not auto-advance int
 post-G5 implementation milestone without a new user-approved goal window.
 
 The user later authorized G6 Language SDK Wrapper Skeletons planning only. G6 planning is complete,
-but SDK implementation remains paused until the user approves a G6 implementation window and
-chooses the Python binding substrate.
+and the user selected Python binding Option A. SDK implementation remains paused until the user
+approves a G6 implementation window.
 
 Stop conditions for this continuous window:
 

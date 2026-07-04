@@ -17,7 +17,7 @@ and is treated here as the future `grcl-cpp` module candidate, not as the whole 
 - G3 Backend SPI API Shape v0.1 design baseline: `complete`
 - M1 First Runnable GRCL-C Core With Null/Native Backend: `complete under task briefs, TDD-style verification, and independent audit`
 - G5 Conformance Harness v0.1: `complete under task briefs, TDD-style verification, and independent audit`
-- G6 Language SDK Wrapper Skeletons planning: `complete; implementation pending user approval and Python binding substrate decision`
+- G6 Language SDK Wrapper Skeletons planning: `complete; implementation pending user approval with Python binding Option A selected`
 - Primary current output: M2/G6 cross-language SDK boundary plan
 - Autonomous Goal Runner mode completed for M1 and must not auto-advance into post-M1 implementation
 - G1-A through G1-E passed independent audit
