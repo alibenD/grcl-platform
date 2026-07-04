@@ -16,7 +16,8 @@ and is treated here as the future `grcl-cpp` module candidate, not as the whole 
 - G2 `grcl-c` ABI Contract v0.1: `complete`
 - G3 Backend SPI API Shape v0.1 design baseline: `complete`
 - M1 First Runnable GRCL-C Core With Null/Native Backend: `complete under task briefs, TDD-style verification, and independent audit`
-- Primary current output: M1 runnable-core closeout; next milestone requires explicit user approval
+- G5 Conformance Harness v0.1 planning: `complete; implementation pending explicit user approval`
+- Primary current output: G5 local contract-drift harness plan
 - Autonomous Goal Runner mode completed for M1 and must not auto-advance into post-M1 implementation
 - G1-A through G1-E passed independent audit
 - M1-B through M1-G passed independent audit, with M1-G accepted with non-blocking repository
@@ -79,6 +80,7 @@ must create it on demand before writing outputs.
 - [Module Skeleton Plan](docs/plans/2026-07-02-grcl-platform-module-skeleton-plan.md)
 - [GRCL-C ABI Contract Plan](docs/plans/2026-07-03-grcl-c-abi-contract-plan.md)
 - [M1 First Runnable GRCL-C Core Plan](docs/plans/2026-07-04-m1-first-runnable-core-plan.md)
+- [G5 Conformance Harness Plan](docs/plans/2026-07-04-g5-conformance-harness-plan.md)
 - [ADR-0010 GRCL-C Capability ABI Representation](docs/adr/ADR-0010-grcl-c-capability-abi-representation.md)
 
 ## Repository Policy

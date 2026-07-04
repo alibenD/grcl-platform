@@ -6,18 +6,20 @@ Drive GRCL Platform through dependency-ordered contract-artifact delivery with d
 task briefs, implementation subagents, and independent audit gates. G1 is closed. The authorized
 continuous implementation window for G2-C through G2-E is also closed after audit acceptance. The
 user-approved M1 Autonomous Goal Runner window for the first runnable `grcl-c` core with a
-null/native-test backend is complete.
+null/native-test backend is complete. G5 Conformance Harness v0.1 planning is complete; G5
+implementation remains pending explicit user approval.
 
 ## Boundaries
 
 - Workspace root: `/Users/aliben/Project/grcl-platform_ws`
 - Repository root: `/Users/aliben/Project/grcl-platform_ws/src/grcl-platform`
 - Code implementation: M1 is limited to the approved first runnable `grcl-c` core with
-  null/native-test backend under task briefs plus independent audit; post-M1 goals remain paused
+  null/native-test backend under task briefs plus independent audit; post-M1 implementation goals
+  remain paused
 - Completed work: M1 first runnable `grcl-c` core with null/native-test backend, using task briefs,
   implementation subagents, independent audit subagents, and TDD-style verification
-- Allowed work now: explicitly requested documentation/status cleanup or planning for a new
-  user-approved goal window
+- Allowed work now: explicitly requested documentation/status cleanup or user-approved planning for
+  a new implementation window
 - Blocked post-M1 work without a new user-approved goal window: publish/subscribe, service/client,
   executor scheduling, transport, ROS2, MCU, SDK, management plane, auth, remote management, event
   streams, Docker, CI, external `grcl` migration, and repo-wide build-system policy
@@ -75,6 +77,10 @@ null/native-test backend is complete.
 | GQ-050 | M1-E implement null/native-test backend capability behavior | GQ-049 | complete | M1-E audit status `accepted_with_notes` in `.local/agentic-runs/2026-07-04-m1-first-runnable-core/m1-e-null-native-backend-capability/audit-report.md` |
 | GQ-051 | M1-F add diagnostics and negative state tests | GQ-050 | complete | M1-F audit status `accepted_with_notes` in `.local/agentic-runs/2026-07-04-m1-first-runnable-core/m1-f-diagnostics-negative-states/audit-report.md` |
 | GQ-052 | M1-G run full M1 verification and close runnable-core milestone | GQ-051 | complete | M1-G audit status `accepted_with_notes` in `.local/agentic-runs/2026-07-04-m1-first-runnable-core/m1-g-closeout/audit-report.md`; full local M1 harness passed from workspace root, with `GRCL_PLATFORM_ARTIFACT_ROOT` override, and from repository root; forbidden-scope and repo-root artifact scans passed |
+| GQ-053 | Authorize G5 Conformance Harness v0.1 planning | GQ-052 | complete | user approved G5 planning for local contract-drift checks covering docs, schemas, C ABI, capability fixtures, MCU profile fixtures, and M1 harness integration |
+| GQ-054 | File G5 goal-specific plan | GQ-053 | complete | `docs/plans/2026-07-04-g5-conformance-harness-plan.md` |
+| GQ-055 | Update conformance design home and durable status for G5 planning | GQ-054 | complete | `docs/architecture/conformance-and-ci-strategy.md`, `docs/status/current-context.md`, `docs/status/middleware-goal-roadmap.md`, this queue, README navigation |
+| GQ-056 | Validate and commit G5 planning closeout | GQ-055 | complete | `git diff --check`, unfinished-marker scan, stale-status scan, and changed-file scope scan passed for the G5 planning files |
 
 ## Execution Rules
 
@@ -89,6 +95,9 @@ null/native-test backend is complete.
 - G2-F and G3 design baseline work was separately authorized as documentation-only work.
 - M1 Autonomous Goal Runner is complete. It may not auto-advance into any post-M1 implementation
   milestone without a new user-approved goal window.
+- G5 Conformance Harness v0.1 planning is complete. It does not authorize G5 implementation,
+  scripts, task briefs, CI, Docker, repo-wide build-system changes, SDK wrappers, pub/sub, graph,
+  transport, ROS2, MCU runtime, simulator, or management-plane implementation.
 - If a future task becomes implementation work, use file-based task briefs and independent audit
   subagents according to `docs/architecture/agentic-delivery-governance.md`.
 - If validation fails, update this queue with the failure and fix task before claiming completion.
@@ -103,5 +112,7 @@ GQ-030 is resolved by the recommended hybrid capability ABI decision, and G2-A t
 closed. G3 Backend SPI API Shape v0.1 design baseline is recorded in the canonical backend SPI
 document. M1 first runnable `grcl-c` core with null/native-test backend is complete: M1-B through
 M1-F passed independent audit, and M1-G passed independent audit with notes after verifying the full
-local harness, artifact-root behavior, report/audit inventory, and forbidden-scope scans. No post-M1
-implementation milestone is authorized from this queue state alone.
+local harness, artifact-root behavior, report/audit inventory, and forbidden-scope scans. G5
+Conformance Harness v0.1 planning is complete and selects the local contract-drift harness as the
+next recommended implementation milestone. No post-M1 implementation milestone is authorized from
+this queue state alone.

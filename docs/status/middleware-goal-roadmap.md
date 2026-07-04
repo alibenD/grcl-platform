@@ -29,7 +29,9 @@ complete. Middleware documentation information architecture cleanup is also comp
 design-only goal closed G2-F and produced the G3 Backend SPI API Shape v0.1 baseline. M1 has now
 completed the first runnable `grcl-c` lifecycle, bounded-storage, capability negotiation, and
 diagnostics core with a private null/native-test backend. No post-M1 implementation milestone is
-authorized from the roadmap alone.
+authorized from the roadmap alone. G5 Conformance Harness v0.1 planning is complete and records a
+local contract-drift harness scope; G5 implementation still requires a separate user-approved
+implementation window.
 
 ## Model And Effort Policy
 
@@ -78,7 +80,7 @@ bar for the task, and must record the chosen policy in each task brief.
 | G2 | `grcl-c` ABI Contract v0.1 | compile-oriented C ABI headers, result model, opaque handles, lifecycle, storage, capability query | C headers compile in a minimal test; no C++/ROS2 public type leakage; ABI rules are explicit |
 | G3 | Backend SPI API Shape v0.1 | backend registration design, C function-table shape, capability query hooks, graph/diagnostics hooks | Backend boundary is precise enough to brief G4 implementation without deciding ROS2 internals |
 | G4 | Null/Native Test Backend v0.1 | superseded at the minimum runnable-core level by M1; any expanded backend work needs a new plan | M1 closeout verified create/start/stop/destroy, capability query, negotiation, diagnostics, and bounded-storage negative paths against a null/native-test backend |
-| G5 | Conformance Harness v0.1 | docs, schema, C ABI, capability, and MCU profile checks | Local and CI-oriented checks can fail on contract drift |
+| G5 | Conformance Harness v0.1 | local docs, schema, C ABI, capability fixture, MCU profile fixture, and M1 harness checks | Local checks can fail on contract drift before SDK, simulator, ROS2, MCU runtime, management-plane, CI, or release work expands |
 | G6 | Language SDK Wrapper Skeletons | `grcl-cpp` and `grcl-py` wrappers over `grcl-c` handles | SDK skeletons wrap core handles without independent lifecycle semantics |
 | G7 | Simulator Runtime v0.1 | deterministic simulator backend for graph, capability, diagnostics, and snapshot validation | Middleware semantics can be tested without ROS2 or hardware |
 | G8 | ROS2 Adapter Design And Skeleton | ROS2 backend skeleton, graph projection rules, `rcl`/`rmw`/`rclcpp` containment | ROS2 types remain backend-private; GRCL runtime participant mapping is explicit |
@@ -130,6 +132,33 @@ Deferred from the original module skeleton plan:
 - Original Task 5 development-environment scaffolding remains deferred.
 - `scripts/test-docs.sh`, `scripts/check-links.py`, `scripts/env.sh`, `docker/ubuntu-ros-humble/`, and `docker/mcu-cross/` are outside the approved G1 scope because G1 currently forbids build scripts and Dockerfiles.
 
+## G5 Scope
+
+G5 Conformance Harness v0.1 is planned as a local contract-drift harness. It includes:
+
+- documentation consistency checks.
+- schema fixture validation for runtime capability and capability negotiation.
+- MCU profile fixture validation.
+- C ABI/header conformance checks.
+- integration of the existing M1 runnable harness.
+- artifact-root enforcement.
+
+G5 excludes:
+
+- CI workflows, Dockerfiles, containers, package-manager policy, and repo-wide build-system policy.
+- SDK wrapper implementation.
+- publish/subscribe, service/client, graph behavior, graph deltas, transport, executor scheduling,
+  ROS2 behavior, MCU runtime behavior, simulator behavior, and management-plane behavior.
+- authentication, remote management, event streams, release signing, registry work, and external
+  `github.com/alibenD/grcl` migration.
+
+Current G5 status:
+
+- G5 planning status: `complete`
+- G5 implementation status: `pending_user_approval`
+- G5 plan:
+  [G5 Conformance Harness Plan](../plans/2026-07-04-g5-conformance-harness-plan.md)
+
 ## G2-G11 Refinement Rule
 
 Before each later goal starts, the main agent must create or update a goal-specific plan that:
@@ -142,19 +171,17 @@ Before each later goal starts, the main agent must create or update a goal-speci
 
 Do not execute later goals from this roadmap alone. The roadmap establishes dependency order; each
 goal still needs a task plan or task briefs before implementation. M1 completion does not authorize
-G5, SDK, simulator, ROS2, MCU, gateway, management-plane, CI, Docker, or external migration work.
+G5 implementation, SDK, simulator, ROS2, MCU, gateway, management-plane, CI, Docker, or external
+migration work. G5 planning completion does not authorize G5 implementation.
 
 ## Current Decision State
 
 Management-plane concept work is no longer the blocking path for core middleware progress. It is
 preserved as future input for G10. G1 is complete under the already authorized task-brief and
-independent-audit workflow. The next dependency-ordered goal is G2 `grcl-c` ABI Contract v0.1. Its
-goal-specific plan is filed, and the runtime capability C ABI representation decision is resolved by
-ADR-0010. G2-E used a narrowed per-batch task brief that treated accepted G2-B, G2-C, and G2-D
-artifacts as its baseline, and it passed independent audit. Middleware documentation information
-architecture cleanup established `docs/README.md` as the global navigation entrypoint and
-`system-overview.md` as the whole-middleware canonical design home. G2-F closeout and G3 Backend
-SPI API Shape v0.1 design baseline are complete. M1 First Runnable GRCL-C Core With Null/Native
-Backend is complete, locally verified, and independently audited with notes. No further
-auto-advance is authorized from this roadmap state alone: any post-M1 implementation requires a new
-approved goal window with task briefs, TDD plan, implementation subagent, and independent audit.
+independent-audit workflow. G2-F closeout and G3 Backend SPI API Shape v0.1 design baseline are
+complete. M1 First Runnable GRCL-C Core With Null/Native Backend is complete, locally verified, and
+independently audited with notes. G5 Conformance Harness v0.1 planning is complete and should be
+the next implementation milestone if the user approves implementation. No further auto-advance is
+authorized from this roadmap state alone: any post-M1 implementation, including G5 implementation,
+requires a new approved goal window with task briefs, TDD plan, implementation subagent, and
+independent audit.

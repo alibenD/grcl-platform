@@ -2,7 +2,7 @@
 
 ## Purpose
 
-GRCL Platform needs conformance and CI before implementation starts because the system spans C ABI,
+GRCL Platform needs conformance before implementation expands because the system spans C ABI,
 language SDKs, native Linux runtimes, ROS2 adapters, MCU/RTOS profiles, gateways, simulators, and
 future third-party SDKs. Tests must verify that these surfaces implement one architecture rather
 than independent interpretations.
@@ -16,6 +16,8 @@ for future implementation plans.
 - Do not create CI workflow files yet.
 - Do not claim ROS2 runtime verification from macOS.
 - Do not define final protocol byte layouts.
+- Do not treat the G5 local harness as CI, Docker, repo-wide build-system, SDK, pub/sub, graph,
+  transport, ROS2, MCU runtime, simulator, or management-plane implementation.
 
 ## Conformance Layers
 
@@ -46,6 +48,30 @@ for future implementation plans.
 
 The `docs` stage is the only stage that can run before implementation scaffolding exists. All other
 stages are planned gates and must be introduced by accepted implementation plans.
+
+## G5 Local Conformance Harness Baseline
+
+G5 Conformance Harness v0.1 is the next planned milestone after M1. Its role is to convert the
+accepted G1, G2, G3, and M1 artifacts into repeatable local drift checks before the project expands
+into SDK wrappers, simulator runtime, ROS2 adapter work, MCU runtime work, management-plane
+snapshots, or release hardening.
+
+G5 is local and contract-focused:
+
+- documentation conformance checks for links, unfinished markers, and status consistency.
+- schema and fixture validation for runtime capability records, negotiation results, and MCU
+  profiles.
+- C ABI/header conformance checks for public header hygiene and C11/C++17 compile coverage.
+- integration of the existing M1 runnable harness as a conformance stage.
+- artifact-root enforcement for generated outputs.
+
+G5 is not a CI rollout. It must not create GitHub Actions workflows, Dockerfiles, container images,
+repo-wide build scripts, package-manager policy, SDK wrappers, pub/sub behavior, graph behavior,
+transport behavior, ROS2 behavior, MCU runtime behavior, simulator behavior, management-plane
+behavior, auth, remote management, event streams, or release-stability claims.
+
+The goal-specific plan is
+[G5 Conformance Harness Plan](../plans/2026-07-04-g5-conformance-harness-plan.md).
 
 ## Required Local Commands
 

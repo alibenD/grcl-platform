@@ -104,6 +104,7 @@ Plans are execution artifacts. Read them after the relevant architecture documen
 - [GRCL Platform Module Skeleton Plan](plans/2026-07-02-grcl-platform-module-skeleton-plan.md)
 - [GRCL Platform Management Plane Architecture Plan](plans/2026-07-03-management-plane-architecture-plan.md)
 - [GRCL-C ABI Contract Plan](plans/2026-07-03-grcl-c-abi-contract-plan.md)
+- [G5 Conformance Harness Plan](plans/2026-07-04-g5-conformance-harness-plan.md)
 
 Current recovery and queue state:
 

@@ -68,7 +68,7 @@ See [system-overview.mmd](../assets/system-overview.mmd).
 | MCU/RTOS profiles | Profile descriptors, subset rules, storage and executor constraints | Full desktop runtime requirements | [ADR-0007](../adr/ADR-0007-mcu-runtime-profile-contract.md) | G1 fixtures complete; runtime implementation pending |
 | Language SDKs | C++, Python, and future SDK layering over `grcl-c` handles | Independent runtime semantics or backend-private type exposure | [ADR-0003](../adr/ADR-0003-language-sdks-over-grcl-c.md), [ADR-0009](../adr/ADR-0009-language-sdk-binding-contract.md) | G6 pending |
 | Management plane | Future read-only snapshot contract, CLI/debug/dashboard data shape, diagnostics visibility | v1 auth, remote control, event streams, SDK permission enforcement | future G10 ADR | G10 deferred |
-| Conformance | Header hygiene, schema fixtures, C ABI compile-only checks, future CI-oriented gates | Runtime claims without corresponding runnable evidence | architecture decision docs only | G1/G2 artifacts exist; G5 harness pending |
+| Conformance | Header hygiene, schema fixtures, C ABI compile-only checks, local contract-drift gates, future CI-oriented gates | Runtime claims without corresponding runnable evidence | architecture decision docs only | G5 local harness planned; implementation pending approval |
 
 ## Design Traceability
 
