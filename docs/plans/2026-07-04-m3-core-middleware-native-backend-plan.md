@@ -143,6 +143,7 @@ Exit criteria:
 Files:
 
 - Modify: `src/grcl-c/src/runtime.c`
+- Modify: `src/grcl-runtime-native/src/null_backend.c`
 - Add or modify: `src/grcl-c/tests/object_ownership_test.c`
 - Modify: `src/grcl-c/tests/run_m1_tests.sh`
 
@@ -152,6 +153,10 @@ Steps:
   cleanup, invalid arguments, and bad lifecycle state.
 - [ ] Write failing tests for core-owned node, endpoint, publisher, subscription, service, client,
   and executor table capacity exhaustion returning `GRCL_ERROR_CAPACITY_EXCEEDED`.
+- [ ] Extend `null/native-test` with M3 object-lifecycle no-op backend hooks only. These hooks may
+  acknowledge node, endpoint, and executor create/destroy so core ownership can be tested, but they
+  must not route messages, allocate backend queues, implement params, or claim native in-process
+  routing capability.
 - [ ] Implement core-owned node, endpoint, publisher, subscription, service, client, and executor
   tables with deterministic destroy behavior.
 - [ ] Keep backend-private state behind backend callbacks.
@@ -160,6 +165,8 @@ Exit criteria:
 
 - Core ownership tests pass.
 - Existing M1 lifecycle, capability, and diagnostics tests remain green.
+- `null/native-test` remains a lifecycle/object-lifecycle test backend only; pub/sub delivery,
+  service/client routing, executor dispatch, and params stay unsupported until later M3 batches.
 
 ### M3-E: Pub/Sub Routing
 

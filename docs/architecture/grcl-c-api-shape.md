@@ -42,7 +42,7 @@ The M1 baseline contains:
 | Backend SPI materialization | `src/grcl-c/include/grcl/c/backend.h` | descriptor, runtime context, operation table, capability hooks, negotiation hook, and caller-buffer diagnostics hook compile in C and C++ |
 | Core runtime lifecycle | `src/grcl-c/src/runtime.c` | create, init-with-storage, start, stop, and destroy run through a core-owned runtime handle |
 | Bounded storage | `src/grcl-c/src/runtime.c` and `src/grcl-c/tests/runtime_lifecycle_test.c` | caller-provided runtime-object storage succeeds; missing or insufficient bounded storage fails with a resource-category result |
-| Null/native-test backend | `src/grcl-runtime-native/src/null_backend.c` | private deterministic backend supplies lifecycle, capability, negotiation, and diagnostics hook behavior |
+| Null/native-test backend | `src/grcl-runtime-native/src/null_backend.c` | private deterministic backend supplies lifecycle, capability, negotiation, diagnostics, and M3-D object-lifecycle no-op hook behavior |
 | Capability query and negotiation | `src/grcl-c/tests/backend_capability_test.c` | deterministic capability record plus accepted, degraded accepted, and rejected incompatible negotiation cases pass |
 | Diagnostics accessor | `src/grcl-c/include/grcl/c/runtime.h` and `src/grcl-c/tests/diagnostics_negative_state_test.c` | narrow public `grcl_runtime_get_diagnostics` caller-buffer API is present and verifies latest lifecycle or storage failure reporting |
 | Local harness | `src/grcl-c/tests/run_m1_tests.sh` | C11/C++17 header smoke and runnable lifecycle/capability/diagnostics tests pass from workspace root, artifact-root override, and repository root |

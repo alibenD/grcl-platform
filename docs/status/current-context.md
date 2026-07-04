@@ -87,7 +87,9 @@ multi-repository orchestration, and generated artifacts need a stable workspace-
   Design review has passed after architecture review `accepted_with_notes`, ABI/SPI re-review
   `accepted_with_notes`, and test-plan re-review `accepted`. M3-C API/SPI header contract is
   complete after independent audit `accepted_with_notes`; M3-D core object ownership is the active
-  implementation batch.
+  implementation batch. M3-D may extend `null/native-test` with object-lifecycle no-op backend
+  hooks only; it must not implement pub/sub delivery, service/client routing, executor dispatch, or
+  params.
 - post-M3 implementation remains unauthorized unless a new user-approved goal window records a
   goal-specific plan, allowed files, verification strategy, implementation subagents, and
   independent audit gates.

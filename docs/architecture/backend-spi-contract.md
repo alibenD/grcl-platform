@@ -15,7 +15,7 @@ in-process messaging while preserving backend containment.
 
 | Backend | Role | First implementation goal |
 |---|---|---|
-| null/native-test | deterministic local backend used to validate lifecycle and capability contracts | completed in M1 minimum runnable-core scope |
+| null/native-test | deterministic local backend used to validate lifecycle, capability, diagnostics, and M3-D object lifecycle hooks without routing | completed in M1 minimum runnable-core scope; extended in M3-D with object-lifecycle no-op hooks only |
 | native | in-process native routing for M3, later Linux/native transport work | M3 for in-process routing only |
 | ros2 | ROS2 adapter and GRCL graph projection over ROS2 behavior | G8 |
 | mcu | profile-limited bare-metal/RTOS runtime | G9 |
@@ -392,6 +392,14 @@ bounded-storage negative tests.
 
 M3 introduces a complete in-process native backend sufficient for core examples. "Complete" in M3
 means complete for local C examples, not complete as a production transport backend.
+
+M3-D uses a narrower bridge before the full native in-process backend exists: the existing
+`null/native-test` backend may implement no-op M3 object-lifecycle hooks so the core can prove
+runtime-owned node, endpoint, service/client, and executor lifetime rules through TDD. Those no-op
+hooks are not routing hooks. They must not store topic queues, route requests, implement params,
+claim local messaging capability, or hide missing M3 behavior. Pub/sub delivery, service/client
+request/reply routing, executor dispatch, and runtime-local params remain owned by the later
+in-process native backend batches.
 
 | Scenario | Required result |
 |---|---|
