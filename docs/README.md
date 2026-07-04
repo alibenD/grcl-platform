@@ -35,7 +35,7 @@ new architecture document. Supporting topic documents must be linked from their 
 | Management plane | [Management Plane Concept And Scope](architecture/management-plane-concept-and-scope.md) | [Management Plane Decision Scope](architecture/management-plane-decision-scope.md), future G10 plan |
 | Conformance and release gates | [Conformance And CI Strategy](architecture/conformance-and-ci-strategy.md) | [Review And Verification Governance](architecture/review-and-verification-governance.md) |
 | Development workspace and artifacts | [Development Environment](architecture/development-environment.md) | [Container Workspace Strategy](architecture/container-workspace-strategy.md), [Workspace Bootstrap](status/workspace-bootstrap.md) |
-| Agentic delivery process | [Agentic Delivery Governance](architecture/agentic-delivery-governance.md) | [Agentic Delivery Templates](templates/agentic-delivery/README.md) |
+| Task workflow and delivery process | [Task Workflow Governance](architecture/task-workflow-governance.md) | [Agentic Delivery Governance](architecture/agentic-delivery-governance.md), [Review And Verification Governance](architecture/review-and-verification-governance.md), [Agentic Delivery Templates](templates/agentic-delivery/README.md) |
 
 ## Document Roles
 
@@ -85,6 +85,7 @@ Environment, conformance, and delivery:
 - [Conformance And CI Strategy](architecture/conformance-and-ci-strategy.md)
 - Local runner: `../scripts/run-conformance.sh`
 - SDK boundary drift checker: `../scripts/check-sdk-boundaries.py`
+- [Task Workflow Governance](architecture/task-workflow-governance.md)
 - [Agentic Delivery Governance](architecture/agentic-delivery-governance.md)
 - [Review And Verification Governance](architecture/review-and-verification-governance.md)
 

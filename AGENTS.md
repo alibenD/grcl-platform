@@ -52,9 +52,31 @@ These rules are repository-local and define how agents should work in `grcl-plat
 - Do not mark a task completed without fresh verification evidence.
 - If verification cannot run locally, record the exact environmental blocker.
 
+## Task Workflow Rules
+
+- Follow [Task Workflow Governance](docs/architecture/task-workflow-governance.md) for repository
+  task classification, lifecycle states, fast-path limits, TDD policy, commit boundaries, and
+  durable recovery updates.
+- Every task must be classified before work begins. At minimum choose between `architecture design`,
+  `architecture iteration`, `feature dev`, `bug fix`, `refactor`, `test/infrastructure`,
+  `docs-only behavior change`, `docs/editorial`, and `release/governance`.
+- Use the canonical workflow unless the task is a true `docs/editorial` fast-path case.
+- `docs/editorial` fast path is only for spelling, link, formatting, or wording cleanup that does
+  not change behavior or governance meaning.
+- Tasks that change behavior, contract meaning, queue state, recovery state, or governance policy
+  must not use the editorial fast path.
+- Implementation-facing tasks must follow TDD. Write the failing test or reproduction first, verify
+  the expected failure, then implement the minimal fix or feature, then rerun focused and required
+  regression checks.
+- A task is not complete without a task-bounded commit. GRCL Platform uses `one task -> one
+  commit`.
+- After the commit, update at least one durable recovery surface such as `docs/status/current-context.md`,
+  the goal queue, the relevant plan, or the task ledger.
+
 ## Agentic Delivery Rules
 
-- Follow [Agentic Delivery Governance](docs/architecture/agentic-delivery-governance.md) for
+- Follow [Task Workflow Governance](docs/architecture/task-workflow-governance.md) first, then
+  [Agentic Delivery Governance](docs/architecture/agentic-delivery-governance.md) for
   implementation-stage task execution.
 - The main agent owns task queue management, context curation, subagent dispatch, audit gates, and
   final status updates.
@@ -81,8 +103,9 @@ These rules are repository-local and define how agents should work in `grcl-plat
   substitute completion audit before claiming the affected goal, plan, or milestone is complete.
 - The substitute audit must derive requirements from the objective, user request, active plan, and
   repository rules, then map each requirement to current-state evidence.
-- Documentation-only architecture work must at minimum run git status, diff hygiene, document
-  inventory, internal link checks, and draft-marker scans before completion is claimed.
+- Documentation-only architecture, governance, and docs-behavior work must at minimum run git
+  status, diff hygiene, document inventory, internal link checks, and draft-marker scans before
+  completion is claimed.
 - Follow [Review And Verification Governance](docs/architecture/review-and-verification-governance.md)
   for delegated review states, substitute audit requirements, and final reporting rules.
 

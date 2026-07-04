@@ -74,6 +74,7 @@ must create it on demand before writing outputs.
 - SDK boundary drift checker: `scripts/check-sdk-boundaries.py`
 - [Management Plane Concept And Scope](docs/architecture/management-plane-concept-and-scope.md)
 - [Management Plane Decision Scope](docs/architecture/management-plane-decision-scope.md)
+- [Task Workflow Governance](docs/architecture/task-workflow-governance.md)
 - [Agentic Delivery Governance](docs/architecture/agentic-delivery-governance.md)
 - [Review And Verification Governance](docs/architecture/review-and-verification-governance.md)
 - [SDK Platform Governance](docs/architecture/sdk-platform-governance.md)
@@ -99,3 +100,5 @@ During architecture stabilization, this repository uses a modular monorepo strat
 - Treat `grcl-cpp`, `grcl-py`, and future language SDKs as wrappers over `grcl-c`.
 - Keep runtime/backend capability rules visible before writing implementation code.
 - Do not implement module code before the relevant architecture plan is reviewed and accepted.
+- Classify every task before work begins and follow the repository workflow, TDD, verification, and
+  task-bounded commit rules from `docs/architecture/task-workflow-governance.md`.

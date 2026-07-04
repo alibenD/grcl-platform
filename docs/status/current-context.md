@@ -100,6 +100,9 @@ multi-repository orchestration, and generated artifacts need a stable workspace-
   available.
 - Future implementation tasks should use implementation subagents plus independent audit subagents
   according to the agentic delivery governance document.
+- Repository-local workflow classification, fast-path limits, TDD policy, task-bounded commits, and
+  durable recovery updates are governed by
+  [Task Workflow Governance](../architecture/task-workflow-governance.md).
 
 ## Key Decisions
 
@@ -145,6 +148,8 @@ multi-repository orchestration, and generated artifacts need a stable workspace-
   middleware design.
 - `.local/agentic-runs/` records execution evidence only and is not a human-facing documentation
   entrypoint.
+- `docs/architecture/task-workflow-governance.md` is the repository source of truth for task
+  classification, fast-path eligibility, TDD requirements, and `one task -> one commit`.
 
 ## Workspace Layout
 
@@ -193,6 +198,7 @@ goals still require their own goal-specific plan and task briefs before executio
 - [Conformance And CI Strategy](../architecture/conformance-and-ci-strategy.md)
 - [Management Plane Concept And Scope](../architecture/management-plane-concept-and-scope.md)
 - [Management Plane Decision Scope](../architecture/management-plane-decision-scope.md)
+- [Task Workflow Governance](../architecture/task-workflow-governance.md)
 - [Agentic Delivery Governance](../architecture/agentic-delivery-governance.md)
 - [Review And Verification Governance](../architecture/review-and-verification-governance.md)
 - [Dependency Analysis](../architecture/dependency-analysis.md)

@@ -7,6 +7,10 @@ planning require stronger reasoning than mechanical implementation. This documen
 repeatable delivery model, model policy, subagent roles, file-based exchange contract, review loop,
 and completion gate.
 
+Use [Task Workflow Governance](task-workflow-governance.md) first to classify the task, determine
+whether fast-path handling is forbidden, and confirm whether this document applies. This document is
+the implementation-task specialization of the broader repository workflow.
+
 The goal is to prevent implementation drift in a heterogeneous middleware project where C, C++,
 Python, ROS2, Docker, MCU profiles, wire protocol, and SDK governance must stay consistent with the
 architecture documents.
@@ -23,6 +27,9 @@ This governance applies to:
 
 It does not replace normal Git, CI, tests, or human review. It defines how the main agent and
 subagents exchange information and when work may proceed.
+
+It also does not replace task classification, TDD policy, commit-boundary policy, or durable-state
+update duties. Those rules are owned by [Task Workflow Governance](task-workflow-governance.md).
 
 ## Model Policy
 
@@ -45,6 +52,7 @@ the chosen model policy in the task brief.
 
 The main agent owns:
 
+- classifying the task before implementation dispatch.
 - reading the active plan and architecture context.
 - decomposing work into isolated tasks.
 - creating file-based work packages.
@@ -62,6 +70,7 @@ An implementation subagent owns exactly one implementation task or one explicit 
 
 - read the task brief provided by the main agent.
 - read only the referenced architecture, plan, and source files unless it needs more context.
+- follow the repository TDD rule when the task changes code or verifiable behavior.
 - make the requested changes.
 - run the required verification commands or record exact blockers.
 - write an implementation report.
@@ -85,6 +94,9 @@ The audit subagent must not modify implementation files. If it finds issues, it 
 evidence and recommended fix scope. The main agent dispatches a new fix task.
 
 ## Execution State Machine
+
+This state machine starts after the broader workflow has already reached `implement` for an
+implementation-classified task.
 
 ```text
 planned
@@ -231,6 +243,8 @@ main agent.
 - The main agent cannot move to the next planned task until audit passes.
 - If the same task fails audit repeatedly because the plan is ambiguous or wrong, pause and revise
   the plan before continuing.
+- The task remains incomplete until the verified result is committed under the repository
+  `one task -> one commit` policy and the relevant durable state is updated.
 
 ## Architecture Cross-Check Gate
 
