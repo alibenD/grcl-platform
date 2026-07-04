@@ -8,19 +8,19 @@ continuous implementation window for G2-C through G2-E is also closed after audi
 user-approved M1 Autonomous Goal Runner window for the first runnable `grcl-c` core with a
 null/native-test backend is complete. G5 Conformance Harness v0.1 planning is complete, and the
 user-approved G5 implementation window is complete after G5-G independent audit acceptance. G6
-Language SDK Wrapper Skeletons planning is complete, Python binding Option A is selected, but
-implementation is not authorized.
+Language SDK Wrapper Skeletons planning is complete, Python binding Option A is selected, and the
+user has authorized goal-driven G6 implementation.
 
 ## Boundaries
 
 - Workspace root: `/Users/aliben/Project/grcl-platform_ws`
 - Repository root: `/Users/aliben/Project/grcl-platform_ws/src/grcl-platform`
-- Code implementation: G5 is limited to local contract-drift checks under task briefs plus
-  independent audit; non-G5 post-M1 implementation goals remain paused
+- Code implementation: active G6 implementation is limited to SDK wrapper skeletons, SDK boundary
+  drift checks, local conformance integration, and closeout under task briefs plus independent audit
 - Completed work: M1 first runnable `grcl-c` core with null/native-test backend, using task briefs,
   implementation subagents, independent audit subagents, and TDD-style verification
-- Allowed work now: recovery, review, or G6 implementation planning; no SDK implementation unless
-  the user approves a new G6 implementation goal window
+- Allowed work now: G6-C/G6-D SDK wrapper skeleton execution, followed by G6-E SDK boundary drift
+  checks and G6-F closeout after predecessor audits pass
 - Blocked post-M1 work without a new user-approved goal window: publish/subscribe, service/client,
   executor scheduling, transport, ROS2, MCU, SDK, management plane, auth, remote management, event
   streams, Docker, CI, external `grcl` migration, and repo-wide build-system policy
@@ -89,6 +89,9 @@ implementation is not authorized.
 | GQ-061 | Execute G5-G closeout verification and independent audit | GQ-060 | complete | G5-G audit status `accepted`; full local conformance runner passed from workspace root, with `/tmp` artifact override, and from repository root |
 | GQ-062 | Plan G6 Language SDK Wrapper Skeletons / M2 boundary baseline | GQ-061 | complete | `docs/plans/2026-07-04-g6-language-sdk-wrapper-skeletons-plan.md`, SDK design home, roadmap, status, and navigation updated; no SDK code implemented |
 | GQ-063 | Choose G6 Python binding substrate before implementation | GQ-062 | complete | user selected Option A: `ctypes`/private dynamic-library shim boundary with package distribution deferred |
+| GQ-064 | Execute G6-C `grcl-cpp` minimal RAII boundary skeleton | GQ-063 | complete | G6-C audit status `accepted_with_notes` in `.local/agentic-runs/2026-07-04-g6-language-sdk-wrapper-skeletons/g6-c-grcl-cpp-raii-boundary/audit-report.md` |
+| GQ-065 | Execute G6-D `grcl-py` minimal ownership boundary skeleton | GQ-063 | complete | G6-D audit status `accepted` in `.local/agentic-runs/2026-07-04-g6-language-sdk-wrapper-skeletons/g6-d-grcl-py-ownership-boundary/audit-report.md` |
+| GQ-066 | Execute G6-E SDK boundary drift checks and conformance integration | GQ-064, GQ-065 | pending | blocked until G6-C/G6-D skeleton batch is verified and committed |
 
 ## Execution Rules
 
@@ -103,9 +106,14 @@ implementation is not authorized.
 - G2-F and G3 design baseline work was separately authorized as documentation-only work.
 - M1 Autonomous Goal Runner is complete. It may not auto-advance into any post-M1 implementation
   milestone without a new user-approved goal window.
-- G5 Conformance Harness v0.1 implementation is authorized only for local contract-drift checks.
-  It does not authorize CI, Docker, repo-wide build-system changes, SDK wrappers, pub/sub, graph,
-  transport, ROS2, MCU runtime, simulator, or management-plane implementation.
+- G5 Conformance Harness v0.1 implementation is complete and no longer the active implementation
+  window.
+- G6 Language SDK Wrapper Skeletons implementation is authorized only for the selected Option A
+  SDK wrapper skeletons, SDK boundary drift checks, local conformance integration, and closeout.
+  It does not authorize CI, Docker, repo-wide build-system changes, package distribution, generated
+  shared libraries, native extension framework selection, pub/sub, graph, transport, ROS2, MCU
+  runtime, simulator, management-plane implementation, auth, remote management, event streams, or
+  external `grcl` migration.
 - If a future task becomes implementation work, use file-based task briefs and independent audit
   subagents according to `docs/architecture/agentic-delivery-governance.md`.
 - If validation fails, update this queue with the failure and fix task before claiming completion.
@@ -122,6 +130,5 @@ document. M1 first runnable `grcl-c` core with null/native-test backend is compl
 M1-F passed independent audit, and M1-G passed independent audit with notes after verifying the full
 local harness, artifact-root behavior, report/audit inventory, and forbidden-scope scans. G5
 Conformance Harness v0.1 is complete after G5-G independent audit acceptance. G6 Language SDK
-Wrapper Skeletons planning is complete and Python binding Option A is selected, but implementation
-is blocked on user approval. No post-G5 implementation milestone is authorized from this queue
-state alone.
+Wrapper Skeletons planning is complete, Python binding Option A is selected, and G6 implementation
+is active under GQ-064/GQ-065 with task briefs and independent-audit requirements.
