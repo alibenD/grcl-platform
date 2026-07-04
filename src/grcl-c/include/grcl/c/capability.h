@@ -55,7 +55,8 @@ typedef enum grcl_capability_summary_flags {
   GRCL_CAPABILITY_SUMMARY_FLAG_EXTENDED_DIAGNOSTICS = 0x00000200u,
   GRCL_CAPABILITY_SUMMARY_FLAG_SECURITY_FAMILY_PRESENT = 0x00000400u,
   GRCL_CAPABILITY_SUMMARY_FLAG_DYNAMIC_ENDPOINT_DELTA = 0x00000800u,
-  GRCL_CAPABILITY_SUMMARY_FLAG_STATIC_MANIFEST = 0x00001000u
+  GRCL_CAPABILITY_SUMMARY_FLAG_STATIC_MANIFEST = 0x00001000u,
+  GRCL_CAPABILITY_SUMMARY_FLAG_RUNTIME_LOCAL_PARAMS = 0x00002000u
 } grcl_capability_summary_flags_t;
 
 typedef struct grcl_runtime_capability_record {
@@ -104,6 +105,9 @@ typedef struct grcl_runtime_capability_record {
   size_t diagnostics_descriptor_capacity;
   size_t security_descriptor_count;
   size_t security_descriptor_capacity;
+  size_t max_parameters;
+  size_t parameter_name_buffer_bytes;
+  size_t parameter_value_buffer_bytes;
 } grcl_runtime_capability_record_t;
 
 typedef struct grcl_runtime_capability_request {
