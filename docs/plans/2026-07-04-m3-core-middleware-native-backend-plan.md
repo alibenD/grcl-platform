@@ -153,6 +153,8 @@ Steps:
   cleanup, invalid arguments, and bad lifecycle state.
 - [ ] Write failing tests for core-owned node, endpoint, publisher, subscription, service, client,
   and executor table capacity exhaustion returning `GRCL_ERROR_CAPACITY_EXCEEDED`.
+  Publisher, subscription, service, and client objects consume the core endpoint table in M3-D;
+  M3-D must not invent new public storage ABI fields for per-endpoint-kind capacities.
 - [ ] Extend `null/native-test` with M3 object-lifecycle no-op backend hooks only. These hooks may
   acknowledge node, endpoint, and executor create/destroy so core ownership can be tested, but they
   must not route messages, allocate backend queues, implement params, or claim native in-process

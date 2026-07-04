@@ -98,8 +98,8 @@ user-approved plan.
 | GQ-068 | File M3 core middleware native backend plan and design baseline | GQ-067 | complete | `docs/plans/2026-07-04-m3-core-middleware-native-backend-plan.md`; canonical design docs updated; `git diff --check` and `python3 scripts/check-docs.py` passed |
 | GQ-069 | Run M3 architecture, ABI, and test-plan design reviews | GQ-068 | complete | architecture review `accepted_with_notes`; ABI/SPI re-review `accepted_with_notes`; test-plan re-review `accepted` under `.local/agentic-runs/2026-07-04-m3-core-middleware-native-backend/` |
 | GQ-070 | Execute M3-C API and SPI header contract batch | GQ-069 | complete | M3-C audit status `accepted_with_notes` in `.local/agentic-runs/2026-07-04-m3-core-middleware-native-backend/m3-c-api-spi-header-contract/audit-report.md`; header smoke and M1 harness passed |
-| GQ-071 | Execute M3-D core object ownership batch | GQ-070 | in_progress | requires M3-D task brief, TDD implementation subagent, and independent audit |
-| GQ-072 | Execute M3-E pub/sub routing batch | GQ-071 | pending | requires M3-D audit acceptance |
+| GQ-071 | Execute M3-D core object ownership batch | GQ-070 | complete | M3-D audit status `accepted_with_notes` in `.local/agentic-runs/2026-07-04-m3-core-middleware-native-backend/m3-d-core-object-ownership/audit-report.md`; object ownership tests and M1 harness passed; non-blocking runtime create-failure cleanup hardening noted |
+| GQ-072 | Execute M3-E pub/sub routing batch | GQ-071 | in_progress | requires M3-E task brief, TDD implementation subagent, and independent audit |
 | GQ-073 | Execute M3-F service/client routing batch | GQ-072 | pending | requires M3-E audit acceptance |
 | GQ-074 | Execute M3-G local runtime params batch | GQ-073 | pending | requires M3-F audit acceptance |
 | GQ-075 | Execute M3-H native backend capability update batch | GQ-074 | pending | requires M3-G audit acceptance |

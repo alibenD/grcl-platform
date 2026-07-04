@@ -10,6 +10,30 @@ struct grcl_backend_runtime_state {
   const grcl_storage_t * storage;
 };
 
+struct grcl_backend_node_state {
+  int placeholder;
+};
+
+struct grcl_backend_publisher_state {
+  int placeholder;
+};
+
+struct grcl_backend_subscription_state {
+  int placeholder;
+};
+
+struct grcl_backend_service_state {
+  int placeholder;
+};
+
+struct grcl_backend_client_state {
+  int placeholder;
+};
+
+struct grcl_backend_executor_state {
+  int placeholder;
+};
+
 static void grcl_null_native_fill_capabilities(
   grcl_runtime_capability_record_t * record)
 {
@@ -357,16 +381,258 @@ static grcl_result_t grcl_null_native_get_diagnostics(
   return GRCL_OK;
 }
 
+static grcl_result_t grcl_null_native_allocate_tiny_state(
+  void ** out_state,
+  size_t bytes)
+{
+  if (out_state == NULL) {
+    return GRCL_ERROR_INVALID_ARGUMENT;
+  }
+
+  *out_state = calloc(1u, bytes);
+  if (*out_state == NULL) {
+    return GRCL_ERROR_OUT_OF_MEMORY;
+  }
+
+  return GRCL_OK;
+}
+
+static grcl_result_t grcl_null_native_create_node(
+  grcl_backend_runtime_state_t * backend_state,
+  const grcl_node_t * node,
+  const grcl_node_options_t * options,
+  grcl_backend_node_state_t ** out_backend_node)
+{
+  (void)node;
+  (void)options;
+
+  if (backend_state == NULL || out_backend_node == NULL) {
+    return GRCL_ERROR_INVALID_ARGUMENT;
+  }
+
+  return grcl_null_native_allocate_tiny_state(
+    (void **)out_backend_node,
+    sizeof(grcl_backend_node_state_t));
+}
+
+static grcl_result_t grcl_null_native_destroy_node(
+  grcl_backend_runtime_state_t * backend_state,
+  grcl_backend_node_state_t * backend_node)
+{
+  if (backend_state == NULL || backend_node == NULL) {
+    return GRCL_ERROR_INVALID_ARGUMENT;
+  }
+
+  free(backend_node);
+  return GRCL_OK;
+}
+
+static grcl_result_t grcl_null_native_create_publisher(
+  grcl_backend_runtime_state_t * backend_state,
+  grcl_backend_node_state_t * backend_node,
+  const grcl_publisher_t * publisher,
+  const grcl_publisher_options_t * options,
+  grcl_backend_publisher_state_t ** out_backend_publisher)
+{
+  (void)publisher;
+  (void)options;
+
+  if (backend_state == NULL || backend_node == NULL ||
+    out_backend_publisher == NULL) {
+    return GRCL_ERROR_INVALID_ARGUMENT;
+  }
+
+  return grcl_null_native_allocate_tiny_state(
+    (void **)out_backend_publisher,
+    sizeof(grcl_backend_publisher_state_t));
+}
+
+static grcl_result_t grcl_null_native_destroy_publisher(
+  grcl_backend_runtime_state_t * backend_state,
+  grcl_backend_publisher_state_t * backend_publisher)
+{
+  if (backend_state == NULL || backend_publisher == NULL) {
+    return GRCL_ERROR_INVALID_ARGUMENT;
+  }
+
+  free(backend_publisher);
+  return GRCL_OK;
+}
+
+static grcl_result_t grcl_null_native_create_subscription(
+  grcl_backend_runtime_state_t * backend_state,
+  grcl_backend_node_state_t * backend_node,
+  const grcl_subscription_t * subscription,
+  const grcl_subscription_options_t * options,
+  grcl_backend_subscription_state_t ** out_backend_subscription)
+{
+  (void)subscription;
+  (void)options;
+
+  if (backend_state == NULL || backend_node == NULL ||
+    out_backend_subscription == NULL) {
+    return GRCL_ERROR_INVALID_ARGUMENT;
+  }
+
+  return grcl_null_native_allocate_tiny_state(
+    (void **)out_backend_subscription,
+    sizeof(grcl_backend_subscription_state_t));
+}
+
+static grcl_result_t grcl_null_native_destroy_subscription(
+  grcl_backend_runtime_state_t * backend_state,
+  grcl_backend_subscription_state_t * backend_subscription)
+{
+  if (backend_state == NULL || backend_subscription == NULL) {
+    return GRCL_ERROR_INVALID_ARGUMENT;
+  }
+
+  free(backend_subscription);
+  return GRCL_OK;
+}
+
+static grcl_result_t grcl_null_native_create_service(
+  grcl_backend_runtime_state_t * backend_state,
+  grcl_backend_node_state_t * backend_node,
+  const grcl_service_t * service,
+  const grcl_service_options_t * options,
+  grcl_backend_service_state_t ** out_backend_service)
+{
+  (void)service;
+  (void)options;
+
+  if (backend_state == NULL || backend_node == NULL ||
+    out_backend_service == NULL) {
+    return GRCL_ERROR_INVALID_ARGUMENT;
+  }
+
+  return grcl_null_native_allocate_tiny_state(
+    (void **)out_backend_service,
+    sizeof(grcl_backend_service_state_t));
+}
+
+static grcl_result_t grcl_null_native_destroy_service(
+  grcl_backend_runtime_state_t * backend_state,
+  grcl_backend_service_state_t * backend_service)
+{
+  if (backend_state == NULL || backend_service == NULL) {
+    return GRCL_ERROR_INVALID_ARGUMENT;
+  }
+
+  free(backend_service);
+  return GRCL_OK;
+}
+
+static grcl_result_t grcl_null_native_create_client(
+  grcl_backend_runtime_state_t * backend_state,
+  grcl_backend_node_state_t * backend_node,
+  const grcl_client_t * client,
+  const grcl_client_options_t * options,
+  grcl_backend_client_state_t ** out_backend_client)
+{
+  (void)client;
+  (void)options;
+
+  if (backend_state == NULL || backend_node == NULL ||
+    out_backend_client == NULL) {
+    return GRCL_ERROR_INVALID_ARGUMENT;
+  }
+
+  return grcl_null_native_allocate_tiny_state(
+    (void **)out_backend_client,
+    sizeof(grcl_backend_client_state_t));
+}
+
+static grcl_result_t grcl_null_native_destroy_client(
+  grcl_backend_runtime_state_t * backend_state,
+  grcl_backend_client_state_t * backend_client)
+{
+  if (backend_state == NULL || backend_client == NULL) {
+    return GRCL_ERROR_INVALID_ARGUMENT;
+  }
+
+  free(backend_client);
+  return GRCL_OK;
+}
+
+static grcl_result_t grcl_null_native_create_executor(
+  grcl_backend_runtime_state_t * backend_state,
+  const grcl_executor_t * executor,
+  const grcl_executor_options_t * options,
+  grcl_backend_executor_state_t ** out_backend_executor)
+{
+  (void)executor;
+  (void)options;
+
+  if (backend_state == NULL || out_backend_executor == NULL) {
+    return GRCL_ERROR_INVALID_ARGUMENT;
+  }
+
+  return grcl_null_native_allocate_tiny_state(
+    (void **)out_backend_executor,
+    sizeof(grcl_backend_executor_state_t));
+}
+
+static grcl_result_t grcl_null_native_destroy_executor(
+  grcl_backend_runtime_state_t * backend_state,
+  grcl_backend_executor_state_t * backend_executor)
+{
+  if (backend_state == NULL || backend_executor == NULL) {
+    return GRCL_ERROR_INVALID_ARGUMENT;
+  }
+
+  free(backend_executor);
+  return GRCL_OK;
+}
+
+static grcl_result_t grcl_null_native_executor_add_node(
+  grcl_backend_runtime_state_t * backend_state,
+  grcl_backend_executor_state_t * backend_executor,
+  grcl_backend_node_state_t * backend_node)
+{
+  if (backend_state == NULL || backend_executor == NULL || backend_node == NULL) {
+    return GRCL_ERROR_INVALID_ARGUMENT;
+  }
+
+  return GRCL_OK;
+}
+
+static grcl_result_t grcl_null_native_executor_remove_node(
+  grcl_backend_runtime_state_t * backend_state,
+  grcl_backend_executor_state_t * backend_executor,
+  grcl_backend_node_state_t * backend_node)
+{
+  if (backend_state == NULL || backend_executor == NULL || backend_node == NULL) {
+    return GRCL_ERROR_INVALID_ARGUMENT;
+  }
+
+  return GRCL_OK;
+}
+
 static const grcl_backend_ops_t grcl_null_native_backend_ops = {
-  sizeof(grcl_backend_ops_t),
-  GRCL_C_ABI_VERSION_CURRENT,
-  grcl_null_native_create_runtime,
-  grcl_null_native_start_runtime,
-  grcl_null_native_stop_runtime,
-  grcl_null_native_destroy_runtime,
-  grcl_null_native_get_capabilities,
-  grcl_null_native_negotiate_capabilities,
-  grcl_null_native_get_diagnostics
+  .struct_size = sizeof(grcl_backend_ops_t),
+  .abi_version = GRCL_C_ABI_VERSION_CURRENT,
+  .create_runtime = grcl_null_native_create_runtime,
+  .start_runtime = grcl_null_native_start_runtime,
+  .stop_runtime = grcl_null_native_stop_runtime,
+  .destroy_runtime = grcl_null_native_destroy_runtime,
+  .get_capabilities = grcl_null_native_get_capabilities,
+  .negotiate_capabilities = grcl_null_native_negotiate_capabilities,
+  .get_diagnostics = grcl_null_native_get_diagnostics,
+  .create_node = grcl_null_native_create_node,
+  .destroy_node = grcl_null_native_destroy_node,
+  .create_publisher = grcl_null_native_create_publisher,
+  .destroy_publisher = grcl_null_native_destroy_publisher,
+  .create_subscription = grcl_null_native_create_subscription,
+  .destroy_subscription = grcl_null_native_destroy_subscription,
+  .create_service = grcl_null_native_create_service,
+  .destroy_service = grcl_null_native_destroy_service,
+  .create_client = grcl_null_native_create_client,
+  .destroy_client = grcl_null_native_destroy_client,
+  .create_executor = grcl_null_native_create_executor,
+  .destroy_executor = grcl_null_native_destroy_executor,
+  .executor_add_node = grcl_null_native_executor_add_node,
+  .executor_remove_node = grcl_null_native_executor_remove_node
 };
 
 static const grcl_backend_descriptor_t grcl_null_native_backend_descriptor = {
