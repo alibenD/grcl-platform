@@ -77,7 +77,8 @@ STATUS_EXPECTATIONS_BY_FILE = {
             patterns=(
                 re.compile(r"\bG6\b.*\bimplementation\b.*\bauthorized\b", re.IGNORECASE),
                 re.compile(r"\bG6\b.*\bimplementation\b.*\bactive\b", re.IGNORECASE),
-                re.compile(r"\bG6 implementation status:\s*`?(?:authorized|active|pending user approval)`?", re.IGNORECASE),
+                re.compile(r"\bG6\b.*\bimplementation\b.*\bcomplete\b", re.IGNORECASE),
+                re.compile(r"\bG6 implementation status:\s*`?(?:authorized|active|complete)`?", re.IGNORECASE),
             ),
         ),
     ),

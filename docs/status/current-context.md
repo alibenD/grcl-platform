@@ -75,14 +75,12 @@ multi-repository orchestration, and generated artifacts need a stable workspace-
   It records M2 Cross-Language SDK Boundary Baseline, future task breakdown, allowed file sets,
   verification strategy, and the Python binding substrate gate. The user selected Option A:
   `ctypes` or private dynamic-library shim boundary with package distribution deferred.
-- G6 Language SDK Wrapper Skeletons implementation is authorized under the active goal-driven
-  window. It is limited to the selected Option A Python binding profile, file-based task briefs,
-  TDD-style verification, implementation subagent execution, and independent audit. It must not
-  introduce CI, Docker, repo-wide build-system policy, package distribution, generated shared
-  libraries, native extension framework selection, pub/sub, graph, transport, ROS2, MCU runtime,
-  simulator, management-plane, auth, remote-management, event streams, or external `grcl`
-  migration.
-- non-G5 post-M1 implementation remains unauthorized unless a new user-approved goal window records
+- G6 Language SDK Wrapper Skeletons implementation is complete under the user-approved goal-driven
+  window. G6-C `grcl-cpp` passed independent audit with notes, G6-D `grcl-py` passed independent
+  audit, and G6-E SDK boundary drift checks passed independent audit. The local conformance runner
+  now includes documentation, schema fixture, C ABI/header, M1 harness, and SDK boundary drift
+  stages.
+- post-G6 implementation remains unauthorized unless a new user-approved goal window records
   a goal-specific plan, allowed files, verification strategy, implementation subagents, and
   independent audit gates.
 - Management-plane concept modeling is deferred as future G10 input unless explicitly reprioritized.
@@ -238,9 +236,9 @@ after G5-G independent audit acceptance. The main agent may not auto-advance int
 post-G5 implementation milestone without a new user-approved goal window.
 
 The user later authorized G6 Language SDK Wrapper Skeletons planning, selected Python binding
-Option A, and then authorized goal-driven G6 implementation. The active G6 implementation window is
-limited to `grcl-cpp` and `grcl-py` wrapper skeletons, SDK boundary drift checks, local conformance
-integration, and closeout through implementation subagents plus independent audit.
+Option A, and then authorized goal-driven G6 implementation. That G6 implementation window is now
+complete after G6-F closeout verification and independent audit acceptance. The main agent may not
+auto-advance into G7 or any later milestone without a new user-approved goal window.
 
 Stop conditions for this continuous window:
 

@@ -17,9 +17,9 @@ and is treated here as the future `grcl-cpp` module candidate, not as the whole 
 - G3 Backend SPI API Shape v0.1 design baseline: `complete`
 - M1 First Runnable GRCL-C Core With Null/Native Backend: `complete under task briefs, TDD-style verification, and independent audit`
 - G5 Conformance Harness v0.1: `complete under task briefs, TDD-style verification, and independent audit`
-- G6 Language SDK Wrapper Skeletons planning: `complete; implementation pending user approval with Python binding Option A selected`
-- Primary current output: M2/G6 cross-language SDK boundary plan
-- Autonomous Goal Runner mode completed for M1 and must not auto-advance into post-M1 implementation
+- G6 Language SDK Wrapper Skeletons: `complete under task briefs, TDD-style verification, and independent audit`
+- Primary current output: M2/G6 cross-language SDK boundary skeletons and SDK boundary drift checks
+- Autonomous Goal Runner mode completed for M1, G5, and G6; it must not auto-advance into G7 or any later milestone
 - G1-A through G1-E passed independent audit
 - M1-B through M1-G passed independent audit, with M1-G accepted with non-blocking repository
   hygiene notes
@@ -70,6 +70,7 @@ must create it on demand before writing outputs.
 - [Container Workspace Strategy](docs/architecture/container-workspace-strategy.md)
 - [Conformance And CI Strategy](docs/architecture/conformance-and-ci-strategy.md)
 - Local conformance runner: `scripts/run-conformance.sh`
+- SDK boundary drift checker: `scripts/check-sdk-boundaries.py`
 - [Management Plane Concept And Scope](docs/architecture/management-plane-concept-and-scope.md)
 - [Management Plane Decision Scope](docs/architecture/management-plane-decision-scope.md)
 - [Agentic Delivery Governance](docs/architecture/agentic-delivery-governance.md)

@@ -102,16 +102,21 @@ scripts/run-conformance.sh
 find . -maxdepth 1 \( -name build -o -name install -o -name log \) -print
 ```
 
-`scripts/check-docs.py` is the durable local documentation conformance entrypoint for G5-B. It
+`scripts/check-docs.py` is the durable local documentation conformance entrypoint. It
 checks Markdown links in `README.md`, `AGENTS.md`, and `docs/**/*.md`, rejects unfinished durable
-documentation markers, verifies that the three durable status documents agree on M1/G5 execution
+documentation markers, verifies that the three durable status documents agree on M1/G5/G6 execution
 state, and writes its generated report only under `GRCL_PLATFORM_ARTIFACT_ROOT/g5/docs/` or the
 workspace artifact root default.
 
-`scripts/run-conformance.sh` is the G5-F top-level local runner. It may be invoked from the
+`scripts/check-sdk-boundaries.py` is the G6 local SDK boundary drift checker. It scans the current
+`grcl-cpp` and `grcl-py` wrapper skeleton surfaces for backend-private, runtime-internal, ROS2,
+socket, threading, Docker, CI, package, and repo-wide build-system drift, and writes its generated
+report under `GRCL_PLATFORM_ARTIFACT_ROOT/g6/sdk-boundaries/`.
+
+`scripts/run-conformance.sh` is the top-level local runner. It may be invoked from the
 workspace root as `src/grcl-platform/scripts/run-conformance.sh` or from the repository root as
 `scripts/run-conformance.sh`. It preserves an existing `GRCL_PLATFORM_ARTIFACT_ROOT`, otherwise
-defaults generated outputs to `/Users/aliben/Project/grcl-platform_ws/artifacts`, runs the five G5
+defaults generated outputs to `/Users/aliben/Project/grcl-platform_ws/artifacts`, runs the six local
 stages in order, stops on the first failure, and keeps runner-owned summary metadata under
 `GRCL_PLATFORM_ARTIFACT_ROOT/g5/conformance/`.
 

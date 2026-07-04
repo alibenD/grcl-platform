@@ -16,10 +16,10 @@ C apps   -> grcl-c directly
 
 ## G6 M2 Boundary Baseline
 
-G6 plans M2 Cross-Language SDK Boundary Baseline. The baseline is intentionally narrower than a
-usable application SDK: it proves that language wrappers can own and release `grcl-c` handles
-without defining independent lifecycle, result, capability, negotiation, diagnostics, backend, or
-runtime semantics.
+G6 completes the M2 Cross-Language SDK Boundary Baseline. The baseline is intentionally narrower
+than a usable application SDK: it proves that language wrappers can own and release `grcl-c`
+handles without defining independent lifecycle, result, capability, negotiation, diagnostics,
+backend, or runtime semantics.
 
 The G6 boundary covers only the M1-proven surface:
 
@@ -114,3 +114,19 @@ Each language SDK must pass conformance against the same core behavior before be
 For G6, cross-language conformance is limited to wrapper boundary checks and M1-surface lifecycle
 smoke coverage. Stable SDK claims remain deferred until later goals add data-path, graph,
 transport, and release conformance.
+
+## G6 Implementation Closeout
+
+G6 produced:
+
+- a minimal `grcl-cpp` RAII wrapper skeleton over `grcl_runtime_t`.
+- a minimal `grcl-py` ownership wrapper skeleton over a private native boundary shaped like
+  `grcl-c`.
+- local C++ and Python smoke tests for the wrapper ownership boundary.
+- `scripts/check-sdk-boundaries.py`, integrated into `scripts/run-conformance.sh`, to catch local
+  SDK boundary drift.
+
+G6 remains a boundary baseline, not a stable SDK release. Package distribution, shared-library
+production, native extension framework selection, data-path APIs, graph behavior, transport, ROS2,
+MCU runtime, simulator, management-plane behavior, auth, remote management, event streams, CI,
+Docker, and external `grcl` migration remain deferred to later goal-specific plans.
