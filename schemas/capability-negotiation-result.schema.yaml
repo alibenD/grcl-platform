@@ -1,0 +1,53 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://grcl-platform.local/schemas/capability-negotiation-result.schema.yaml"
+title: "GRCL Capability Negotiation Result"
+type: object
+additionalProperties: false
+required:
+  - status
+  - effective_capability
+  - rejection_reasons
+  - diagnostic_code
+  - scope
+properties:
+  status:
+    type: string
+    enum:
+      - accepted
+      - degraded_accepted
+      - rejected_incompatible
+  effective_capability:
+    $ref: "runtime-capability-record.schema.yaml"
+  rejection_reasons:
+    type: array
+    items:
+      type: object
+      additionalProperties: false
+      required:
+        - code
+        - summary
+      properties:
+        code:
+          type: string
+          minLength: 1
+        summary:
+          type: string
+          minLength: 1
+        capability_path:
+          type: string
+          minLength: 1
+  suggested_downgrade:
+    oneOf:
+      - $ref: "runtime-capability-record.schema.yaml"
+      - type: "null"
+  diagnostic_code:
+    type: string
+    minLength: 1
+  scope:
+    type: string
+    enum:
+      - session
+      - channel
+      - endpoint
+      - graph_projection
+

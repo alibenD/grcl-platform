@@ -1,0 +1,223 @@
+case_name: accepted
+description: "Two linux-full runtimes negotiate a session without downgrades."
+local_runtime:
+  identity:
+    runtime_id: "runtime-linux-a"
+    boot_id: "boot-linux-a-001"
+    domain: "factory-a"
+    profile: "linux-full"
+    implementation_id: "grcl-runtime-native"
+    implementation_version: "0.1.0"
+  protocol:
+    grcl_protocol_major: 0
+    grcl_protocol_minor: 1
+    capability_schema_version: "v1"
+  transport:
+    supported_transports:
+      - "in-process"
+      - "shared-memory"
+      - "udp"
+      - "tcp"
+    max_mtu_bytes: 65536
+    fragmentation: true
+    retransmission: true
+    flow_control: true
+  qos:
+    best_effort: true
+    reliable: true
+    history_max_samples: 256
+    deadline: true
+    liveliness: true
+    durability_subset:
+      - "volatile"
+      - "transient-local"
+  encoding:
+    cdr_compatible: true
+    static_type_support: true
+    dynamic_type_support: true
+    endian_support:
+      - "little"
+      - "big"
+    compression: true
+  memory:
+    max_payload_bytes: 1048576
+    max_entities: 4096
+    static_storage: false
+    no_heap_after_init: false
+    history_bytes: 8388608
+  executor:
+    poll: true
+    sequential: true
+    trigger_any: true
+    trigger_all: true
+    let_like: true
+    multithread_support: true
+  graph:
+    projection_modes:
+      - "full"
+      - "runtime-only"
+      - "interest-scoped"
+    dynamic_endpoint_delta: true
+    static_manifest: false
+    full_graph_cache: true
+  diagnostics:
+    basic_health: true
+    extended_metrics: true
+    tracing: true
+    remote_log_sink: true
+  security:
+    authentication: true
+    authorization: true
+    enclave: true
+    audit: true
+    signed_manifest: true
+peer_runtime:
+  identity:
+    runtime_id: "runtime-linux-b"
+    boot_id: "boot-linux-b-009"
+    domain: "factory-a"
+    profile: "linux-full"
+    implementation_id: "grcl-runtime-ros2"
+    implementation_version: "0.1.0"
+  protocol:
+    grcl_protocol_major: 0
+    grcl_protocol_minor: 1
+    capability_schema_version: "v1"
+  transport:
+    supported_transports:
+      - "shared-memory"
+      - "udp"
+      - "tcp"
+    max_mtu_bytes: 65536
+    fragmentation: true
+    retransmission: true
+    flow_control: true
+  qos:
+    best_effort: true
+    reliable: true
+    history_max_samples: 256
+    deadline: true
+    liveliness: true
+    durability_subset:
+      - "volatile"
+      - "transient-local"
+  encoding:
+    cdr_compatible: true
+    static_type_support: true
+    dynamic_type_support: true
+    endian_support:
+      - "little"
+      - "big"
+    compression: true
+  memory:
+    max_payload_bytes: 1048576
+    max_entities: 4096
+    static_storage: false
+    no_heap_after_init: false
+    history_bytes: 8388608
+  executor:
+    poll: true
+    sequential: true
+    trigger_any: true
+    trigger_all: true
+    let_like: true
+    multithread_support: true
+  graph:
+    projection_modes:
+      - "full"
+      - "runtime-only"
+      - "interest-scoped"
+    dynamic_endpoint_delta: true
+    static_manifest: false
+    full_graph_cache: true
+  diagnostics:
+    basic_health: true
+    extended_metrics: true
+    tracing: true
+    remote_log_sink: true
+  security:
+    authentication: true
+    authorization: true
+    enclave: true
+    audit: true
+    signed_manifest: true
+requested_scope: session
+expected_negotiation:
+  status: accepted
+  effective_capability:
+    identity:
+      runtime_id: "runtime-linux-b"
+      boot_id: "boot-linux-b-009"
+      domain: "factory-a"
+      profile: "linux-full"
+      implementation_id: "grcl-runtime-ros2"
+      implementation_version: "0.1.0"
+    protocol:
+      grcl_protocol_major: 0
+      grcl_protocol_minor: 1
+      capability_schema_version: "v1"
+    transport:
+      supported_transports:
+        - "shared-memory"
+        - "udp"
+        - "tcp"
+      max_mtu_bytes: 65536
+      fragmentation: true
+      retransmission: true
+      flow_control: true
+    qos:
+      best_effort: true
+      reliable: true
+      history_max_samples: 256
+      deadline: true
+      liveliness: true
+      durability_subset:
+        - "volatile"
+        - "transient-local"
+    encoding:
+      cdr_compatible: true
+      static_type_support: true
+      dynamic_type_support: true
+      endian_support:
+        - "little"
+        - "big"
+      compression: true
+    memory:
+      max_payload_bytes: 1048576
+      max_entities: 4096
+      static_storage: false
+      no_heap_after_init: false
+      history_bytes: 8388608
+    executor:
+      poll: true
+      sequential: true
+      trigger_any: true
+      trigger_all: true
+      let_like: true
+      multithread_support: true
+    graph:
+      projection_modes:
+        - "full"
+        - "runtime-only"
+        - "interest-scoped"
+      dynamic_endpoint_delta: true
+      static_manifest: false
+      full_graph_cache: true
+    diagnostics:
+      basic_health: true
+      extended_metrics: true
+      tracing: true
+      remote_log_sink: true
+    security:
+      authentication: true
+      authorization: true
+      enclave: true
+      audit: true
+      signed_manifest: true
+  rejection_reasons: []
+  suggested_downgrade: null
+  diagnostic_code: "negotiation.accepted"
+  scope: session
+notes:
+  - "This fixture models capability-only negotiation and intentionally excludes availability and health records."
+  - "The effective capability matches the peer safe capability because no downgrade is required."

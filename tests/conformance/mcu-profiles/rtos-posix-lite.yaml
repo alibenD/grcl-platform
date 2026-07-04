@@ -1,0 +1,46 @@
+profile_name: "rtos-posix-lite"
+target_class: "posix-lite-rtos"
+allocation_policy: "init-only-heap"
+graph_policy: "interest-scoped"
+transport_policy:
+  supported_transports:
+    - "udp"
+    - "serial"
+    - "custom"
+  max_mtu_bytes: 4096
+  fragmentation: true
+  retransmission: true
+  flow_control: true
+qos_policy:
+  best_effort: true
+  reliable: true
+  history_max_samples: 16
+  deadline: true
+  liveliness: true
+  durability_subset:
+    - "volatile"
+    - "transient-local"
+executor_policy:
+  poll: true
+  sequential: true
+  trigger_any: true
+  trigger_all: true
+  let_like: true
+  multithread_support: false
+diagnostics_policy: "extended"
+security_policy: "signed-manifest"
+entity_limits:
+  max_nodes: 8
+  max_endpoints: 64
+  max_sessions: 16
+  max_channels: 32
+  max_timers: 16
+payload_limits:
+  max_payload_bytes: 8192
+  history_bytes: 65536
+profile_constraints:
+  dynamic_endpoint_delta: true
+  static_manifest_required: false
+  gateway_representation: true
+  full_graph_cache_forbidden: true
+  no_heap_after_init: true

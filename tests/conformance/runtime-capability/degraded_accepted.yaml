@@ -1,0 +1,285 @@
+case_name: degraded_accepted
+description: "A linux-full runtime accepts a downgraded session against an rtos-basic peer."
+local_runtime:
+  identity:
+    runtime_id: "runtime-linux-controller"
+    boot_id: "boot-linux-controller-021"
+    domain: "cell-07"
+    profile: "linux-full"
+    implementation_id: "grcl-runtime-native"
+    implementation_version: "0.1.0"
+  protocol:
+    grcl_protocol_major: 0
+    grcl_protocol_minor: 1
+    capability_schema_version: "v1"
+  transport:
+    supported_transports:
+      - "shared-memory"
+      - "udp"
+      - "tcp"
+    max_mtu_bytes: 65536
+    fragmentation: true
+    retransmission: true
+    flow_control: true
+  qos:
+    best_effort: true
+    reliable: true
+    history_max_samples: 256
+    deadline: true
+    liveliness: true
+    durability_subset:
+      - "volatile"
+      - "transient-local"
+  encoding:
+    cdr_compatible: true
+    static_type_support: true
+    dynamic_type_support: true
+    endian_support:
+      - "little"
+      - "big"
+    compression: true
+  memory:
+    max_payload_bytes: 1048576
+    max_entities: 4096
+    static_storage: false
+    no_heap_after_init: false
+    history_bytes: 8388608
+  executor:
+    poll: true
+    sequential: true
+    trigger_any: true
+    trigger_all: true
+    let_like: true
+    multithread_support: true
+  graph:
+    projection_modes:
+      - "full"
+      - "runtime-only"
+      - "interest-scoped"
+    dynamic_endpoint_delta: true
+    static_manifest: false
+    full_graph_cache: true
+  diagnostics:
+    basic_health: true
+    extended_metrics: true
+    tracing: true
+    remote_log_sink: true
+  security:
+    authentication: true
+    authorization: true
+    enclave: true
+    audit: true
+    signed_manifest: true
+peer_runtime:
+  identity:
+    runtime_id: "runtime-rtos-peer"
+    boot_id: "boot-rtos-peer-004"
+    domain: "cell-07"
+    profile: "rtos-basic"
+    implementation_id: "grcl-runtime-mcu"
+    implementation_version: "0.1.0"
+  protocol:
+    grcl_protocol_major: 0
+    grcl_protocol_minor: 1
+    capability_schema_version: "v1"
+  transport:
+    supported_transports:
+      - "udp"
+      - "serial"
+    max_mtu_bytes: 1500
+    fragmentation: false
+    retransmission: true
+    flow_control: true
+  qos:
+    best_effort: true
+    reliable: true
+    history_max_samples: 4
+    deadline: false
+    liveliness: true
+    durability_subset:
+      - "volatile"
+  encoding:
+    cdr_compatible: true
+    static_type_support: true
+    dynamic_type_support: false
+    endian_support:
+      - "little"
+    compression: false
+  memory:
+    max_payload_bytes: 2048
+    max_entities: 48
+    static_storage: true
+    no_heap_after_init: true
+    history_bytes: 8192
+  executor:
+    poll: true
+    sequential: true
+    trigger_any: true
+    trigger_all: false
+    let_like: false
+    multithread_support: false
+  graph:
+    projection_modes:
+      - "runtime-only"
+      - "interest-scoped"
+    dynamic_endpoint_delta: true
+    static_manifest: false
+    full_graph_cache: false
+  diagnostics:
+    basic_health: true
+    extended_metrics: false
+    tracing: false
+    remote_log_sink: false
+  security:
+    authentication: false
+    authorization: false
+    enclave: false
+    audit: false
+    signed_manifest: false
+requested_scope: session
+expected_negotiation:
+  status: degraded_accepted
+  effective_capability:
+    identity:
+      runtime_id: "runtime-rtos-peer"
+      boot_id: "boot-rtos-peer-004"
+      domain: "cell-07"
+      profile: "rtos-basic"
+      implementation_id: "grcl-runtime-mcu"
+      implementation_version: "0.1.0"
+    protocol:
+      grcl_protocol_major: 0
+      grcl_protocol_minor: 1
+      capability_schema_version: "v1"
+    transport:
+      supported_transports:
+        - "udp"
+        - "serial"
+      max_mtu_bytes: 1500
+      fragmentation: false
+      retransmission: true
+      flow_control: true
+    qos:
+      best_effort: true
+      reliable: true
+      history_max_samples: 4
+      deadline: false
+      liveliness: true
+      durability_subset:
+        - "volatile"
+    encoding:
+      cdr_compatible: true
+      static_type_support: true
+      dynamic_type_support: false
+      endian_support:
+        - "little"
+      compression: false
+    memory:
+      max_payload_bytes: 2048
+      max_entities: 48
+      static_storage: true
+      no_heap_after_init: true
+      history_bytes: 8192
+    executor:
+      poll: true
+      sequential: true
+      trigger_any: true
+      trigger_all: false
+      let_like: false
+      multithread_support: false
+    graph:
+      projection_modes:
+        - "runtime-only"
+        - "interest-scoped"
+      dynamic_endpoint_delta: true
+      static_manifest: false
+      full_graph_cache: false
+    diagnostics:
+      basic_health: true
+      extended_metrics: false
+      tracing: false
+      remote_log_sink: false
+    security:
+      authentication: false
+      authorization: false
+      enclave: false
+      audit: false
+      signed_manifest: false
+  rejection_reasons:
+    - code: "optional_capability_omitted"
+      summary: "Peer cannot expose a full graph cache for this session."
+      capability_path: "graph.full_graph_cache"
+    - code: "history_depth_reduced"
+      summary: "Reliable history is bounded to the peer declared limit."
+      capability_path: "qos.history_max_samples"
+  suggested_downgrade:
+    identity:
+      runtime_id: "runtime-rtos-peer"
+      boot_id: "boot-rtos-peer-004"
+      domain: "cell-07"
+      profile: "rtos-basic"
+      implementation_id: "grcl-runtime-mcu"
+      implementation_version: "0.1.0"
+    protocol:
+      grcl_protocol_major: 0
+      grcl_protocol_minor: 1
+      capability_schema_version: "v1"
+    transport:
+      supported_transports:
+        - "udp"
+        - "serial"
+      max_mtu_bytes: 1500
+      fragmentation: false
+      retransmission: true
+      flow_control: true
+    qos:
+      best_effort: true
+      reliable: true
+      history_max_samples: 4
+      deadline: false
+      liveliness: true
+      durability_subset:
+        - "volatile"
+    encoding:
+      cdr_compatible: true
+      static_type_support: true
+      dynamic_type_support: false
+      endian_support:
+        - "little"
+      compression: false
+    memory:
+      max_payload_bytes: 2048
+      max_entities: 48
+      static_storage: true
+      no_heap_after_init: true
+      history_bytes: 8192
+    executor:
+      poll: true
+      sequential: true
+      trigger_any: true
+      trigger_all: false
+      let_like: false
+      multithread_support: false
+    graph:
+      projection_modes:
+        - "runtime-only"
+        - "interest-scoped"
+      dynamic_endpoint_delta: true
+      static_manifest: false
+      full_graph_cache: false
+    diagnostics:
+      basic_health: true
+      extended_metrics: false
+      tracing: false
+      remote_log_sink: false
+    security:
+      authentication: false
+      authorization: false
+      enclave: false
+      audit: false
+      signed_manifest: false
+  diagnostic_code: "negotiation.degraded.peer_profile_limit"
+  scope: session
+notes:
+  - "The downgrade is visible in the effective capability through reduced graph projection, bounded history, and disabled dynamic type support."
+  - "This fixture preserves capability-only semantics and does not encode runtime availability or runtime health."

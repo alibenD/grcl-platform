@@ -1,0 +1,44 @@
+profile_name: "rtos-basic"
+target_class: "rtos"
+allocation_policy: "init-only-heap"
+graph_policy: "interest-scoped"
+transport_policy:
+  supported_transports:
+    - "udp"
+    - "serial"
+  max_mtu_bytes: 1500
+  fragmentation: false
+  retransmission: true
+  flow_control: true
+qos_policy:
+  best_effort: true
+  reliable: true
+  history_max_samples: 4
+  deadline: false
+  liveliness: true
+  durability_subset:
+    - "volatile"
+executor_policy:
+  poll: true
+  sequential: true
+  trigger_any: true
+  trigger_all: false
+  let_like: false
+  multithread_support: false
+diagnostics_policy: "basic"
+security_policy: "link-auth"
+entity_limits:
+  max_nodes: 2
+  max_endpoints: 16
+  max_sessions: 4
+  max_channels: 8
+  max_timers: 8
+payload_limits:
+  max_payload_bytes: 2048
+  history_bytes: 8192
+profile_constraints:
+  dynamic_endpoint_delta: true
+  static_manifest_required: false
+  gateway_representation: true
+  full_graph_cache_forbidden: true
+  no_heap_after_init: true

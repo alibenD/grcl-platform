@@ -1,0 +1,220 @@
+case_name: rejected_incompatible
+description: "A linux-full runtime requests features that a baremetal-min peer cannot safely honor."
+local_runtime:
+  identity:
+    runtime_id: "runtime-linux-supervisor"
+    boot_id: "boot-linux-supervisor-115"
+    domain: "line-02"
+    profile: "linux-full"
+    implementation_id: "grcl-runtime-native"
+    implementation_version: "0.1.0"
+  protocol:
+    grcl_protocol_major: 0
+    grcl_protocol_minor: 1
+    capability_schema_version: "v1"
+  transport:
+    supported_transports:
+      - "udp"
+      - "tcp"
+    max_mtu_bytes: 65536
+    fragmentation: true
+    retransmission: true
+    flow_control: true
+  qos:
+    best_effort: true
+    reliable: true
+    history_max_samples: 128
+    deadline: true
+    liveliness: true
+    durability_subset:
+      - "volatile"
+      - "transient-local"
+  encoding:
+    cdr_compatible: true
+    static_type_support: true
+    dynamic_type_support: true
+    endian_support:
+      - "little"
+      - "big"
+    compression: true
+  memory:
+    max_payload_bytes: 524288
+    max_entities: 2048
+    static_storage: false
+    no_heap_after_init: false
+    history_bytes: 4194304
+  executor:
+    poll: true
+    sequential: true
+    trigger_any: true
+    trigger_all: true
+    let_like: true
+    multithread_support: true
+  graph:
+    projection_modes:
+      - "full"
+      - "interest-scoped"
+      - "runtime-only"
+    dynamic_endpoint_delta: true
+    static_manifest: false
+    full_graph_cache: true
+  diagnostics:
+    basic_health: true
+    extended_metrics: true
+    tracing: true
+    remote_log_sink: true
+  security:
+    authentication: true
+    authorization: true
+    enclave: true
+    audit: true
+    signed_manifest: true
+peer_runtime:
+  identity:
+    runtime_id: "runtime-baremetal-peer"
+    boot_id: "boot-baremetal-peer-001"
+    domain: "line-02"
+    profile: "baremetal-min"
+    implementation_id: "grcl-runtime-mcu"
+    implementation_version: "0.1.0"
+  protocol:
+    grcl_protocol_major: 0
+    grcl_protocol_minor: 1
+    capability_schema_version: "v1"
+  transport:
+    supported_transports:
+      - "serial"
+      - "can"
+    max_mtu_bytes: 256
+    fragmentation: false
+    retransmission: false
+    flow_control: false
+  qos:
+    best_effort: true
+    reliable: false
+    history_max_samples: 1
+    deadline: false
+    liveliness: false
+    durability_subset:
+      - "volatile"
+  encoding:
+    cdr_compatible: true
+    static_type_support: true
+    dynamic_type_support: false
+    endian_support:
+      - "little"
+    compression: false
+  memory:
+    max_payload_bytes: 256
+    max_entities: 12
+    static_storage: true
+    no_heap_after_init: true
+    history_bytes: 256
+  executor:
+    poll: true
+    sequential: true
+    trigger_any: false
+    trigger_all: false
+    let_like: false
+    multithread_support: false
+  graph:
+    projection_modes:
+      - "runtime-only"
+      - "static-manifest"
+    dynamic_endpoint_delta: false
+    static_manifest: true
+    full_graph_cache: false
+  diagnostics:
+    basic_health: true
+    extended_metrics: false
+    tracing: false
+    remote_log_sink: false
+  security:
+    authentication: false
+    authorization: false
+    enclave: false
+    audit: false
+    signed_manifest: false
+requested_scope: session
+expected_negotiation:
+  status: rejected_incompatible
+  effective_capability:
+    identity:
+      runtime_id: "runtime-baremetal-peer"
+      boot_id: "boot-baremetal-peer-001"
+      domain: "line-02"
+      profile: "baremetal-min"
+      implementation_id: "grcl-runtime-mcu"
+      implementation_version: "0.1.0"
+    protocol:
+      grcl_protocol_major: 0
+      grcl_protocol_minor: 1
+      capability_schema_version: "v1"
+    transport:
+      supported_transports:
+        - "serial"
+        - "can"
+      max_mtu_bytes: 256
+      fragmentation: false
+      retransmission: false
+      flow_control: false
+    qos:
+      best_effort: true
+      reliable: false
+      history_max_samples: 1
+      deadline: false
+      liveliness: false
+      durability_subset:
+        - "volatile"
+    encoding:
+      cdr_compatible: true
+      static_type_support: true
+      dynamic_type_support: false
+      endian_support:
+        - "little"
+      compression: false
+    memory:
+      max_payload_bytes: 256
+      max_entities: 12
+      static_storage: true
+      no_heap_after_init: true
+      history_bytes: 256
+    executor:
+      poll: true
+      sequential: true
+      trigger_any: false
+      trigger_all: false
+      let_like: false
+      multithread_support: false
+    graph:
+      projection_modes:
+        - "runtime-only"
+        - "static-manifest"
+      dynamic_endpoint_delta: false
+      static_manifest: true
+      full_graph_cache: false
+    diagnostics:
+      basic_health: true
+      extended_metrics: false
+      tracing: false
+      remote_log_sink: false
+    security:
+      authentication: false
+      authorization: false
+      enclave: false
+      audit: false
+      signed_manifest: false
+  rejection_reasons:
+    - code: "unsupported_required_graph_projection"
+      summary: "Peer does not support the requested full or interest-scoped graph session semantics."
+      capability_path: "graph.projection_modes"
+    - code: "unsupported_required_reliable_qos"
+      summary: "Peer cannot provide required reliable delivery for this session request."
+      capability_path: "qos.reliable"
+  suggested_downgrade: null
+  diagnostic_code: "negotiation.rejected.incompatible_capability"
+  scope: session
+notes:
+  - "The schema currently requires effective_capability even when negotiation is rejected; this fixture exposes the peer safe declared capability as the visible candidate."
+  - "No session or channel is opened when status is rejected_incompatible."
+  - "Availability and health are intentionally excluded so the rejection is explained only by capability mismatch."

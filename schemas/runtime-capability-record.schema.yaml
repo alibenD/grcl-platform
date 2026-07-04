@@ -1,0 +1,271 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://grcl-platform.local/schemas/runtime-capability-record.schema.yaml"
+title: "GRCL Runtime Capability Record"
+type: object
+additionalProperties: false
+required:
+  - identity
+  - protocol
+  - transport
+  - qos
+  - encoding
+  - memory
+  - executor
+  - graph
+  - diagnostics
+  - security
+properties:
+  identity:
+    type: object
+    additionalProperties: false
+    required:
+      - runtime_id
+      - boot_id
+      - domain
+      - profile
+      - implementation_id
+      - implementation_version
+    properties:
+      runtime_id:
+        type: string
+        minLength: 1
+      boot_id:
+        type: string
+        minLength: 1
+      domain:
+        type: string
+        minLength: 1
+      profile:
+        type: string
+        enum:
+          - baremetal-min
+          - rtos-basic
+          - rtos-posix-lite
+          - linux-full
+          - gateway-full
+          - sim-full
+      implementation_id:
+        type: string
+        minLength: 1
+      implementation_version:
+        type: string
+        minLength: 1
+  protocol:
+    type: object
+    additionalProperties: false
+    required:
+      - grcl_protocol_major
+      - grcl_protocol_minor
+      - capability_schema_version
+    properties:
+      grcl_protocol_major:
+        type: integer
+        minimum: 0
+      grcl_protocol_minor:
+        type: integer
+        minimum: 0
+      capability_schema_version:
+        type: string
+        minLength: 1
+  transport:
+    type: object
+    additionalProperties: false
+    required:
+      - supported_transports
+      - max_mtu_bytes
+      - fragmentation
+      - retransmission
+      - flow_control
+    properties:
+      supported_transports:
+        type: array
+        minItems: 1
+        uniqueItems: true
+        items:
+          type: string
+          enum:
+            - in-process
+            - shared-memory
+            - udp
+            - tcp
+            - serial
+            - can
+            - custom
+      max_mtu_bytes:
+        type: integer
+        minimum: 1
+      fragmentation:
+        type: boolean
+      retransmission:
+        type: boolean
+      flow_control:
+        type: boolean
+  qos:
+    type: object
+    additionalProperties: false
+    required:
+      - best_effort
+      - reliable
+      - history_max_samples
+      - deadline
+      - liveliness
+      - durability_subset
+    properties:
+      best_effort:
+        type: boolean
+      reliable:
+        type: boolean
+      history_max_samples:
+        type: integer
+        minimum: 0
+      deadline:
+        type: boolean
+      liveliness:
+        type: boolean
+      durability_subset:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          enum:
+            - volatile
+            - transient-local
+            - persistent
+  encoding:
+    type: object
+    additionalProperties: false
+    required:
+      - cdr_compatible
+      - static_type_support
+      - dynamic_type_support
+      - endian_support
+      - compression
+    properties:
+      cdr_compatible:
+        type: boolean
+      static_type_support:
+        type: boolean
+      dynamic_type_support:
+        type: boolean
+      endian_support:
+        type: array
+        minItems: 1
+        uniqueItems: true
+        items:
+          type: string
+          enum:
+            - little
+            - big
+      compression:
+        type: boolean
+  memory:
+    type: object
+    additionalProperties: false
+    required:
+      - max_payload_bytes
+      - max_entities
+      - static_storage
+      - no_heap_after_init
+      - history_bytes
+    properties:
+      max_payload_bytes:
+        type: integer
+        minimum: 0
+      max_entities:
+        type: integer
+        minimum: 0
+      static_storage:
+        type: boolean
+      no_heap_after_init:
+        type: boolean
+      history_bytes:
+        type: integer
+        minimum: 0
+  executor:
+    type: object
+    additionalProperties: false
+    required:
+      - poll
+      - sequential
+      - trigger_any
+      - trigger_all
+      - let_like
+      - multithread_support
+    properties:
+      poll:
+        type: boolean
+      sequential:
+        type: boolean
+      trigger_any:
+        type: boolean
+      trigger_all:
+        type: boolean
+      let_like:
+        type: boolean
+      multithread_support:
+        type: boolean
+  graph:
+    type: object
+    additionalProperties: false
+    required:
+      - projection_modes
+      - dynamic_endpoint_delta
+      - static_manifest
+      - full_graph_cache
+    properties:
+      projection_modes:
+        type: array
+        minItems: 1
+        uniqueItems: true
+        items:
+          type: string
+          enum:
+            - full
+            - runtime-only
+            - interest-scoped
+            - static-manifest
+            - gateway-represented
+      dynamic_endpoint_delta:
+        type: boolean
+      static_manifest:
+        type: boolean
+      full_graph_cache:
+        type: boolean
+  diagnostics:
+    type: object
+    additionalProperties: false
+    required:
+      - basic_health
+      - extended_metrics
+      - tracing
+      - remote_log_sink
+    properties:
+      basic_health:
+        type: boolean
+      extended_metrics:
+        type: boolean
+      tracing:
+        type: boolean
+      remote_log_sink:
+        type: boolean
+  security:
+    type: object
+    additionalProperties: false
+    required:
+      - authentication
+      - authorization
+      - enclave
+      - audit
+      - signed_manifest
+    properties:
+      authentication:
+        type: boolean
+      authorization:
+        type: boolean
+      enclave:
+        type: boolean
+      audit:
+        type: boolean
+      signed_manifest:
+        type: boolean
+

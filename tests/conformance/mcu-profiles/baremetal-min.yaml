@@ -1,0 +1,44 @@
+profile_name: "baremetal-min"
+target_class: "bare-metal"
+allocation_policy: "caller-provided-storage-only"
+graph_policy: "static-manifest"
+transport_policy:
+  supported_transports:
+    - "serial"
+    - "can"
+  max_mtu_bytes: 256
+  fragmentation: false
+  retransmission: false
+  flow_control: false
+qos_policy:
+  best_effort: true
+  reliable: false
+  history_max_samples: 1
+  deadline: false
+  liveliness: false
+  durability_subset:
+    - "volatile"
+executor_policy:
+  poll: true
+  sequential: true
+  trigger_any: false
+  trigger_all: false
+  let_like: false
+  multithread_support: false
+diagnostics_policy: "basic"
+security_policy: "none"
+entity_limits:
+  max_nodes: 1
+  max_endpoints: 4
+  max_sessions: 1
+  max_channels: 2
+  max_timers: 2
+payload_limits:
+  max_payload_bytes: 256
+  history_bytes: 256
+profile_constraints:
+  dynamic_endpoint_delta: false
+  static_manifest_required: true
+  gateway_representation: false
+  full_graph_cache_forbidden: true
+  no_heap_after_init: true

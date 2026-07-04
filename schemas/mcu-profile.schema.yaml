@@ -1,0 +1,210 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://grcl-platform.local/schemas/mcu-profile.schema.yaml"
+title: "GRCL MCU Profile Descriptor"
+type: object
+additionalProperties: false
+required:
+  - profile_name
+  - target_class
+  - allocation_policy
+  - graph_policy
+  - transport_policy
+  - qos_policy
+  - executor_policy
+  - diagnostics_policy
+  - security_policy
+  - entity_limits
+  - payload_limits
+properties:
+  profile_name:
+    type: string
+    enum:
+      - baremetal-min
+      - rtos-basic
+      - rtos-posix-lite
+      - linux-full
+      - gateway-full
+      - sim-full
+  target_class:
+    type: string
+    enum:
+      - bare-metal
+      - rtos
+      - posix-lite-rtos
+      - linux
+      - gateway
+      - simulator
+  allocation_policy:
+    type: string
+    enum:
+      - heap-allowed
+      - init-only-heap
+      - caller-provided-storage-only
+  graph_policy:
+    type: string
+    enum:
+      - full
+      - runtime-only
+      - interest-scoped
+      - static-manifest
+      - gateway-represented
+  transport_policy:
+    type: object
+    additionalProperties: false
+    required:
+      - supported_transports
+      - max_mtu_bytes
+      - fragmentation
+      - retransmission
+      - flow_control
+    properties:
+      supported_transports:
+        type: array
+        minItems: 1
+        uniqueItems: true
+        items:
+          type: string
+          enum:
+            - in-process
+            - shared-memory
+            - udp
+            - tcp
+            - serial
+            - can
+            - custom
+      max_mtu_bytes:
+        type: integer
+        minimum: 1
+      fragmentation:
+        type: boolean
+      retransmission:
+        type: boolean
+      flow_control:
+        type: boolean
+  qos_policy:
+    type: object
+    additionalProperties: false
+    required:
+      - best_effort
+      - reliable
+      - history_max_samples
+      - deadline
+      - liveliness
+      - durability_subset
+    properties:
+      best_effort:
+        type: boolean
+      reliable:
+        type: boolean
+      history_max_samples:
+        type: integer
+        minimum: 0
+      deadline:
+        type: boolean
+      liveliness:
+        type: boolean
+      durability_subset:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          enum:
+            - volatile
+            - transient-local
+            - persistent
+  executor_policy:
+    type: object
+    additionalProperties: false
+    required:
+      - poll
+      - sequential
+      - trigger_any
+      - trigger_all
+      - let_like
+      - multithread_support
+    properties:
+      poll:
+        type: boolean
+      sequential:
+        type: boolean
+      trigger_any:
+        type: boolean
+      trigger_all:
+        type: boolean
+      let_like:
+        type: boolean
+      multithread_support:
+        type: boolean
+  diagnostics_policy:
+    type: string
+    enum:
+      - none
+      - basic
+      - extended
+      - tracing
+  security_policy:
+    type: string
+    enum:
+      - none
+      - link-auth
+      - signed-manifest
+      - audit
+  entity_limits:
+    type: object
+    additionalProperties: false
+    required:
+      - max_nodes
+      - max_endpoints
+      - max_sessions
+      - max_channels
+      - max_timers
+    properties:
+      max_nodes:
+        type: integer
+        minimum: 0
+      max_endpoints:
+        type: integer
+        minimum: 0
+      max_sessions:
+        type: integer
+        minimum: 0
+      max_channels:
+        type: integer
+        minimum: 0
+      max_timers:
+        type: integer
+        minimum: 0
+  payload_limits:
+    type: object
+    additionalProperties: false
+    required:
+      - max_payload_bytes
+      - history_bytes
+    properties:
+      max_payload_bytes:
+        type: integer
+        minimum: 0
+      history_bytes:
+        type: integer
+        minimum: 0
+  profile_constraints:
+    type: object
+    additionalProperties: false
+    required:
+      - dynamic_endpoint_delta
+      - static_manifest_required
+      - gateway_representation
+      - full_graph_cache_forbidden
+      - no_heap_after_init
+    properties:
+      dynamic_endpoint_delta:
+        type: boolean
+      static_manifest_required:
+        type: boolean
+      gateway_representation:
+        type: boolean
+      full_graph_cache_forbidden:
+        type: boolean
+      no_heap_after_init:
+        type: boolean
+
