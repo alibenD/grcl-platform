@@ -32,6 +32,29 @@ Required sections:
 | diagnostics | basic health, extended metrics, tracing, remote log sink |
 | security | authentication, authorization, enclave, audit, signed manifest |
 
+## Public C ABI Representation
+
+The G2 public C ABI uses the recommended hybrid representation for `RuntimeCapabilityRecord` data.
+
+Fixed root structs are limited to stable, versioned, small-surface fields such as identity,
+protocol version, profile/class identifiers, graph projection mode summary, bounded storage and
+entity limit summaries, lifecycle/result summaries, and high-level diagnostics or security summary
+flags where those flags do not expand a variable family.
+
+Variable capability families must use descriptor structs, iterator-style APIs, or caller-provided
+output buffer APIs rather than being flattened into one giant public capability struct. This applies
+at least to transports, QoS variants/subsets, encodings, diagnostics capabilities, and security
+capability subsets.
+
+Opaque serialized blob support is deferred from G2. It may become a future extension point for
+wire protocol, gateway representation, tooling export, or management-plane snapshots, but it is not
+the active G2 public C ABI baseline.
+
+Capability, availability, and health remain separate concepts at both schema and ABI boundaries.
+
+See [GRCL-C Capability ABI Representation](grcl-c-capability-abi-representation.md) and
+[ADR-0010 GRCL-C Capability ABI Representation](../adr/ADR-0010-grcl-c-capability-abi-representation.md).
+
 ## RuntimeAvailabilityRecord
 
 Required sections:
@@ -85,4 +108,3 @@ Required fields:
 - Unsupported required capability is rejected.
 - Unsupported optional capability can be omitted only when the caller explicitly marked it optional.
 - Downgrade is visible in graph state and diagnostics.
-
