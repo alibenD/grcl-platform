@@ -26,16 +26,27 @@ class RuntimeFixtureSpec:
     expected_status: str
 
 
+@dataclass(frozen=True)
+class FixtureSpec:
+    filename: str
+
+
 SCRIPT_PATH = Path(__file__).resolve()
 REPO_ROOT = SCRIPT_PATH.parent.parent
 WORKSPACE_ROOT = REPO_ROOT.parent.parent
 DEFAULT_ARTIFACT_ROOT = WORKSPACE_ROOT / "artifacts"
 RUNTIME_SCHEMA_PATH = REPO_ROOT / "schemas" / "runtime-capability-record.schema.yaml"
 NEGOTIATION_SCHEMA_PATH = REPO_ROOT / "schemas" / "capability-negotiation-result.schema.yaml"
+MCU_PROFILE_SCHEMA_PATH = REPO_ROOT / "schemas" / "mcu-profile.schema.yaml"
 RUNTIME_FIXTURE_SPECS = (
     RuntimeFixtureSpec("accepted.yaml", "accepted"),
     RuntimeFixtureSpec("degraded_accepted.yaml", "degraded_accepted"),
     RuntimeFixtureSpec("rejected_incompatible.yaml", "rejected_incompatible"),
+)
+MCU_PROFILE_FIXTURE_SPECS = (
+    FixtureSpec("baremetal-min.yaml"),
+    FixtureSpec("rtos-basic.yaml"),
+    FixtureSpec("rtos-posix-lite.yaml"),
 )
 FORBIDDEN_RECORD_KEYS = {"availability", "health", "resources", "pressure", "rate_limits", "degradation"}
 
@@ -379,6 +390,45 @@ def validate_runtime_capability_fixtures() -> list[str]:
     return validated_files
 
 
+def validate_mcu_profile_fixture_semantics(fixture_path: Path, fixture_data: dict[str, Any]) -> None:
+    constraints = fixture_data.get("profile_constraints")
+    if not isinstance(constraints, dict):
+        raise ValidationError(f"{fixture_path.name}: profile_constraints must be an object")
+
+    full_graph_cache_forbidden = constraints.get("full_graph_cache_forbidden")
+    if full_graph_cache_forbidden is not True:
+        raise ValidationError(
+            f"{fixture_path.name}: profile_constraints.full_graph_cache_forbidden must be true"
+        )
+
+    if "no_heap_after_init" not in constraints:
+        raise ValidationError(f"{fixture_path.name}: profile_constraints.no_heap_after_init must be explicit")
+
+    if type(constraints["no_heap_after_init"]) is not bool:
+        raise ValidationError(f"{fixture_path.name}: profile_constraints.no_heap_after_init must be boolean")
+
+    graph_policy = fixture_data.get("graph_policy")
+    if graph_policy == "full":
+        raise ValidationError(f"{fixture_path.name}: constrained MCU fixtures must not claim graph_policy 'full'")
+
+
+def validate_mcu_profile_fixtures() -> list[str]:
+    mcu_profile_schema = load_yaml_like(MCU_PROFILE_SCHEMA_PATH)
+    fixture_dir = REPO_ROOT / "tests" / "conformance" / "mcu-profiles"
+
+    validated_files: list[str] = []
+    for spec in MCU_PROFILE_FIXTURE_SPECS:
+        fixture_path = fixture_dir / spec.filename
+        fixture_data = load_yaml_like(fixture_path)
+        if not isinstance(fixture_data, dict):
+            raise ValidationError(f"{fixture_path.name}: fixture root must be an object")
+
+        validate_against_schema(fixture_data, mcu_profile_schema, MCU_PROFILE_SCHEMA_PATH)
+        validate_mcu_profile_fixture_semantics(fixture_path, fixture_data)
+        validated_files.append(str(fixture_path.relative_to(REPO_ROOT)))
+    return validated_files
+
+
 def artifact_root() -> Path:
     configured = os.environ.get("GRCL_PLATFORM_ARTIFACT_ROOT")
     return Path(configured) if configured else DEFAULT_ARTIFACT_ROOT
@@ -390,6 +440,21 @@ def write_runtime_report(validated_files: list[str]) -> Path:
     report_path = report_dir / "runtime-capability-report.txt"
     content = [
         "runtime capability fixture validation: ok",
+        f"repository_root: {REPO_ROOT}",
+        f"validated_count: {len(validated_files)}",
+        "validated_files:",
+        *[f"- {path}" for path in validated_files],
+    ]
+    report_path.write_text("\n".join(content) + "\n", encoding="utf-8")
+    return report_path
+
+
+def write_mcu_profile_report(validated_files: list[str]) -> Path:
+    report_dir = artifact_root() / "g5" / "schema"
+    report_dir.mkdir(parents=True, exist_ok=True)
+    report_path = report_dir / "mcu-profiles-report.txt"
+    content = [
+        "mcu profile fixture validation: ok",
         f"repository_root: {REPO_ROOT}",
         f"validated_count: {len(validated_files)}",
         "validated_files:",
@@ -411,7 +476,11 @@ def main(argv: list[str] | None = None) -> int:
             return 0
 
         if args.mcu_profiles:
-            raise ValidationError("--mcu-profiles is reserved for G5-D and is not implemented in G5-C")
+            validated_files = validate_mcu_profile_fixtures()
+            report_path = write_mcu_profile_report(validated_files)
+            print(f"mcu profile fixtures valid: {len(validated_files)}")
+            print(f"report: {report_path}")
+            return 0
 
         raise ValidationError("no validation target selected")
     except (ParseError, ValidationError) as exc:

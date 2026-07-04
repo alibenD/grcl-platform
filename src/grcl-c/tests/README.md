@@ -47,6 +47,18 @@ Current harness scope for M1 closeout:
 M1 is closed at this harness scope. Post-M1 test expansion requires a new user-approved goal window
 and must continue to keep generated outputs outside the repository.
 
+G5 adds a local C ABI/header conformance entrypoint:
+
+```bash
+python3 scripts/check-c-abi.py
+```
+
+The G5 checker compiles the two header smoke sources to object files only, scans public
+`grcl-c` headers for forbidden C++/ROS/build/runtime leakage, and verifies required
+ABI-boundary structs retain `struct_size` and `abi_version`. It writes compiler outputs and its
+report under `artifacts/g5/c-abi/` by default, or under
+`$GRCL_PLATFORM_ARTIFACT_ROOT/g5/c-abi/` when the variable is set.
+
 The smoke sources exist to prove that the current header surface:
 
 - compiles as C11

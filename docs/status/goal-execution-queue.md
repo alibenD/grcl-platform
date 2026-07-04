@@ -82,7 +82,7 @@ user-approved G5 implementation window is active.
 | GQ-056 | Validate and commit G5 planning closeout | GQ-055 | complete | `git diff --check`, unfinished-marker scan, stale-status scan, and changed-file scope scan passed for the G5 planning files |
 | GQ-057 | Authorize G5 implementation window | GQ-056 | complete | user selected option 2 and approved goal-driven G5 implementation under the local contract-drift scope |
 | GQ-058 | Execute G5-B documentation checks and G5-C runtime capability fixture checks | GQ-057 | complete | G5-B and G5-C audit status `accepted_with_notes` under `.local/agentic-runs/2026-07-04-g5-conformance-harness/`; docs and runtime capability fixture checks pass |
-| GQ-059 | Execute G5-D MCU profile fixture checks and G5-E C ABI/header checks | GQ-058 | pending | next parallel batch after B/C commit |
+| GQ-059 | Execute G5-D MCU profile fixture checks and G5-E C ABI/header checks | GQ-058 | complete | G5-D audit status `accepted_with_notes`; G5-E audit status `accepted` after narrow raw `ROS2_*` / `ROS_*` identifier fix |
 
 ## Execution Rules
 
