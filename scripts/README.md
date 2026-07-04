@@ -14,4 +14,6 @@ Planned scripts:
 
 All build/test scripts must source `scripts/env.sh` and write generated artifacts under
 `GRCL_PLATFORM_ARTIFACT_ROOT`. They must not default to repository-root `build/`, `install/`, or
-`log/` directories.
+`log/` directories, and they must not create `src/artifacts`. When
+`GRCL_PLATFORM_ARTIFACT_ROOT` is unset in the standard workspace layout, scripts should default to
+the workspace-level `artifacts/` directory.

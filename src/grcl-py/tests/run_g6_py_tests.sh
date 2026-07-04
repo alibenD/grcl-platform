@@ -3,8 +3,9 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
+WORKSPACE_ROOT="$(cd "$REPO_ROOT/../.." && pwd)"
 PACKAGE_ROOT="$REPO_ROOT/src/grcl-py"
-ARTIFACT_ROOT="${GRCL_PLATFORM_ARTIFACT_ROOT:-$REPO_ROOT/../artifacts}/g6/grcl-py"
+ARTIFACT_ROOT="${GRCL_PLATFORM_ARTIFACT_ROOT:-$WORKSPACE_ROOT/artifacts}/g6/grcl-py"
 
 mkdir -p "$ARTIFACT_ROOT"
 

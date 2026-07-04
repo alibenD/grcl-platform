@@ -21,29 +21,47 @@ if [ -z "$artifact_root" ]; then
   fi
 fi
 
+forbidden_artifact_root=
+if [ -n "$default_workspace_root" ]; then
+  forbidden_artifact_root="$default_workspace_root/src/artifacts"
+fi
+
 export GRCL_PLATFORM_ARTIFACT_ROOT="$artifact_root"
 
 runner_output_root="$GRCL_PLATFORM_ARTIFACT_ROOT/g5/conformance"
-mkdir -p "$runner_output_root"
 
 stage_index=0
+total_stages=7
 
 run_stage() {
   stage_index=$((stage_index + 1))
   stage_label=$1
   shift
 
-  printf '==> [%s/6] %s\n' "$stage_index" "$stage_label"
+  printf '==> [%s/%s] %s\n' "$stage_index" "$total_stages" "$stage_label"
   if "$@"; then
-    printf 'PASS [%s/6] %s\n' "$stage_index" "$stage_label"
+    printf 'PASS [%s/%s] %s\n' "$stage_index" "$total_stages" "$stage_label"
   else
     status=$?
-    printf 'FAIL [%s/6] %s (exit %s)\n' "$stage_index" "$stage_label" "$status" >&2
+    printf 'FAIL [%s/%s] %s (exit %s)\n' "$stage_index" "$total_stages" "$stage_label" "$status" >&2
     exit "$status"
   fi
 }
 
+check_artifact_root_hygiene() {
+  if [ -n "$forbidden_artifact_root" ] && [ -e "$forbidden_artifact_root" ]; then
+    printf '%s\n' \
+      "generated artifacts must use workspace-level artifacts/ or GRCL_PLATFORM_ARTIFACT_ROOT; forbidden path exists: $forbidden_artifact_root" >&2
+    return 1
+  fi
+}
+
 cd "$repo_root"
+
+run_stage "artifact root hygiene" \
+  check_artifact_root_hygiene
+
+mkdir -p "$runner_output_root"
 
 run_stage "documentation checks" \
   python3 scripts/check-docs.py
@@ -69,6 +87,7 @@ local conformance runner: ok
 repository_root: $repo_root
 artifact_root: $GRCL_PLATFORM_ARTIFACT_ROOT
 stages:
+- artifact root hygiene
 - documentation checks
 - runtime capability fixtures
 - MCU profile fixtures
