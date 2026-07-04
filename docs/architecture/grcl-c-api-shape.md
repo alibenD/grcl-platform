@@ -2,8 +2,54 @@
 
 ## Purpose
 
-This document defines the first public shape of the `grcl-c` contract before code is written. It
-is intentionally an API design document, not a header implementation.
+This document defines the first public shape of the `grcl-c` contract before runtime and backend
+behavior is implemented. It records the accepted header baseline and the constraints later
+implementation goals must preserve.
+
+This is the canonical design home for the `grcl-c` core contract. It owns the public C ABI shape,
+the G2 closeout baseline, and the handoff constraints that later backend SPI and runtime
+implementation goals must preserve.
+
+## G2-F Closeout Baseline
+
+G2-F closes `grcl-c` ABI Contract v0.1 as an implementation-ready contract baseline, not as a
+runtime implementation. The accepted G2 baseline contains:
+
+| Area | Artifact | Status |
+|---|---|---|
+| ABI versioning | `src/grcl-c/include/grcl/c/version.h` | v0.1 macros and packed ABI version present |
+| Results | `src/grcl-c/include/grcl/c/result.h` | explicit result categories and result codes present |
+| Opaque handles | `src/grcl-c/include/grcl/c/types.h` | runtime, node, endpoint, executor, backend, transport, allocator, storage handles declared |
+| Controlled storage | `src/grcl-c/include/grcl/c/storage.h` | storage regions, flags, and bounded capacity descriptors present |
+| Allocator policy | `src/grcl-c/include/grcl/c/allocator.h` | caller-provided allocator callbacks and limits present |
+| Diagnostics | `src/grcl-c/include/grcl/c/diagnostics.h` | severity, category, scope, code, and record shape present |
+| Runtime declarations | `src/grcl-c/include/grcl/c/runtime.h` | lifecycle, node, endpoint, executor, and capability query declarations present |
+| Capability ABI | `src/grcl-c/include/grcl/c/capability.h` | fixed root summaries, request shape, negotiation result shape present |
+| Compile-only checks | `src/grcl-c/tests/compile_headers_smoke.c`, `src/grcl-c/tests/compile_headers_smoke.cpp` | C11 and C++17 syntax-only smoke artifacts present |
+
+G2-F does not freeze the final binary ABI for release. It freezes the v0.1 design baseline for G3
+backend SPI design and minimum backend implementation planning.
+
+## M1 Runnable-Core Closeout Baseline
+
+M1 closes the first runnable `grcl-c` core path against the G2/G3 contract baseline. It does not
+freeze a release ABI and does not authorize post-M1 feature work.
+
+The M1 baseline contains:
+
+| Area | Artifact | Status |
+|---|---|---|
+| Backend SPI materialization | `src/grcl-c/include/grcl/c/backend.h` | descriptor, runtime context, operation table, capability hooks, negotiation hook, and caller-buffer diagnostics hook compile in C and C++ |
+| Core runtime lifecycle | `src/grcl-c/src/runtime.c` | create, init-with-storage, start, stop, and destroy run through a core-owned runtime handle |
+| Bounded storage | `src/grcl-c/src/runtime.c` and `src/grcl-c/tests/runtime_lifecycle_test.c` | caller-provided runtime-object storage succeeds; missing or insufficient bounded storage fails with a resource-category result |
+| Null/native-test backend | `src/grcl-runtime-native/src/null_backend.c` | private deterministic backend supplies lifecycle, capability, negotiation, and diagnostics hook behavior |
+| Capability query and negotiation | `src/grcl-c/tests/backend_capability_test.c` | deterministic capability record plus accepted, degraded accepted, and rejected incompatible negotiation cases pass |
+| Diagnostics accessor | `src/grcl-c/include/grcl/c/runtime.h` and `src/grcl-c/tests/diagnostics_negative_state_test.c` | narrow public `grcl_runtime_get_diagnostics` caller-buffer API is present and verifies latest lifecycle or storage failure reporting |
+| Local harness | `src/grcl-c/tests/run_m1_tests.sh` | C11/C++17 header smoke and runnable lifecycle/capability/diagnostics tests pass from workspace root, artifact-root override, and repository root |
+
+M1 remains intentionally below publish/subscribe, service/client, executor scheduling, transport,
+ROS2, MCU, SDK wrapper, management-plane, auth, remote-management, event-stream, Docker, CI,
+repo-wide build-system, or external `grcl` migration scope.
 
 ## Naming Rules
 
@@ -115,13 +161,32 @@ grcl_result_t grcl_runtime_negotiate_capabilities(
   const grcl_runtime_t * runtime,
   const grcl_runtime_capability_request_t * request,
   grcl_capability_negotiation_result_t * out_result);
+
+grcl_result_t grcl_runtime_get_diagnostics(
+  const grcl_runtime_t * runtime,
+  grcl_diagnostic_record_t * out_records,
+  size_t record_capacity,
+  size_t * out_record_count);
 ```
 
 Rules:
 
 - Capability queries must not report current resource availability as static capability.
+- Capability records use the selected hybrid public C ABI strategy: fixed root structs for stable
+  identity, protocol, profile/class identifiers, storage and entity limits, lifecycle/result
+  summaries, and graph projection summaries.
+- Variable capability families such as transports, QoS variants/subsets, encodings, diagnostics
+  capabilities, and security capability subsets must use descriptor structs, iterator-style APIs, or
+  caller-provided output buffer APIs instead of a giant flattened public root struct.
+- Opaque serialized blob support is deferred from G2 and may be revisited only as a future protocol
+  or management-plane extension point.
 - Negotiation must return `accepted`, `degraded_accepted`, or `rejected_incompatible`.
 - Silent downgrade is not allowed.
+- Capability, availability, and health remain separate concepts and must not be collapsed into one
+  query result object.
+
+See [GRCL-C Capability ABI Representation](grcl-c-capability-abi-representation.md) and
+[ADR-0010 GRCL-C Capability ABI Representation](../adr/ADR-0010-grcl-c-capability-abi-representation.md).
 
 ## Controlled Storage Shape
 
@@ -150,3 +215,38 @@ Profiles may set some capacities to zero when the capability is unsupported.
 - Public C headers must not expose C++ types, exceptions, templates, RTTI, `rcl`, `rmw`, or
   `rclcpp` types.
 
+## Backend SPI Handoff
+
+G3 backend SPI design must preserve the following `grcl-c` baseline constraints:
+
+- `grcl-c` remains the public semantic boundary. Backend SPI types are internal contract artifacts
+  for implementations and must not leak backend-private ROS2, native, MCU, or simulator types into
+  public SDK headers.
+- Runtime lifecycle ownership starts in the core contract. A backend may allocate backend-private
+  state through the provided allocator/storage policy, but public runtime, node, endpoint, and
+  executor handles remain core-owned opaque handles.
+- Backend lifecycle hooks must map to the public lifecycle declarations in this document:
+  configure or init, start, stop, destroy. G3 must not add public lifecycle states that are not
+  representable through `grcl_result_t`, diagnostics, and capability negotiation.
+- Backend capability hooks must fill or negotiate the existing capability root summaries. G3 may
+  define internal descriptor-family APIs, but it must not require a new G2 schema or an opaque
+  serialized blob to make the first native/null backend testable.
+- The completed M1 minimum backend tests target lifecycle, bounded storage, capability query,
+  capability negotiation, and diagnostics only. Publish/subscribe, service/client, executor
+  scheduling, transport, ROS2 projection, management snapshots, auth, and event streams remain
+  later goals.
+
+## M1 Minimum Runnable Target
+
+The first native/null backend has now proved only this contract path:
+
+1. Create a runtime with `grcl_runtime_create` or `grcl_runtime_init_with_storage`.
+2. Start and stop the runtime through the public lifecycle declarations.
+3. Query capabilities through `grcl_runtime_get_capabilities`.
+4. Negotiate a compatible and an incompatible capability request.
+5. Destroy the runtime deterministically.
+
+The minimum target includes negative cases for invalid arguments, incompatible capability, bad
+state, and bounded storage or capacity failure. It must not be interpreted as permission to open
+channels, publish messages, spin executor behavior beyond a compile/runtime placeholder, or project
+ROS2 graph state.
