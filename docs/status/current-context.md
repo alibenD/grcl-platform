@@ -65,9 +65,11 @@ multi-repository orchestration, and generated artifacts need a stable workspace-
   [G5 Conformance Harness Plan](../plans/2026-07-04-g5-conformance-harness-plan.md). G5 is scoped
   as a local contract-drift harness for docs, schemas, C ABI, capability fixtures, MCU profile
   fixtures, and M1 harness integration.
-- G5 implementation is authorized under the user-approved goal window. It must stay inside the G5
-  local contract-drift harness scope and use task briefs, TDD-style verification, implementation
-  subagents, and independent audit subagents.
+- G5 Conformance Harness v0.1 is complete under the user-approved goal window. G5-B through G5-G
+  used task briefs, TDD-style verification, implementation subagents, and independent audit
+  subagents. G5 provides the local `scripts/run-conformance.sh` contract-drift harness covering
+  documentation checks, runtime capability fixtures, MCU profile fixtures, C ABI/header checks, and
+  the M1 runnable harness.
 - No post-M1 implementation milestone other than G5 Conformance Harness v0.1 is authorized. Any
   non-G5 milestone requires explicit user approval, a goal-specific plan or task briefs, TDD-style
   verification, implementation subagent execution, and independent audit.
@@ -218,8 +220,9 @@ main agent may not auto-advance into any post-M1 implementation milestone withou
 user-approved goal window.
 
 The user later authorized G5 Conformance Harness v0.1 planning, and then authorized G5
-implementation under the goal-driven delivery model. G5 implementation is limited to local
-contract-drift checks and must use file-based task briefs plus independent audit.
+implementation under the goal-driven delivery model. That G5 implementation window is now complete
+after G5-G independent audit acceptance. The main agent may not auto-advance into G6 or any other
+post-G5 implementation milestone without a new user-approved goal window.
 
 Stop conditions for this continuous window:
 

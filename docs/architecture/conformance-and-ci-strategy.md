@@ -73,6 +73,10 @@ behavior, auth, remote management, event streams, or release-stability claims.
 The goal-specific plan is
 [G5 Conformance Harness Plan](../plans/2026-07-04-g5-conformance-harness-plan.md).
 
+G5-G closeout verification completed the local harness. It used the refined non-goal scan from the
+G5-G task brief so normal `grcl_runtime_*` identifiers and intentional conformance-checker pattern
+definitions were not treated as pass/fail evidence. The G5 closeout passed independent audit.
+
 ## Required Local Commands
 
 Before any documentation-only architecture iteration is called complete:

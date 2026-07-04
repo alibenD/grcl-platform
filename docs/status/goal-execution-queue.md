@@ -7,7 +7,7 @@ task briefs, implementation subagents, and independent audit gates. G1 is closed
 continuous implementation window for G2-C through G2-E is also closed after audit acceptance. The
 user-approved M1 Autonomous Goal Runner window for the first runnable `grcl-c` core with a
 null/native-test backend is complete. G5 Conformance Harness v0.1 planning is complete, and the
-user-approved G5 implementation window is active.
+user-approved G5 implementation window is complete after G5-G independent audit acceptance.
 
 ## Boundaries
 
@@ -17,8 +17,8 @@ user-approved G5 implementation window is active.
   independent audit; non-G5 post-M1 implementation goals remain paused
 - Completed work: M1 first runnable `grcl-c` core with null/native-test backend, using task briefs,
   implementation subagents, independent audit subagents, and TDD-style verification
-- Allowed work now: G5 task-brief execution for local docs, schemas, C ABI, capability fixture, MCU
-  profile fixture, and M1 harness integration checks
+- Allowed work now: recovery, review, or planning only unless the user approves a new post-G5
+  implementation goal window
 - Blocked post-M1 work without a new user-approved goal window: publish/subscribe, service/client,
   executor scheduling, transport, ROS2, MCU, SDK, management plane, auth, remote management, event
   streams, Docker, CI, external `grcl` migration, and repo-wide build-system policy
@@ -84,6 +84,7 @@ user-approved G5 implementation window is active.
 | GQ-058 | Execute G5-B documentation checks and G5-C runtime capability fixture checks | GQ-057 | complete | G5-B and G5-C audit status `accepted_with_notes` under `.local/agentic-runs/2026-07-04-g5-conformance-harness/`; docs and runtime capability fixture checks pass |
 | GQ-059 | Execute G5-D MCU profile fixture checks and G5-E C ABI/header checks | GQ-058 | complete | G5-D audit status `accepted_with_notes`; G5-E audit status `accepted` after narrow raw `ROS2_*` / `ROS_*` identifier fix |
 | GQ-060 | Execute G5-F top-level local conformance runner | GQ-059 | complete | G5-F audit status `accepted_with_notes`; local runner composes docs, runtime capability, MCU profile, C ABI, and M1 harness stages |
+| GQ-061 | Execute G5-G closeout verification and independent audit | GQ-060 | complete | G5-G audit status `accepted`; full local conformance runner passed from workspace root, with `/tmp` artifact override, and from repository root |
 
 ## Execution Rules
 
@@ -116,6 +117,5 @@ closed. G3 Backend SPI API Shape v0.1 design baseline is recorded in the canonic
 document. M1 first runnable `grcl-c` core with null/native-test backend is complete: M1-B through
 M1-F passed independent audit, and M1-G passed independent audit with notes after verifying the full
 local harness, artifact-root behavior, report/audit inventory, and forbidden-scope scans. G5
-Conformance Harness v0.1 planning is complete, and G5 implementation is now authorized only for the
-local contract-drift harness scope. No non-G5 post-M1 implementation milestone is authorized from
-this queue state alone.
+Conformance Harness v0.1 is complete after G5-G independent audit acceptance. No non-G5 or post-G5
+implementation milestone is authorized from this queue state alone.

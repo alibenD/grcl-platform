@@ -16,8 +16,8 @@ and is treated here as the future `grcl-cpp` module candidate, not as the whole 
 - G2 `grcl-c` ABI Contract v0.1: `complete`
 - G3 Backend SPI API Shape v0.1 design baseline: `complete`
 - M1 First Runnable GRCL-C Core With Null/Native Backend: `complete under task briefs, TDD-style verification, and independent audit`
-- G5 Conformance Harness v0.1 planning: `complete; implementation pending explicit user approval`
-- Primary current output: G5 local contract-drift harness plan
+- G5 Conformance Harness v0.1: `complete under task briefs, TDD-style verification, and independent audit`
+- Primary current output: G5 local contract-drift harness
 - Autonomous Goal Runner mode completed for M1 and must not auto-advance into post-M1 implementation
 - G1-A through G1-E passed independent audit
 - M1-B through M1-G passed independent audit, with M1-G accepted with non-blocking repository
