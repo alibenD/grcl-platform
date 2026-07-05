@@ -11,7 +11,7 @@ and is treated here as the future `grcl-cpp` module candidate, not as the whole 
 ## Current Status
 
 - Architecture phase: `active`
-- Runtime/product code implementation phase: `active under M5 Local Core Product Surface And GRCL-CPP Completion`
+- Runtime/product code implementation phase: `no new post-M5 implementation milestone authorized; M5 local-core/native-backend plus grcl-cpp scope is locally verified and awaiting independent closeout audit`
 - Bounded G1 contract-artifact creation: `complete under task briefs and independent audit`
 - G2 `grcl-c` ABI Contract v0.1: `complete`
 - G3 Backend SPI API Shape v0.1 design baseline: `complete`
@@ -20,9 +20,9 @@ and is treated here as the future `grcl-cpp` module candidate, not as the whole 
 - G6 Language SDK Wrapper Skeletons: `complete under task briefs, TDD-style verification, and independent audit`
 - M3 Core Middleware Contract And Native In-Process Backend: `complete under task briefs, TDD-style verification, and independent audit`
 - M4 GRCL-C Core Contract Stabilization And Conformance Expansion: `complete under task briefs, TDD-style verification, and independent audit`
-- M5 Local Core Product Surface And GRCL-CPP Completion: `active goal; M5-A plan and durable queue filing complete`
-- Primary current output: M5-F `grcl-cpp` local-core wrapper surface complete through params; next batch is M5 C++ conformance integration and closeout
-- Autonomous Goal Runner mode completed for M1, G5, G6, M3, and M4, and is now re-opened inside the approved M5 scope
+- M5 Local Core Product Surface And GRCL-CPP Completion: `implementation and final local verification complete for the approved local-core/native-backend plus grcl-cpp scope; independent closeout audit remains the final gate`
+- Primary current output: completed local-core/native-backend `grcl-c` baseline plus full approved `grcl-cpp` wrapper surface, with passing C/C++ tests, runnable C/C++ examples, and top-level local conformance
+- Autonomous Goal Runner mode completed for M1, G5, G6, M3, M4, and the approved M5 implementation scope; later milestones still require a new user-approved goal window
 - G1-A through G1-E passed independent audit
 - M1-B through M1-G passed independent audit, with M1-G accepted with non-blocking repository
   hygiene notes

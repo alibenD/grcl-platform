@@ -35,9 +35,11 @@ binding Option A is recorded, and SDK boundary drift checks are integrated into 
 conformance runner. M3 Core Middleware Contract And Native In-Process Backend is complete under a
 goal-specific plan and is limited to local in-process native backend behavior for C examples. M4
 GRCL-C Core Contract Stabilization And Conformance Expansion is complete after closeout audit
-acceptance. M5 Local Core Product Surface And GRCL-CPP Completion is now the active milestone: it
-targets a feature-complete native-backend local-core product surface in `grcl-c`, full `grcl-cpp`
-wrapping of that surface, and passing C/C++ tests plus runnable C/C++ examples.
+acceptance. M5 Local Core Product Surface And GRCL-CPP Completion is complete for its approved
+scope: a feature-complete native-backend local-core product surface in `grcl-c`, full `grcl-cpp`
+wrapping of that surface, passing C/C++ tests, runnable C/C++ examples, and top-level local
+conformance integration. This does not authorize G7 or any later goal automatically; the next
+coordination gate is an independent M5 closeout audit plus a new user-approved goal window.
 
 ## Model And Effort Policy
 
@@ -247,8 +249,10 @@ acceptance. G6 Language SDK Wrapper Skeletons is complete after task briefs, TDD
 implementation subagents, and independent audit. M3 Core Middleware Contract And Native In-Process
 Backend is complete under a goal-specific plan. M4 GRCL-C Core Contract Stabilization And
 Conformance Expansion is complete after closeout audit acceptance. M5 Local Core Product Surface
-And GRCL-CPP Completion is the current goal and requires its own design review, task briefs,
-implementation subagents, and independent audits.
+And GRCL-CPP Completion is complete for the approved local-core/native-backend plus `grcl-cpp`
+scope after design review, task briefs, implementation batches, independent implementation audits,
+and final fresh local verification. Independent closeout audit remains the next coordination gate
+before any later milestone is considered.
 
 ## M4 Scope
 
@@ -294,6 +298,8 @@ Current M5 status:
 
 - M5 authorization status: `complete`
 - M5 planning status: `M5-A and M5-B complete`
-- M5 implementation status: `M5-C through M5-F complete; M5 C++ conformance integration and closeout is the next gate`
+- M5 implementation status: `complete through M5-G implementation plus independent audit`
+- M5 final verification status: `M5-H complete with fresh workspace-root, repo-root, and artifact-root-override evidence`
+- M5 audit coordination status: `independent closeout audit pending before main-agent goal closure or later milestone authorization`
 - M5 plan:
   [M5 Local Core Product And GRCL-CPP Completion Plan](../plans/2026-07-05-m5-local-core-product-and-grcl-cpp-completion-plan.md)

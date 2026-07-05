@@ -16,7 +16,7 @@ creating parallel index or review-pack files.
 | Review M2/G6 SDK boundary baseline | [Language SDK Strategy](architecture/language-sdk-strategy.md) | [G6 Language SDK Wrapper Skeletons Plan](plans/2026-07-04-g6-language-sdk-wrapper-skeletons-plan.md), [SDK Platform Governance](architecture/sdk-platform-governance.md) |
 | Review M3 core middleware design | [GRCL-C API Shape](architecture/grcl-c-api-shape.md) | [Backend SPI Contract](architecture/backend-spi-contract.md), [M3 Core Middleware Native Backend Plan](plans/2026-07-04-m3-core-middleware-native-backend-plan.md) |
 | Review M4 `grcl-c` contract stabilization | [GRCL-C API Shape](architecture/grcl-c-api-shape.md) | [Conformance And CI Strategy](architecture/conformance-and-ci-strategy.md), [M4 GRCL-C Core Contract Stabilization Plan](plans/2026-07-05-m4-grcl-c-core-contract-stabilization-plan.md) |
-| Review M5 local core product completion | [Language SDK Strategy](architecture/language-sdk-strategy.md) | [GRCL-C API Shape](architecture/grcl-c-api-shape.md), [Conformance And CI Strategy](architecture/conformance-and-ci-strategy.md), [M5 Local Core Product And GRCL-CPP Completion Plan](plans/2026-07-05-m5-local-core-product-and-grcl-cpp-completion-plan.md) |
+| Review completed M5 local core product baseline | [Language SDK Strategy](architecture/language-sdk-strategy.md) | [GRCL-C API Shape](architecture/grcl-c-api-shape.md), [Conformance And CI Strategy](architecture/conformance-and-ci-strategy.md), [M5 Local Core Product And GRCL-CPP Completion Plan](plans/2026-07-05-m5-local-core-product-and-grcl-cpp-completion-plan.md) |
 | Run the local conformance harness | [Conformance And CI Strategy](architecture/conformance-and-ci-strategy.md) | `../scripts/run-conformance.sh`, `../src/grcl-c/tests/run_m4_contract_tests.sh`, `../examples/c/run_m3_examples.sh`, `../examples/cpp/run_m5_cpp_examples.sh`, [G5 Conformance Harness Plan](plans/2026-07-04-g5-conformance-harness-plan.md) |
 | Recover current execution state | [Current Context](status/current-context.md) | [Goal Execution Queue](status/goal-execution-queue.md), [Middleware Goal Roadmap](status/middleware-goal-roadmap.md) |
 | Audit a completed task | [Goal Execution Queue](status/goal-execution-queue.md) | `.local/agentic-runs/<plan-id>/<task-id>/ledger.md` and audit reports |
@@ -127,6 +127,8 @@ Current recovery and queue state:
 - [Goal Execution Queue](status/goal-execution-queue.md)
 - [Middleware Goal Roadmap](status/middleware-goal-roadmap.md)
 - [Workspace Bootstrap](status/workspace-bootstrap.md)
+- M5 status boundary: local-core/native-backend `grcl-c` plus approved `grcl-cpp` scope is fully
+  implemented and locally verified; independent closeout audit remains the final milestone gate
 
 ## Current Artifacts
 

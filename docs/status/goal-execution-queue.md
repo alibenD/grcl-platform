@@ -11,18 +11,20 @@ user-approved G5 implementation window is complete after G5-G independent audit 
 Language SDK Wrapper Skeletons is complete after G6-C/G6-D/G6-E independent audit acceptance and
 G6-F closeout. M3 Core Middleware Contract And Native In-Process Backend is complete after M3-J
 closeout audit acceptance. M4 GRCL-C Core Contract Stabilization And Conformance Expansion is
-complete after M4-G closeout audit acceptance. The next active goal is M5 Local Core Product
-Surface And GRCL-CPP Completion.
+complete after M4-G closeout audit acceptance. M5 Local Core Product Surface And GRCL-CPP
+Completion is now locally complete for the approved local-core/native-backend plus `grcl-cpp`
+scope, and the next coordination gate is an independent closeout audit rather than a new
+implementation batch.
 
 ## Boundaries
 
 - Workspace root: `/Users/aliben/Project/grcl-platform_ws`
 - Repository root: `/Users/aliben/Project/grcl-platform_ws/src/grcl-platform`
-- Code implementation: active only inside the approved M5 local-core product scope
+- Code implementation: no new implementation batch is authorized from this queue state alone
 - Completed work: M1 first runnable `grcl-c` core with null/native-test backend, using task briefs,
   implementation subagents, independent audit subagents, and TDD-style verification
-- Allowed work now: M5 C++ conformance integration and closeout under GQ-092 is the next
-  authorized batch; later M5 implementation batches remain dependency-ordered behind it
+- Allowed work now: request and inspect the independent M5 closeout audit; any later milestone
+  still needs a new user-approved goal window after that gate
 - Blocked outside M5 without a new user-approved goal window: ROS2, DDS, sockets, shared memory,
   multi-process transport, simulator backend, MCU runtime, gateway, management plane, auth, remote
   management, event streams, Docker, CI, external `grcl` migration, IDL/codegen, C++/Python
@@ -120,7 +122,7 @@ Surface And GRCL-CPP Completion.
 | GQ-089 | Execute M5 `grcl-cpp` runtime, node, and executor wrappers | GQ-088 | complete | implementation report and independent audit status `accepted_with_notes` under `.local/agentic-runs/2026-07-05-m5-local-core-product-and-grcl-cpp-completion/m5-d-grcl-cpp-runtime-node-executor/`; G6 smoke, new M5 C++ runner, M1 harness, M4 contract runner, docs check, diff hygiene, and top-level conformance passed |
 | GQ-090 | Execute M5 `grcl-cpp` pub/sub wrappers and example | GQ-089 | complete | implementation report plus independent audit status `accepted_with_notes` under `.local/agentic-runs/2026-07-05-m5-local-core-product-and-grcl-cpp-completion/m5-e-grcl-cpp-pub-sub/`; G6 smoke, M5 C++ runner, M1 harness, M4 contract runner, C++ example runner, docs check, diff hygiene, and top-level conformance passed |
 | GQ-091 | Execute M5 `grcl-cpp` service/client and params wrappers | GQ-090 | complete | M5-F1 service/client wrappers completed with implementation report plus independent audit status `accepted_with_notes` under `.local/agentic-runs/2026-07-05-m5-local-core-product-and-grcl-cpp-completion/m5-f-service-client/`; M5-F2 params wrappers completed with implementation report plus independent audit status `accepted_with_notes` under `.local/agentic-runs/2026-07-05-m5-local-core-product-and-grcl-cpp-completion/m5-f-params/` |
-| GQ-092 | Execute M5 C++ conformance integration and closeout | GQ-091 | pending | top-level conformance integration, closeout verification, independent audit, and final M5 durable status closeout |
+| GQ-092 | Execute M5 C++ conformance integration and closeout | GQ-091 | complete | M5-G independent audit `accepted`; M5-H fresh closeout verification passed for docs, SDK boundary drift, G6 C++ smoke, M5 C++ tests, M1 harness, M4 contract runner, M3 C examples, M5 C++ examples, workspace-root conformance, repo-root conformance, `/tmp/grcl-platform-m5-h-closeout` override conformance, and repo-root artifact scan; durable status updated while leaving independent closeout audit as the next coordination gate |
 
 ## Execution Rules
 
@@ -152,9 +154,10 @@ Surface And GRCL-CPP Completion.
   public feature areas, ROS2, networking, simulator, MCU runtime, management plane, auth, remote
   management, event streams, Docker, CI, package/build-system rollout, external `grcl` migration,
   IDL/codegen, or C++/Python example acceptance.
-- M5 Local Core Product Surface And GRCL-CPP Completion is now the active milestone. It is limited
-  to completing the native-backend local-core product surface in `grcl-c`, fully wrapping that
-  surface in `grcl-cpp`, and verifying it with tests plus runnable C/C++ examples.
+- M5 Local Core Product Surface And GRCL-CPP Completion is complete for the approved
+  native-backend local-core `grcl-c` surface plus full `grcl-cpp` wrapping and local verification.
+  This queue state does not authorize any post-M5 implementation milestone; an independent closeout
+  audit and a new user-approved goal window remain required before later milestone work.
 - If a future task becomes implementation work, use file-based task briefs and independent audit
   subagents according to `docs/architecture/agentic-delivery-governance.md`.
 - If validation fails, update this queue with the failure and fix task before claiming completion.
@@ -174,5 +177,7 @@ Conformance Harness v0.1 is complete after G5-G independent audit acceptance. G6
 Wrapper Skeletons is complete after G6-C/G6-D/G6-E independent audit acceptance and G6-F closeout
 verification. M3 Core Middleware Contract And Native In-Process Backend is complete under GQ-068
 through GQ-077. M4 GRCL-C Core Contract Stabilization And Conformance Expansion is complete under
-GQ-078 through GQ-084. M5 Local Core Product Surface And GRCL-CPP Completion is authorized under
-GQ-085. GQ-086 through GQ-091 are complete. GQ-092 is now the next dependency-ordered batch.
+GQ-078 through GQ-084. M5 Local Core Product Surface And GRCL-CPP Completion was authorized under
+GQ-085 and is now locally complete through GQ-092 for the approved local-core/native-backend plus
+`grcl-cpp` scope. The next dependency-ordered coordination step is the independent closeout audit,
+not automatic advancement into a later milestone.

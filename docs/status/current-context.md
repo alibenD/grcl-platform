@@ -32,7 +32,8 @@ multi-repository orchestration, and generated artifacts need a stable workspace-
 ## Current Development Mode
 
 - M1 implementation is complete under the user-approved Autonomous Goal Runner window.
-- Runtime/product code implementation is re-opened only inside the user-approved M5 scope.
+- Runtime/product code implementation is complete for the approved M5 local-core/native-backend
+  plus `grcl-cpp` scope, and no post-M5 implementation milestone is authorized from status alone.
 - Autonomous Goal Runner mode was authorized for M1 implementation-stage task briefs,
   implementation subagents, and independent audit subagents.
 - G1 v0.1 Contract Artifacts is complete.
@@ -115,8 +116,8 @@ multi-repository orchestration, and generated artifacts need a stable workspace-
   independent audit acceptance. M4-G closeout verification is complete after closeout audit
   acceptance with notes. No post-M4 implementation milestone is authorized without a new
   user-approved goal.
-- The user has now approved M5 Local Core Product Surface And GRCL-CPP Completion as the next
-  active implementation milestone. M5 normalizes the user's broad end-state request into one
+- The user approved M5 Local Core Product Surface And GRCL-CPP Completion as the implementation
+  milestone after M4. M5 normalizes the user's broad end-state request into one
   concrete target: complete the native-backend local-core product surface in `grcl-c`, fully wrap
   that surface in `grcl-cpp`, and verify it with passing core tests plus runnable C and C++
   examples.
@@ -159,10 +160,28 @@ multi-repository orchestration, and generated artifacts need a stable workspace-
   C++ runner with a focused params test, added the first runnable C++ params example plus runner
   coverage, and preserved raw `grcl_param_record_t` plus caller-buffer semantics without typed or
   distributed-param invention.
-- M5 C++ conformance integration and closeout is now the next authorized implementation batch under
-  GQ-092. M5 implementation batches must remain inside the approved local-core scope and continue
-  to use task briefs, implementation subagents, TDD-style verification, and independent audit
-  subagents.
+- M5-G C++ example-matrix and conformance integration is complete after independent audit
+  `accepted`. The top-level local conformance runner now includes the approved M5 C++ local-core
+  examples stage.
+- M5-H final closeout verification is complete with fresh evidence from the workspace root, the
+  repository root, and a `/tmp/grcl-platform-m5-h-closeout` artifact-root override. The full
+  ladder passed: `git -C src/grcl-platform diff --check`, `python3 src/grcl-platform/scripts/check-docs.py`,
+  `python3 src/grcl-platform/scripts/check-sdk-boundaries.py`,
+  `src/grcl-platform/src/grcl-cpp/tests/run_g6_cpp_tests.sh`,
+  `src/grcl-platform/src/grcl-cpp/tests/run_m5_cpp_tests.sh`,
+  `src/grcl-platform/src/grcl-c/tests/run_m1_tests.sh`,
+  `src/grcl-platform/src/grcl-c/tests/run_m4_contract_tests.sh`,
+  `src/grcl-platform/examples/c/run_m3_examples.sh`,
+  `src/grcl-platform/examples/cpp/run_m5_cpp_examples.sh`,
+  `src/grcl-platform/scripts/run-conformance.sh`, `scripts/run-conformance.sh`, and
+  `GRCL_PLATFORM_ARTIFACT_ROOT=/tmp/grcl-platform-m5-h-closeout scripts/run-conformance.sh`.
+- M5 Local Core Product Surface And GRCL-CPP Completion is now complete for the approved
+  local-core/native-backend `grcl-c` plus `grcl-cpp` scope: the C and C++ local-core surfaces,
+  tests, examples, and top-level local conformance all pass with fresh evidence. This does not
+  mean the whole GRCL platform is complete, and it does not authorize any post-M5 implementation
+  milestone by itself.
+- Independent closeout audit remains the final coordination gate before the main agent closes the
+  thread goal or proposes any subsequent milestone.
 - M5 does not authorize ROS2, DDS, sockets, shared memory, networking, multi-process transport,
   simulator backend, MCU runtime, gateway runtime, management plane, auth, remote management,
   event streams, CI, Docker, package manager, CMake, colcon, release packaging, external `grcl`
@@ -346,12 +365,14 @@ authorize ROS2, networking, simulator, MCU runtime, management plane, auth, remo
 event streams, CI, Docker, package/build-system rollout, IDL/codegen, C++/Python example
 acceptance, or external `grcl` migration.
 
-The user later authorized M5 Local Core Product Surface And GRCL-CPP Completion. M5 may proceed
-through goal-specific planning, design review, TDD implementation batches, local conformance
-expansion, and closeout inside the approved local-core scope. M5 does not authorize ROS2, DDS,
+The user later authorized M5 Local Core Product Surface And GRCL-CPP Completion. That approved M5
+scope is now complete under fresh local verification evidence for the local-core/native-backend
+`grcl-c` surface plus full approved `grcl-cpp` wrapping. M5 still does not authorize ROS2, DDS,
 networking, simulator, MCU runtime, gateway runtime, management plane, auth, remote management,
 event streams, CI, Docker, package/build-system rollout, release packaging, IDL/codegen, external
-`grcl` migration, or `grcl-py` expansion beyond the completed G6 boundary skeleton.
+`grcl` migration, or `grcl-py` expansion beyond the completed G6 boundary skeleton, and it does
+not authorize a post-M5 milestone without an independent closeout audit plus a new user-approved
+goal window.
 
 Stop conditions for this continuous window:
 
