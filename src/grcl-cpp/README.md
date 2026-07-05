@@ -13,8 +13,10 @@ The current skeleton provides:
 - runtime capability query, negotiation, and diagnostics forwarding without introducing new policy
 - `grcl::Node` as a move-only ownership wrapper over one `grcl_node_t *`
 - `grcl::Executor` as a move-only ownership wrapper over one `grcl_executor_t *`
+- `grcl::Publisher` as a move-only ownership wrapper over one `grcl_publisher_t *`
+- `grcl::Subscription` as a move-only ownership wrapper over one `grcl_subscription_t *`
 - start/stop/destroy and node/executor forwarding without introducing new runtime semantics
 - local smoke tests and compile scripts that build directly against the existing `grcl-c`
   implementation
 
-Publisher/subscription, service/client, params, and runnable C++ examples remain later M5 batches.
+Service/client, params, and broader runnable C++ examples remain later M5 batches.

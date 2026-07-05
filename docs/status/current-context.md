@@ -141,9 +141,16 @@ multi-repository orchestration, and generated artifacts need a stable workspace-
   runtime selection path. M5-D also applied one narrow `grcl-c` compile-hygiene unblock in
   `src/grcl-c/src/runtime.c` by removing an unused static helper that failed under the accepted
   `-Werror` runner policy.
-- M5-E `grcl-cpp` pub/sub wrappers and example is now the next authorized implementation batch. M5
-  implementation batches must remain inside the approved local-core scope and continue to use task
-  briefs, implementation subagents, TDD-style verification, and independent audit subagents.
+- M5-E `grcl-cpp` pub/sub wrappers and example is complete after implementation report and
+  independent audit `accepted_with_notes`. M5-E added move-only `Publisher` and `Subscription`
+  wrappers, extended the dedicated M5 C++ runner with a focused pub/sub test, added the first
+  runnable C++ pub/sub example plus example runner, and closed a lifecycle-order bug by making the
+  C++ test and example explicitly destroy child wrappers before `Runtime::destroy()` under the
+  current direct-wrapper ownership model.
+- M5-F `grcl-cpp` service/client and runtime-local params wrappers is now the next authorized
+  implementation batch. M5 implementation batches must remain inside the approved local-core scope
+  and continue to use task briefs, implementation subagents, TDD-style verification, and
+  independent audit subagents.
 - M5 does not authorize ROS2, DDS, sockets, shared memory, networking, multi-process transport,
   simulator backend, MCU runtime, gateway runtime, management plane, auth, remote management,
   event streams, CI, Docker, package manager, CMake, colcon, release packaging, external `grcl`
