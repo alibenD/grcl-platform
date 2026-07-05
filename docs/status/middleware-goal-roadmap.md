@@ -264,7 +264,7 @@ acceptance, new public feature areas, and release-stability claims.
 Current M4 status:
 
 - M4 planning status: `complete`
-- M4 design review status: `active`
-- M4 implementation status: `blocked on M4 design reviews`
+- M4 design review status: `complete after API re-review accepted; backend and test-plan reviews accepted with notes`
+- M4 implementation status: `active at M4-C core lifecycle and ownership contract tests`
 - M4 plan:
   [M4 GRCL-C Core Contract Stabilization Plan](../plans/2026-07-05-m4-grcl-c-core-contract-stabilization-plan.md)

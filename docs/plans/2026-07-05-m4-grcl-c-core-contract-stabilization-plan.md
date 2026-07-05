@@ -58,6 +58,11 @@ M4 excludes:
   backend-private structs.
 - M4 must keep `null/native-test` as a lifecycle/object-lifecycle baseline and must not make it
   claim native in-process routing, params, or messaging capability.
+- M4 must not define public API behavior for a heap-owned `grcl_runtime_t *` after
+  `grcl_runtime_destroy` returns `GRCL_OK`. Successful heap-runtime destroy releases the handle, so
+  post-destroy runtime calls would test use-after-free rather than a valid API contract.
+- Destroyed non-runtime object behavior may be tested only while the owning runtime remains alive,
+  because the current core keeps those object records available as tombstones until runtime cleanup.
 
 ## Task Queue
 
@@ -121,7 +126,9 @@ Files:
 Steps:
 
 - [ ] Write failing tests for null required pointers, invalid option struct sizes, wrong lifecycle
-  state, destroyed runtime usage, destroyed node usage, and deterministic runtime destroy cleanup.
+  state, `grcl_runtime_destroy(NULL)`, destroying a started runtime without freeing it,
+  deterministic runtime destroy cleanup, and destroyed non-runtime object usage while the owning
+  runtime remains alive.
 - [ ] Write failing tests for cross-runtime object misuse: adding a node to an executor from another
   runtime, creating endpoints with destroyed nodes, and destroying objects in non-creation order.
 - [ ] Run the M4 contract runner and record RED.
@@ -132,6 +139,8 @@ Exit criteria:
 
 - Lifecycle and ownership contract tests pass.
 - Existing M1 harness and M3 examples remain green.
+- M4-C does not call public APIs on heap-owned runtime handles after successful
+  `grcl_runtime_destroy`.
 - No public header or backend behavior expansion is introduced unless separately approved by design
   review.
 

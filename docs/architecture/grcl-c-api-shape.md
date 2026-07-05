@@ -246,7 +246,7 @@ append-only enum value before any behavior tests or implementation depend on it.
 | Condition | Required result |
 |---|---|
 | null handle, null required pointer, zero-length required name, invalid option struct | `GRCL_ERROR_INVALID_ARGUMENT` |
-| operation against stopped/destroyed runtime, destroyed object, wrong lifecycle state | `GRCL_ERROR_BAD_STATE` |
+| operation against a stopped runtime, a destroyed non-runtime object while its owning runtime is still alive, or the wrong lifecycle state | `GRCL_ERROR_BAD_STATE` |
 | older backend missing a required M3 SPI hook, backend reports unsupported local operation | `GRCL_ERROR_UNSUPPORTED_CAPABILITY` |
 | subscription take with no ready message | `GRCL_ERROR_NO_DATA` |
 | service take with no ready request | `GRCL_ERROR_NO_DATA` |
