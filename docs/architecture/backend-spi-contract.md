@@ -401,6 +401,12 @@ claim local messaging capability, or hide missing M3 behavior. Pub/sub delivery,
 request/reply routing, executor dispatch, and runtime-local params remain owned by the later
 in-process native backend batches.
 
+M3-E selects the in-process native backend through existing runtime options, not through a new
+public backend selector. A runtime with `grcl_runtime_options_t.profile_name` equal to
+`"native-inprocess"` uses the M3 in-process backend. A runtime with no profile name, or any other
+profile name, continues to use `null/native-test` until a future backend-selection contract is
+designed.
+
 | Scenario | Required result |
 |---|---|
 | create two nodes in one runtime | nodes are core-owned and backend observes private node state |

@@ -183,6 +183,9 @@ Files:
 
 Steps:
 
+- [ ] Select the M3 in-process backend without adding a public backend selector: tests and examples
+  use `grcl_runtime_options_t.profile_name = "native-inprocess"`. Null/default runtimes continue to
+  use `null/native-test`.
 - [ ] Write failing tests for publisher/subscription create, topic/type matching, publish byte copy,
   executor spin, take success, type mismatch, too-small receive buffer, and empty queue behavior.
 - [ ] Write failing tests for publisher/topic queue saturation returning
@@ -196,6 +199,7 @@ Exit criteria:
 - Pub/sub tests pass.
 - Caller buffers may be reused after publish.
 - No background threads or transport APIs are introduced.
+- Existing null/default lifecycle and capability tests continue to use `null/native-test`.
 
 ### M3-F: Service/Client Routing
 

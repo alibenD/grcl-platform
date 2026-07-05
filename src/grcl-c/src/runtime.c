@@ -120,6 +120,7 @@ struct grcl_runtime {
 };
 
 const grcl_backend_descriptor_t * grcl_null_native_test_backend_descriptor(void);
+const grcl_backend_descriptor_t * grcl_native_inprocess_backend_descriptor(void);
 
 static grcl_runtime_t * grcl_runtime_allocate(void)
 {
@@ -162,6 +163,17 @@ static const grcl_storage_region_t * grcl_find_runtime_object_region(
 static const grcl_backend_descriptor_t * grcl_runtime_default_backend(void)
 {
   return grcl_null_native_test_backend_descriptor();
+}
+
+static const grcl_backend_descriptor_t * grcl_runtime_select_backend(
+  const grcl_runtime_options_t * options)
+{
+  if (options != NULL && options->profile_name != NULL &&
+    strcmp(options->profile_name, "native-inprocess") == 0) {
+    return grcl_native_inprocess_backend_descriptor();
+  }
+
+  return grcl_runtime_default_backend();
 }
 
 static void grcl_runtime_clear_latest_diagnostic(grcl_runtime_t * runtime)
@@ -782,7 +794,7 @@ grcl_result_t grcl_runtime_create(
   (*runtime)->ownership = GRCL_RUNTIME_STORAGE_OWNERSHIP_HEAP;
   (*runtime)->options = options;
   (*runtime)->storage = NULL;
-  (*runtime)->backend = grcl_runtime_default_backend();
+  (*runtime)->backend = grcl_runtime_select_backend(options);
   grcl_runtime_clear_latest_diagnostic(*runtime);
 
   if (!grcl_runtime_prepare_tables(
@@ -834,7 +846,7 @@ grcl_result_t grcl_runtime_init_with_storage(
   (*runtime)->ownership = GRCL_RUNTIME_STORAGE_OWNERSHIP_CALLER_STORAGE;
   (*runtime)->options = options;
   (*runtime)->storage = storage;
-  (*runtime)->backend = grcl_runtime_default_backend();
+  (*runtime)->backend = grcl_runtime_select_backend(options);
   grcl_runtime_clear_latest_diagnostic(*runtime);
 
   if (!grcl_runtime_prepare_tables(
@@ -1205,10 +1217,35 @@ grcl_result_t grcl_publisher_publish_bytes(
   const void * payload,
   size_t payload_size)
 {
-  (void)publisher;
-  (void)payload;
-  (void)payload_size;
-  return GRCL_ERROR_UNSUPPORTED_CAPABILITY;
+  const grcl_backend_ops_t * ops;
+  grcl_runtime_t * runtime;
+
+  if (publisher == NULL || (payload_size > 0u && payload == NULL)) {
+    return GRCL_ERROR_INVALID_ARGUMENT;
+  }
+  if (publisher->destroyed || publisher->node == NULL ||
+    publisher->node->runtime == NULL) {
+    return GRCL_ERROR_BAD_STATE;
+  }
+
+  runtime = publisher->node->runtime;
+  ops = runtime->backend == NULL ? NULL : runtime->backend->ops;
+  if (!grcl_backend_field_available(
+      ops,
+      offsetof(grcl_backend_ops_t, publish_bytes),
+      sizeof(ops->publish_bytes),
+      ops == NULL ? NULL : (const void *)ops->publish_bytes)) {
+    return GRCL_ERROR_UNSUPPORTED_CAPABILITY;
+  }
+  if (runtime->state != GRCL_RUNTIME_LIFECYCLE_STATE_STARTED) {
+    return GRCL_ERROR_BAD_STATE;
+  }
+
+  return ops->publish_bytes(
+    runtime->backend_state,
+    publisher->backend_state,
+    payload,
+    payload_size);
 }
 
 grcl_result_t grcl_subscription_create(
@@ -1312,11 +1349,37 @@ grcl_result_t grcl_subscription_take_bytes(
   size_t payload_capacity,
   size_t * out_payload_size)
 {
-  (void)subscription;
-  (void)out_payload;
-  (void)payload_capacity;
-  (void)out_payload_size;
-  return GRCL_ERROR_UNSUPPORTED_CAPABILITY;
+  const grcl_backend_ops_t * ops;
+  grcl_runtime_t * runtime;
+
+  if (subscription == NULL || out_payload_size == NULL ||
+    (payload_capacity > 0u && out_payload == NULL)) {
+    return GRCL_ERROR_INVALID_ARGUMENT;
+  }
+  if (subscription->destroyed || subscription->node == NULL ||
+    subscription->node->runtime == NULL) {
+    return GRCL_ERROR_BAD_STATE;
+  }
+
+  runtime = subscription->node->runtime;
+  ops = runtime->backend == NULL ? NULL : runtime->backend->ops;
+  if (!grcl_backend_field_available(
+      ops,
+      offsetof(grcl_backend_ops_t, subscription_take_bytes),
+      sizeof(ops->subscription_take_bytes),
+      ops == NULL ? NULL : (const void *)ops->subscription_take_bytes)) {
+    return GRCL_ERROR_UNSUPPORTED_CAPABILITY;
+  }
+  if (runtime->state != GRCL_RUNTIME_LIFECYCLE_STATE_STARTED) {
+    return GRCL_ERROR_BAD_STATE;
+  }
+
+  return ops->subscription_take_bytes(
+    runtime->backend_state,
+    subscription->backend_state,
+    out_payload,
+    payload_capacity,
+    out_payload_size);
 }
 
 grcl_result_t grcl_service_create(
@@ -1747,7 +1810,7 @@ grcl_result_t grcl_executor_spin_once(
   grcl_executor_t * executor,
   uint64_t timeout_ns)
 {
-  (void)timeout_ns;
+  const grcl_backend_ops_t * ops;
 
   if (executor == NULL) {
     return GRCL_ERROR_INVALID_ARGUMENT;
@@ -1756,7 +1819,22 @@ grcl_result_t grcl_executor_spin_once(
     return GRCL_ERROR_BAD_STATE;
   }
 
-  return GRCL_ERROR_UNSUPPORTED_CAPABILITY;
+  ops = executor->runtime->backend == NULL ? NULL : executor->runtime->backend->ops;
+  if (!grcl_backend_field_available(
+      ops,
+      offsetof(grcl_backend_ops_t, executor_spin_once),
+      sizeof(ops->executor_spin_once),
+      ops == NULL ? NULL : (const void *)ops->executor_spin_once)) {
+    return GRCL_ERROR_UNSUPPORTED_CAPABILITY;
+  }
+  if (executor->runtime->state != GRCL_RUNTIME_LIFECYCLE_STATE_STARTED) {
+    return GRCL_ERROR_BAD_STATE;
+  }
+
+  return ops->executor_spin_once(
+    executor->runtime->backend_state,
+    executor->backend_state,
+    timeout_ns);
 }
 
 grcl_result_t grcl_runtime_get_capabilities(
