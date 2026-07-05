@@ -90,10 +90,10 @@ multi-repository orchestration, and generated artifacts need a stable workspace-
   after independent audit `accepted_with_notes`. M3-E pub/sub routing is complete after re-audit
   `accepted_with_notes`. M3-F service/client routing is complete after independent audit
   `accepted_with_notes`. M3-G local runtime params is complete after independent audit `accepted`.
-  M3-H native backend capability update is complete after independent audit `accepted`; M3-I C
-  examples is the active implementation batch. M3-D audit recorded a non-blocking `runtime.c`
-  create-failure cleanup hardening note; M3-F implemented a narrow cleanup hardening change when
-  that path became testable.
+  M3-H native backend capability update is complete after independent audit `accepted`. M3-I C
+  examples is complete after re-audit `accepted`; M3-J conformance integration and closeout is the
+  active implementation batch. M3-D audit recorded a non-blocking `runtime.c` create-failure cleanup
+  hardening note; M3-F implemented a narrow cleanup hardening change when that path became testable.
 - post-M3 implementation remains unauthorized unless a new user-approved goal window records a
   goal-specific plan, allowed files, verification strategy, implementation subagents, and
   independent audit gates.

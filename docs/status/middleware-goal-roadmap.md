@@ -226,7 +226,7 @@ Current M3 status:
 
 - M3 planning status: `complete`
 - M3 design review status: `complete`
-- M3 implementation status: `active at M3-I C examples`
+- M3 implementation status: `active at M3-J conformance integration and closeout`
 - M3 plan:
   [M3 Core Middleware Native Backend Plan](../plans/2026-07-04-m3-core-middleware-native-backend-plan.md)
 
