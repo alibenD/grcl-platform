@@ -54,6 +54,7 @@ Current local verification commands:
 scripts/run-conformance.sh
 src/grcl-c/tests/run_m4_contract_tests.sh
 examples/c/run_m3_examples.sh
+examples/cpp/run_m5_cpp_examples.sh
 ```
 
 ## Document Entry Points
@@ -83,6 +84,7 @@ examples/c/run_m3_examples.sh
 - Local conformance runner: `scripts/run-conformance.sh`
 - M4 contract runner: `src/grcl-c/tests/run_m4_contract_tests.sh`
 - M3 C examples runner: `examples/c/run_m3_examples.sh`
+- M5 C++ examples runner: `examples/cpp/run_m5_cpp_examples.sh`
 - SDK boundary drift checker: `scripts/check-sdk-boundaries.py`
 - [Management Plane Concept And Scope](docs/architecture/management-plane-concept-and-scope.md)
 - [Management Plane Decision Scope](docs/architecture/management-plane-decision-scope.md)

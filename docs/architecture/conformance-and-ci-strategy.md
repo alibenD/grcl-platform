@@ -116,16 +116,24 @@ support, package distribution, release readiness, ROS2 or transport stability, s
 MCU runtime stability, management-plane behavior, SDK stability, or any new runtime/backend/public
 ABI surface beyond the already approved M3 local contract.
 
-## M5 Planned Local C++ Wrapper And Example Conformance
+## M5 Local C++ Wrapper And Example Conformance
 
-M5 is the next approved milestone after M4. It will add a local C++ parity stage only after the
-`grcl-cpp` wrappers, C++ tests, and C++ examples exist and pass independently. That future stage
-must validate that the C++ layer remains a faithful wrapper over the approved native-backend local
-core C surface.
+M5 adds a tenth local stage to `scripts/run-conformance.sh` after the M4 core contract stage. The
+stage runs `examples/cpp/run_m5_cpp_examples.sh` only after the C++ wrappers, the dedicated M5 C++
+test runner, and the standalone C++ examples pass independently. It validates that the approved
+`grcl-cpp` wrapper surface remains a faithful wrapper over the native in-process local-core C
+surface by exercising:
 
-M5 conformance must remain local. It must not claim package distribution, repo-wide build-system
-rollout, CI rollout, cross-platform installer support, ROS2 stability, transport interoperability,
-simulator behavior, MCU runtime behavior, management-plane behavior, or Python SDK stability.
+- pub/sub bytes delivery
+- service/client request-reply forwarding with explicit `grcl_request_id_t` correlation
+- runtime-local params set/get/list behavior
+- one combined local-core scenario covering runtime, node, executor, pub/sub, service/client, and
+  runtime-local params
+
+M5 conformance remains local contract evidence only. It must not claim package distribution,
+repo-wide build-system rollout, CI rollout, cross-platform installer support, ROS2 support,
+transport interoperability, simulator behavior, MCU runtime behavior, management-plane behavior, or
+Python SDK stability.
 
 ## Required Local Commands
 
@@ -152,7 +160,7 @@ report under `GRCL_PLATFORM_ARTIFACT_ROOT/g6/sdk-boundaries/`.
 `scripts/run-conformance.sh` is the top-level local runner. It may be invoked from the workspace
 root as `src/grcl-platform/scripts/run-conformance.sh` or from the repository root as
 `scripts/run-conformance.sh`. It preserves an existing `GRCL_PLATFORM_ARTIFACT_ROOT`, otherwise
-defaults generated outputs to `/Users/aliben/Project/grcl-platform_ws/artifacts`, runs the nine
+defaults generated outputs to `/Users/aliben/Project/grcl-platform_ws/artifacts`, runs the ten
 local stages in order, stops on the first failure, and keeps runner-owned summary metadata under
 `GRCL_PLATFORM_ARTIFACT_ROOT/g5/conformance/`.
 
@@ -167,6 +175,7 @@ Current runner stages:
 7. SDK boundary drift checks
 8. M3 core middleware examples
 9. M4 core contract tests
+10. M5 C++ local-core examples
 
 ## Artifact Ownership
 
