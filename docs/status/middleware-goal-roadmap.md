@@ -33,7 +33,9 @@ and provides the local contract-drift harness. G6 Language SDK Wrapper Skeletons
 Cross-Language SDK Boundary Baseline: `grcl-cpp` and `grcl-py` wrapper skeletons exist, Python
 binding Option A is recorded, and SDK boundary drift checks are integrated into the local
 conformance runner. M3 Core Middleware Contract And Native In-Process Backend is complete under a
-goal-specific plan and is limited to local in-process native backend behavior for C examples.
+goal-specific plan and is limited to local in-process native backend behavior for C examples. M4
+GRCL-C Core Contract Stabilization And Conformance Expansion is active as the post-M3 hardening
+goal.
 
 ## Model And Effort Policy
 
@@ -85,6 +87,7 @@ bar for the task, and must record the chosen policy in each task brief.
 | G5 | Conformance Harness v0.1 | local docs, schema, C ABI, capability fixture, MCU profile fixture, and M1 harness checks | Local checks can fail on contract drift before SDK, simulator, ROS2, MCU runtime, management-plane, CI, or release work expands |
 | G6 | Language SDK Wrapper Skeletons | `grcl-cpp` and `grcl-py` wrappers over `grcl-c` handles | SDK skeletons wrap core handles without independent lifecycle semantics |
 | M3 | Core Middleware Contract And Native In-Process Backend | sub/pub, service/client, executor pull, local runtime params, C examples, native in-process backend | C examples run through local backend and conformance without transport or ROS2 scope |
+| M4 | GRCL-C Core Contract Stabilization And Conformance Expansion | negative-path C contract tests, boundary hardening, dedicated M4 runner, local conformance stage | M3 `grcl-c` local core behavior is backed by contract tests and conformance without adding new feature areas |
 | G7 | Simulator Runtime v0.1 | deterministic simulator backend for graph, capability, diagnostics, and snapshot validation | Middleware semantics can be tested without ROS2 or hardware |
 | G8 | ROS2 Adapter Design And Skeleton | ROS2 backend skeleton, graph projection rules, `rcl`/`rmw`/`rclcpp` containment | ROS2 types remain backend-private; GRCL runtime participant mapping is explicit |
 | G9 | MCU And Gateway Profile Runtime | profile-limited MCU adapters and gateway representation path | MCU profiles avoid full-graph assumptions; gateway representation is testable |
@@ -241,3 +244,27 @@ acceptance. G6 Language SDK Wrapper Skeletons is complete after task briefs, TDD
 implementation subagents, and independent audit. M3 Core Middleware Contract And Native In-Process
 Backend is complete under a goal-specific plan. No further auto-advance beyond M3 is authorized
 from this roadmap state alone.
+
+## M4 Scope
+
+M4 GRCL-C Core Contract Stabilization And Conformance Expansion includes:
+
+- negative-path and boundary tests for the completed M3 `grcl-c` local core surface.
+- lifecycle, ownership, destroyed-handle, cross-runtime, and deterministic cleanup contract checks.
+- messaging, executor, params, and capability contract checks.
+- a dedicated M4 local contract runner and top-level conformance integration.
+- narrow production fixes only when a failing contract test proves drift from the documented M3
+  contract.
+
+M4 excludes ROS2, DDS, sockets, shared memory, networking, multi-process transport, simulator
+backend, MCU runtime, gateway, management plane, auth, remote management, event streams, CI,
+Docker, package manager, CMake, colcon, IDL/codegen, external `grcl` migration, C++/Python example
+acceptance, new public feature areas, and release-stability claims.
+
+Current M4 status:
+
+- M4 planning status: `complete`
+- M4 design review status: `active`
+- M4 implementation status: `blocked on M4 design reviews`
+- M4 plan:
+  [M4 GRCL-C Core Contract Stabilization Plan](../plans/2026-07-05-m4-grcl-c-core-contract-stabilization-plan.md)

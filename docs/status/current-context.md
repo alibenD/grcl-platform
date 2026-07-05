@@ -99,6 +99,13 @@ multi-repository orchestration, and generated artifacts need a stable workspace-
 - post-M3 implementation remains unauthorized unless a new user-approved goal window records a
   goal-specific plan, allowed files, verification strategy, implementation subagents, and
   independent audit gates.
+- M4 GRCL-C Core Contract Stabilization And Conformance Expansion is active under the user's
+  approved goal request. M4 is scoped to stabilizing the completed M3 `grcl-c` local core contract
+  through design review, negative-path contract tests, conformance expansion, implementation
+  subagents, and independent audits. M4 does not authorize new public feature areas, ROS2,
+  networking, simulator, MCU runtime, management plane, auth, remote management, event streams, CI,
+  Docker, package/build-system rollout, IDL/codegen, C++/Python example acceptance, or external
+  `grcl` migration.
 - Management-plane concept modeling is deferred as future G10 input unless explicitly reprioritized.
 - Runtime capability exchange is a design decision, not an implemented runtime feature.
 - Active goal execution is tracked in `docs/status/goal-execution-queue.md`.
@@ -183,6 +190,7 @@ demand by scripts before writing build, test, coverage, log, or generated files.
 - [G5 Conformance Harness Plan](../plans/2026-07-04-g5-conformance-harness-plan.md)
 - [G6 Language SDK Wrapper Skeletons Plan](../plans/2026-07-04-g6-language-sdk-wrapper-skeletons-plan.md)
 - [M3 Core Middleware Native Backend Plan](../plans/2026-07-04-m3-core-middleware-native-backend-plan.md)
+- [M4 GRCL-C Core Contract Stabilization Plan](../plans/2026-07-05-m4-grcl-c-core-contract-stabilization-plan.md)
 
 The architecture plan records the current system design baseline. The module skeleton plan is the
 accepted G1 execution baseline for the current batch closeout. The middleware goal roadmap records
@@ -268,6 +276,13 @@ is now complete after M3-J closeout audit acceptance and local conformance integ
 authorize ROS2, DDS, sockets, shared memory, multi-process transport, simulator backend, MCU
 runtime, gateway, management plane, auth, remote management, event streams, CI, Docker, package
 manager, CMake, colcon, IDL/codegen, external `grcl` migration, or C++/Python example acceptance.
+
+The user later authorized M4 GRCL-C Core Contract Stabilization And Conformance Expansion. M4 may
+proceed through goal-specific planning, design review, TDD contract-hardening implementation
+batches, local conformance expansion, and closeout inside the approved M4 scope. M4 does not
+authorize ROS2, networking, simulator, MCU runtime, management plane, auth, remote management,
+event streams, CI, Docker, package/build-system rollout, IDL/codegen, C++/Python example
+acceptance, or external `grcl` migration.
 
 Stop conditions for this continuous window:
 

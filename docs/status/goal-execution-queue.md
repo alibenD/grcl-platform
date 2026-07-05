@@ -10,17 +10,19 @@ null/native-test backend is complete. G5 Conformance Harness v0.1 planning is co
 user-approved G5 implementation window is complete after G5-G independent audit acceptance. G6
 Language SDK Wrapper Skeletons is complete after G6-C/G6-D/G6-E independent audit acceptance and
 G6-F closeout. M3 Core Middleware Contract And Native In-Process Backend is complete after M3-J
-closeout audit acceptance.
+closeout audit acceptance. M4 GRCL-C Core Contract Stabilization And Conformance Expansion is
+active under the user's approved goal request.
 
 ## Boundaries
 
 - Workspace root: `/Users/aliben/Project/grcl-platform_ws`
 - Repository root: `/Users/aliben/Project/grcl-platform_ws/src/grcl-platform`
-- Code implementation: M3 is complete; post-M3 implementation requires a new user-approved goal
-  window
+- Code implementation: M4 is active, but implementation batches must wait until M4 plan filing and
+  design review gates pass
 - Completed work: M1 first runnable `grcl-c` core with null/native-test backend, using task briefs,
   implementation subagents, independent audit subagents, and TDD-style verification
-- Allowed work now: recovery, review, planning, and explicitly approved post-M3 goal setup
+- Allowed work now: M4 plan filing, M4 design review, then M4 TDD contract-hardening batches after
+  review acceptance
 - Blocked outside M3 without a new user-approved goal window: ROS2, DDS, sockets, shared memory,
   multi-process transport, simulator backend, MCU runtime, gateway, management plane, auth, remote
   management, event streams, Docker, CI, external `grcl` migration, IDL/codegen, C++/Python
@@ -104,6 +106,13 @@ closeout audit acceptance.
 | GQ-075 | Execute M3-H native backend capability update batch | GQ-074 | complete | M3-H audit status `accepted` in `.local/agentic-runs/2026-07-04-m3-core-middleware-native-backend/m3-h-native-backend-capability-update/audit-report.md`; capability tests and M1 harness passed |
 | GQ-076 | Execute M3-I C examples batch | GQ-075 | complete | M3-I re-audit status `accepted` in `.local/agentic-runs/2026-07-04-m3-core-middleware-native-backend/m3-i-c-examples/reaudit-report.md`; all C examples passed from repo root, workspace root, and artifact-root override |
 | GQ-077 | Execute M3-J conformance integration and closeout | GQ-076 | complete | M3-J closeout audit status `accepted` in `.local/agentic-runs/2026-07-04-m3-core-middleware-native-backend/m3-j-conformance-closeout/audit-report.md`; top-level local conformance runner now includes the M3 core middleware examples stage |
+| GQ-078 | File M4 GRCL-C core contract stabilization plan and durable queue | GQ-077 | complete | `docs/plans/2026-07-05-m4-grcl-c-core-contract-stabilization-plan.md`; recovery docs and navigation updated; `git diff --check` and `python3 scripts/check-docs.py` passed |
+| GQ-079 | Run M4 API, backend containment, and test-plan design reviews | GQ-078 | in_progress | requires M4 review briefs and independent design review subagents |
+| GQ-080 | Execute M4-C core lifecycle and ownership contract tests | GQ-079 | pending | requires accepted M4 design reviews, TDD implementation subagent, and independent audit |
+| GQ-081 | Execute M4-D messaging and executor contract tests | GQ-080 | pending | requires M4-C audit acceptance |
+| GQ-082 | Execute M4-E runtime params and capability contract tests | GQ-081 | pending | requires M4-D audit acceptance |
+| GQ-083 | Execute M4-F local conformance integration | GQ-082 | pending | requires M4-E audit acceptance |
+| GQ-084 | Execute M4-G closeout verification and durable status update | GQ-083 | pending | requires M4-F audit acceptance and independent closeout audit |
 
 ## Execution Rules
 
@@ -129,6 +138,13 @@ closeout audit acceptance.
   M3 scope: in-process native backend, C API/SPI contract, executor pull, pub/sub bytes,
   service/client bytes, local runtime params, C tests, C examples, and local conformance
   integration.
+- M4 GRCL-C Core Contract Stabilization And Conformance Expansion is active. It authorizes only
+  the approved M4 scope after design review gates pass: contract-hardening tests for the completed
+  M3 `grcl-c` surface, narrow fixes driven by failing contract tests, local conformance expansion,
+  and closeout. M4 explicitly does not authorize new public feature areas, ROS2, networking,
+  simulator, MCU runtime, management plane, auth, remote management, event streams, Docker, CI,
+  package/build-system rollout, external `grcl` migration, IDL/codegen, or C++/Python example
+  acceptance.
 - If a future task becomes implementation work, use file-based task briefs and independent audit
   subagents according to `docs/architecture/agentic-delivery-governance.md`.
 - If validation fails, update this queue with the failure and fix task before claiming completion.
@@ -147,4 +163,6 @@ local harness, artifact-root behavior, report/audit inventory, and forbidden-sco
 Conformance Harness v0.1 is complete after G5-G independent audit acceptance. G6 Language SDK
 Wrapper Skeletons is complete after G6-C/G6-D/G6-E independent audit acceptance and G6-F closeout
 verification. M3 Core Middleware Contract And Native In-Process Backend is complete under GQ-068
-through GQ-077. No post-M3 implementation milestone is authorized from this queue state alone.
+through GQ-077. M4 GRCL-C Core Contract Stabilization And Conformance Expansion is active under
+GQ-078 through GQ-084. No post-M4 implementation milestone is authorized from this queue state
+alone.

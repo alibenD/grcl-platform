@@ -19,8 +19,9 @@ and is treated here as the future `grcl-cpp` module candidate, not as the whole 
 - G5 Conformance Harness v0.1: `complete under task briefs, TDD-style verification, and independent audit`
 - G6 Language SDK Wrapper Skeletons: `complete under task briefs, TDD-style verification, and independent audit`
 - M3 Core Middleware Contract And Native In-Process Backend: `complete under task briefs, TDD-style verification, and independent audit`
-- Primary current output: completed M3 core middleware API/SPI baseline, native in-process backend implementation, C examples, and local conformance stage
-- Autonomous Goal Runner mode completed for M1, G5, G6, and M3
+- M4 GRCL-C Core Contract Stabilization And Conformance Expansion: `design review active`
+- Primary current output: M4 goal-specific plan and design review gate for contract hardening and conformance expansion
+- Autonomous Goal Runner mode completed for M1, G5, G6, and M3; M4 is active under its own approved goal
 - G1-A through G1-E passed independent audit
 - M1-B through M1-G passed independent audit, with M1-G accepted with non-blocking repository
   hygiene notes
@@ -96,6 +97,7 @@ examples/c/run_m3_examples.sh
 - [G5 Conformance Harness Plan](docs/plans/2026-07-04-g5-conformance-harness-plan.md)
 - [G6 Language SDK Wrapper Skeletons Plan](docs/plans/2026-07-04-g6-language-sdk-wrapper-skeletons-plan.md)
 - [M3 Core Middleware Native Backend Plan](docs/plans/2026-07-04-m3-core-middleware-native-backend-plan.md)
+- [M4 GRCL-C Core Contract Stabilization Plan](docs/plans/2026-07-05-m4-grcl-c-core-contract-stabilization-plan.md)
 - [ADR-0010 GRCL-C Capability ABI Representation](docs/adr/ADR-0010-grcl-c-capability-abi-representation.md)
 
 ## Repository Policy
