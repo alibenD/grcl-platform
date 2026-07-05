@@ -90,9 +90,10 @@ multi-repository orchestration, and generated artifacts need a stable workspace-
   implementation batch. M3-D may extend `null/native-test` with object-lifecycle no-op backend
   hooks only; it must not implement pub/sub delivery, service/client routing, executor dispatch, or
   params. M3-D is complete after independent audit `accepted_with_notes`. M3-E pub/sub routing is
-  complete after re-audit `accepted_with_notes`; M3-F service/client routing is the active
-  implementation batch. M3-D audit recorded a non-blocking `runtime.c` create-failure cleanup
-  hardening note that should not be forgotten when later backend failure paths become testable.
+  complete after re-audit `accepted_with_notes`. M3-F service/client routing is complete after
+  independent audit `accepted_with_notes`; M3-G local runtime params is the active implementation
+  batch. M3-D audit recorded a non-blocking `runtime.c` create-failure cleanup hardening note; M3-F
+  implemented a narrow cleanup hardening change when that path became testable.
 - post-M3 implementation remains unauthorized unless a new user-approved goal window records a
   goal-specific plan, allowed files, verification strategy, implementation subagents, and
   independent audit gates.

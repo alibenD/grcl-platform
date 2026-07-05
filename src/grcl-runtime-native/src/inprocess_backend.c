@@ -20,6 +20,50 @@ typedef struct grcl_inprocess_message_queue {
   size_t count;
 } grcl_inprocess_message_queue_t;
 
+typedef enum grcl_inprocess_request_state {
+  GRCL_INPROCESS_REQUEST_STATE_UNUSED = 0,
+  GRCL_INPROCESS_REQUEST_STATE_PENDING_REQUEST = 1,
+  GRCL_INPROCESS_REQUEST_STATE_READY_REQUEST = 2,
+  GRCL_INPROCESS_REQUEST_STATE_TAKEN_REQUEST = 3,
+  GRCL_INPROCESS_REQUEST_STATE_PENDING_RESPONSE = 4,
+  GRCL_INPROCESS_REQUEST_STATE_READY_RESPONSE = 5
+} grcl_inprocess_request_state_t;
+
+typedef struct grcl_inprocess_request_record {
+  grcl_request_id_t id;
+  struct grcl_backend_client_state * client;
+  struct grcl_backend_service_state * service;
+  grcl_inprocess_request_state_t state;
+} grcl_inprocess_request_record_t;
+
+typedef struct grcl_inprocess_request_message {
+  grcl_request_id_t id;
+  struct grcl_backend_client_state * client;
+  struct grcl_backend_service_state * service;
+  size_t size;
+  unsigned char data[GRCL_INPROCESS_MAX_PAYLOAD_BYTES];
+} grcl_inprocess_request_message_t;
+
+typedef struct grcl_inprocess_request_queue {
+  grcl_inprocess_request_message_t messages[GRCL_INPROCESS_QUEUE_CAPACITY];
+  size_t head;
+  size_t count;
+} grcl_inprocess_request_queue_t;
+
+typedef struct grcl_inprocess_response_message {
+  grcl_request_id_t id;
+  struct grcl_backend_client_state * client;
+  struct grcl_backend_service_state * service;
+  size_t size;
+  unsigned char data[GRCL_INPROCESS_MAX_PAYLOAD_BYTES];
+} grcl_inprocess_response_message_t;
+
+typedef struct grcl_inprocess_response_queue {
+  grcl_inprocess_response_message_t messages[GRCL_INPROCESS_QUEUE_CAPACITY];
+  size_t head;
+  size_t count;
+} grcl_inprocess_response_queue_t;
+
 struct grcl_backend_node_state {
   struct grcl_backend_node_state * next;
 };
@@ -43,11 +87,23 @@ struct grcl_backend_subscription_state {
 };
 
 struct grcl_backend_service_state {
-  int placeholder;
+  struct grcl_backend_runtime_state * runtime;
+  grcl_backend_node_state_t * node;
+  char * service_name;
+  uint64_t request_type_id;
+  uint64_t response_type_id;
+  grcl_inprocess_request_queue_t ready_requests;
+  struct grcl_backend_service_state * next;
 };
 
 struct grcl_backend_client_state {
-  int placeholder;
+  struct grcl_backend_runtime_state * runtime;
+  grcl_backend_node_state_t * node;
+  char * service_name;
+  uint64_t request_type_id;
+  uint64_t response_type_id;
+  grcl_inprocess_response_queue_t ready_responses;
+  struct grcl_backend_client_state * next;
 };
 
 struct grcl_backend_executor_state {
@@ -57,9 +113,15 @@ struct grcl_backend_executor_state {
 
 struct grcl_backend_runtime_state {
   int started;
+  grcl_request_id_t next_request_id;
   grcl_backend_node_state_t * nodes;
   grcl_backend_publisher_state_t * publishers;
   grcl_backend_subscription_state_t * subscriptions;
+  grcl_backend_service_state_t * services;
+  grcl_backend_client_state_t * clients;
+  grcl_inprocess_request_queue_t pending_requests;
+  grcl_inprocess_response_queue_t pending_responses;
+  grcl_inprocess_request_record_t request_records[GRCL_INPROCESS_QUEUE_CAPACITY * 4u];
 };
 
 static char * grcl_inprocess_copy_string(const char * value)
@@ -138,6 +200,186 @@ static int grcl_inprocess_queue_has_capacity(
   return queue != NULL && queue->count < GRCL_INPROCESS_QUEUE_CAPACITY;
 }
 
+static grcl_result_t grcl_inprocess_request_queue_push(
+  grcl_inprocess_request_queue_t * queue,
+  grcl_request_id_t request_id,
+  grcl_backend_client_state_t * client,
+  grcl_backend_service_state_t * service,
+  const void * payload,
+  size_t payload_size)
+{
+  size_t index;
+
+  if (queue == NULL || client == NULL || service == NULL ||
+    (payload_size > 0u && payload == NULL)) {
+    return GRCL_ERROR_INVALID_ARGUMENT;
+  }
+  if (payload_size > GRCL_INPROCESS_MAX_PAYLOAD_BYTES) {
+    return GRCL_ERROR_PAYLOAD_TOO_LARGE;
+  }
+  if (queue->count >= GRCL_INPROCESS_QUEUE_CAPACITY) {
+    return GRCL_ERROR_CAPACITY_EXCEEDED;
+  }
+
+  index = (queue->head + queue->count) % GRCL_INPROCESS_QUEUE_CAPACITY;
+  queue->messages[index].id = request_id;
+  queue->messages[index].client = client;
+  queue->messages[index].service = service;
+  queue->messages[index].size = payload_size;
+  if (payload_size > 0u) {
+    memcpy(queue->messages[index].data, payload, payload_size);
+  }
+  ++queue->count;
+  return GRCL_OK;
+}
+
+static grcl_result_t grcl_inprocess_request_queue_peek(
+  grcl_inprocess_request_queue_t * queue,
+  grcl_inprocess_request_message_t ** out_message)
+{
+  if (queue == NULL || out_message == NULL) {
+    return GRCL_ERROR_INVALID_ARGUMENT;
+  }
+  if (queue->count == 0u) {
+    return GRCL_ERROR_NO_DATA;
+  }
+
+  *out_message = &queue->messages[queue->head];
+  return GRCL_OK;
+}
+
+static void grcl_inprocess_request_queue_pop(grcl_inprocess_request_queue_t * queue)
+{
+  if (queue == NULL || queue->count == 0u) {
+    return;
+  }
+
+  queue->head = (queue->head + 1u) % GRCL_INPROCESS_QUEUE_CAPACITY;
+  --queue->count;
+}
+
+static int grcl_inprocess_request_queue_has_capacity(
+  const grcl_inprocess_request_queue_t * queue)
+{
+  return queue != NULL && queue->count < GRCL_INPROCESS_QUEUE_CAPACITY;
+}
+
+static grcl_result_t grcl_inprocess_response_queue_push(
+  grcl_inprocess_response_queue_t * queue,
+  grcl_request_id_t request_id,
+  grcl_backend_client_state_t * client,
+  grcl_backend_service_state_t * service,
+  const void * payload,
+  size_t payload_size)
+{
+  size_t index;
+
+  if (queue == NULL || client == NULL || service == NULL ||
+    (payload_size > 0u && payload == NULL)) {
+    return GRCL_ERROR_INVALID_ARGUMENT;
+  }
+  if (payload_size > GRCL_INPROCESS_MAX_PAYLOAD_BYTES) {
+    return GRCL_ERROR_PAYLOAD_TOO_LARGE;
+  }
+  if (queue->count >= GRCL_INPROCESS_QUEUE_CAPACITY) {
+    return GRCL_ERROR_CAPACITY_EXCEEDED;
+  }
+
+  index = (queue->head + queue->count) % GRCL_INPROCESS_QUEUE_CAPACITY;
+  queue->messages[index].id = request_id;
+  queue->messages[index].client = client;
+  queue->messages[index].service = service;
+  queue->messages[index].size = payload_size;
+  if (payload_size > 0u) {
+    memcpy(queue->messages[index].data, payload, payload_size);
+  }
+  ++queue->count;
+  return GRCL_OK;
+}
+
+static grcl_result_t grcl_inprocess_response_queue_peek(
+  grcl_inprocess_response_queue_t * queue,
+  grcl_inprocess_response_message_t ** out_message)
+{
+  if (queue == NULL || out_message == NULL) {
+    return GRCL_ERROR_INVALID_ARGUMENT;
+  }
+  if (queue->count == 0u) {
+    return GRCL_ERROR_NO_DATA;
+  }
+
+  *out_message = &queue->messages[queue->head];
+  return GRCL_OK;
+}
+
+static void grcl_inprocess_response_queue_pop(grcl_inprocess_response_queue_t * queue)
+{
+  if (queue == NULL || queue->count == 0u) {
+    return;
+  }
+
+  queue->head = (queue->head + 1u) % GRCL_INPROCESS_QUEUE_CAPACITY;
+  --queue->count;
+}
+
+static int grcl_inprocess_response_queue_has_capacity(
+  const grcl_inprocess_response_queue_t * queue)
+{
+  return queue != NULL && queue->count < GRCL_INPROCESS_QUEUE_CAPACITY;
+}
+
+static grcl_inprocess_request_record_t * grcl_inprocess_find_request_record(
+  grcl_backend_runtime_state_t * backend_state,
+  grcl_request_id_t request_id)
+{
+  if (backend_state == NULL || request_id == 0u) {
+    return NULL;
+  }
+
+  for (size_t i = 0u; i < GRCL_INPROCESS_QUEUE_CAPACITY * 4u; ++i) {
+    if (backend_state->request_records[i].state != GRCL_INPROCESS_REQUEST_STATE_UNUSED &&
+      backend_state->request_records[i].id == request_id) {
+      return &backend_state->request_records[i];
+    }
+  }
+
+  return NULL;
+}
+
+static grcl_inprocess_request_record_t * grcl_inprocess_allocate_request_record(
+  grcl_backend_runtime_state_t * backend_state,
+  grcl_request_id_t request_id,
+  grcl_backend_client_state_t * client,
+  grcl_backend_service_state_t * service)
+{
+  if (backend_state == NULL || request_id == 0u || client == NULL || service == NULL) {
+    return NULL;
+  }
+
+  for (size_t i = 0u; i < GRCL_INPROCESS_QUEUE_CAPACITY * 4u; ++i) {
+    if (backend_state->request_records[i].state == GRCL_INPROCESS_REQUEST_STATE_UNUSED) {
+      backend_state->request_records[i].id = request_id;
+      backend_state->request_records[i].client = client;
+      backend_state->request_records[i].service = service;
+      backend_state->request_records[i].state =
+        GRCL_INPROCESS_REQUEST_STATE_PENDING_REQUEST;
+      return &backend_state->request_records[i];
+    }
+  }
+
+  return NULL;
+}
+
+static void grcl_inprocess_clear_request_record(
+  grcl_inprocess_request_record_t * record)
+{
+  if (record == NULL) {
+    return;
+  }
+
+  memset(record, 0, sizeof(*record));
+}
+
 static int grcl_inprocess_endpoint_matches(
   const grcl_backend_publisher_state_t * publisher,
   const grcl_backend_subscription_state_t * subscription)
@@ -146,6 +388,53 @@ static int grcl_inprocess_endpoint_matches(
     publisher->type_id == subscription->type_id &&
     publisher->topic_name != NULL && subscription->topic_name != NULL &&
     strcmp(publisher->topic_name, subscription->topic_name) == 0;
+}
+
+static int grcl_inprocess_service_name_matches(
+  const grcl_backend_service_state_t * service,
+  const char * service_name)
+{
+  return service != NULL && service->service_name != NULL && service_name != NULL &&
+    strcmp(service->service_name, service_name) == 0;
+}
+
+static int grcl_inprocess_service_client_matches(
+  const grcl_backend_service_state_t * service,
+  const grcl_backend_client_state_t * client)
+{
+  return service != NULL && client != NULL &&
+    service->request_type_id == client->request_type_id &&
+    service->response_type_id == client->response_type_id &&
+    grcl_inprocess_service_name_matches(service, client->service_name);
+}
+
+static grcl_backend_service_state_t * grcl_inprocess_find_matching_service(
+  grcl_backend_runtime_state_t * backend_state,
+  const grcl_backend_client_state_t * client,
+  int * out_name_found)
+{
+  grcl_backend_service_state_t * service;
+
+  if (out_name_found != NULL) {
+    *out_name_found = 0;
+  }
+  if (backend_state == NULL || client == NULL) {
+    return NULL;
+  }
+
+  for (service = backend_state->services; service != NULL; service = service->next) {
+    if (!grcl_inprocess_service_name_matches(service, client->service_name)) {
+      continue;
+    }
+    if (out_name_found != NULL) {
+      *out_name_found = 1;
+    }
+    if (grcl_inprocess_service_client_matches(service, client)) {
+      return service;
+    }
+  }
+
+  return NULL;
 }
 
 static grcl_result_t grcl_inprocess_create_runtime(
@@ -166,6 +455,7 @@ static grcl_result_t grcl_inprocess_create_runtime(
     return GRCL_ERROR_OUT_OF_MEMORY;
   }
 
+  state->next_request_id = 1u;
   *out_backend_state = state;
   return GRCL_OK;
 }
@@ -564,12 +854,70 @@ static grcl_result_t grcl_inprocess_create_service(
   const grcl_service_options_t * options,
   grcl_backend_service_state_t ** out_backend_service)
 {
-  (void)backend_state;
-  (void)backend_node;
+  grcl_backend_service_state_t * created;
+
   (void)service;
-  (void)options;
-  (void)out_backend_service;
-  return GRCL_ERROR_UNSUPPORTED_CAPABILITY;
+
+  if (backend_state == NULL || backend_node == NULL || options == NULL ||
+    options->service_name == NULL || options->request_type_support == NULL ||
+    options->response_type_support == NULL || out_backend_service == NULL) {
+    return GRCL_ERROR_INVALID_ARGUMENT;
+  }
+
+  *out_backend_service = NULL;
+  created = (grcl_backend_service_state_t *)calloc(1u, sizeof(*created));
+  if (created == NULL) {
+    return GRCL_ERROR_OUT_OF_MEMORY;
+  }
+
+  created->service_name = grcl_inprocess_copy_string(options->service_name);
+  if (created->service_name == NULL) {
+    free(created);
+    return GRCL_ERROR_OUT_OF_MEMORY;
+  }
+
+  created->runtime = backend_state;
+  created->node = backend_node;
+  created->request_type_id = options->request_type_support->type_id;
+  created->response_type_id = options->response_type_support->type_id;
+  created->next = backend_state->services;
+  backend_state->services = created;
+  *out_backend_service = created;
+  return GRCL_OK;
+}
+
+static void grcl_inprocess_remove_service_link(
+  grcl_backend_runtime_state_t * backend_state,
+  grcl_backend_service_state_t * service)
+{
+  grcl_backend_service_state_t ** current;
+
+  if (backend_state == NULL || service == NULL) {
+    return;
+  }
+
+  current = &backend_state->services;
+  while (*current != NULL) {
+    if (*current == service) {
+      *current = service->next;
+      return;
+    }
+    current = &(*current)->next;
+  }
+}
+
+static grcl_result_t grcl_inprocess_destroy_service(
+  grcl_backend_runtime_state_t * backend_state,
+  grcl_backend_service_state_t * backend_service)
+{
+  if (backend_state == NULL || backend_service == NULL) {
+    return GRCL_ERROR_INVALID_ARGUMENT;
+  }
+
+  grcl_inprocess_remove_service_link(backend_state, backend_service);
+  free(backend_service->service_name);
+  free(backend_service);
+  return GRCL_OK;
 }
 
 static grcl_result_t grcl_inprocess_create_client(
@@ -579,12 +927,279 @@ static grcl_result_t grcl_inprocess_create_client(
   const grcl_client_options_t * options,
   grcl_backend_client_state_t ** out_backend_client)
 {
-  (void)backend_state;
-  (void)backend_node;
+  grcl_backend_client_state_t * created;
+
   (void)client;
-  (void)options;
-  (void)out_backend_client;
-  return GRCL_ERROR_UNSUPPORTED_CAPABILITY;
+
+  if (backend_state == NULL || backend_node == NULL || options == NULL ||
+    options->service_name == NULL || options->request_type_support == NULL ||
+    options->response_type_support == NULL || out_backend_client == NULL) {
+    return GRCL_ERROR_INVALID_ARGUMENT;
+  }
+
+  *out_backend_client = NULL;
+  created = (grcl_backend_client_state_t *)calloc(1u, sizeof(*created));
+  if (created == NULL) {
+    return GRCL_ERROR_OUT_OF_MEMORY;
+  }
+
+  created->service_name = grcl_inprocess_copy_string(options->service_name);
+  if (created->service_name == NULL) {
+    free(created);
+    return GRCL_ERROR_OUT_OF_MEMORY;
+  }
+
+  created->runtime = backend_state;
+  created->node = backend_node;
+  created->request_type_id = options->request_type_support->type_id;
+  created->response_type_id = options->response_type_support->type_id;
+  created->next = backend_state->clients;
+  backend_state->clients = created;
+  *out_backend_client = created;
+  return GRCL_OK;
+}
+
+static void grcl_inprocess_remove_client_link(
+  grcl_backend_runtime_state_t * backend_state,
+  grcl_backend_client_state_t * client)
+{
+  grcl_backend_client_state_t ** current;
+
+  if (backend_state == NULL || client == NULL) {
+    return;
+  }
+
+  current = &backend_state->clients;
+  while (*current != NULL) {
+    if (*current == client) {
+      *current = client->next;
+      return;
+    }
+    current = &(*current)->next;
+  }
+}
+
+static grcl_result_t grcl_inprocess_destroy_client(
+  grcl_backend_runtime_state_t * backend_state,
+  grcl_backend_client_state_t * backend_client)
+{
+  if (backend_state == NULL || backend_client == NULL) {
+    return GRCL_ERROR_INVALID_ARGUMENT;
+  }
+
+  grcl_inprocess_remove_client_link(backend_state, backend_client);
+  free(backend_client->service_name);
+  free(backend_client);
+  return GRCL_OK;
+}
+
+static grcl_result_t grcl_inprocess_client_send_request_bytes(
+  grcl_backend_runtime_state_t * backend_state,
+  grcl_backend_client_state_t * backend_client,
+  const void * request_payload,
+  size_t request_payload_size,
+  grcl_request_id_t * out_request_id)
+{
+  grcl_backend_service_state_t * service;
+  grcl_inprocess_request_record_t * record;
+  grcl_request_id_t request_id;
+  int name_found = 0;
+  grcl_result_t result;
+
+  if (backend_state == NULL || backend_client == NULL || out_request_id == NULL ||
+    (request_payload_size > 0u && request_payload == NULL)) {
+    return GRCL_ERROR_INVALID_ARGUMENT;
+  }
+  if (!backend_state->started) {
+    return GRCL_ERROR_BAD_STATE;
+  }
+  if (request_payload_size > GRCL_INPROCESS_MAX_PAYLOAD_BYTES) {
+    return GRCL_ERROR_PAYLOAD_TOO_LARGE;
+  }
+
+  service = grcl_inprocess_find_matching_service(backend_state, backend_client, &name_found);
+  if (service == NULL) {
+    return name_found ? GRCL_ERROR_TYPE_MISMATCH : GRCL_ERROR_PEER_UNAVAILABLE;
+  }
+  if (!grcl_inprocess_request_queue_has_capacity(&backend_state->pending_requests)) {
+    return GRCL_ERROR_CAPACITY_EXCEEDED;
+  }
+
+  request_id = backend_state->next_request_id++;
+  if (request_id == 0u) {
+    request_id = backend_state->next_request_id++;
+  }
+
+  record = grcl_inprocess_allocate_request_record(
+    backend_state,
+    request_id,
+    backend_client,
+    service);
+  if (record == NULL) {
+    return GRCL_ERROR_CAPACITY_EXCEEDED;
+  }
+
+  result = grcl_inprocess_request_queue_push(
+    &backend_state->pending_requests,
+    request_id,
+    backend_client,
+    service,
+    request_payload,
+    request_payload_size);
+  if (result != GRCL_OK) {
+    grcl_inprocess_clear_request_record(record);
+    return result;
+  }
+
+  *out_request_id = request_id;
+  return GRCL_OK;
+}
+
+static grcl_result_t grcl_inprocess_service_take_request_bytes(
+  grcl_backend_runtime_state_t * backend_state,
+  grcl_backend_service_state_t * backend_service,
+  void * out_request_payload,
+  size_t request_payload_capacity,
+  size_t * out_request_payload_size,
+  grcl_request_id_t * out_request_id)
+{
+  grcl_inprocess_request_message_t * message = NULL;
+  grcl_inprocess_request_record_t * record;
+  grcl_result_t result;
+
+  if (backend_state == NULL || backend_service == NULL ||
+    out_request_payload_size == NULL || out_request_id == NULL ||
+    (request_payload_capacity > 0u && out_request_payload == NULL)) {
+    return GRCL_ERROR_INVALID_ARGUMENT;
+  }
+  if (!backend_state->started) {
+    return GRCL_ERROR_BAD_STATE;
+  }
+
+  result = grcl_inprocess_request_queue_peek(&backend_service->ready_requests, &message);
+  if (result != GRCL_OK) {
+    return result;
+  }
+
+  *out_request_payload_size = message->size;
+  if (request_payload_capacity < message->size) {
+    return GRCL_ERROR_CAPACITY_EXCEEDED;
+  }
+
+  if (message->size > 0u) {
+    memcpy(out_request_payload, message->data, message->size);
+  }
+  *out_request_id = message->id;
+  record = grcl_inprocess_find_request_record(backend_state, message->id);
+  if (record != NULL && record->service == backend_service) {
+    record->state = GRCL_INPROCESS_REQUEST_STATE_TAKEN_REQUEST;
+  }
+  grcl_inprocess_request_queue_pop(&backend_service->ready_requests);
+  return GRCL_OK;
+}
+
+static grcl_result_t grcl_inprocess_service_send_response_bytes(
+  grcl_backend_runtime_state_t * backend_state,
+  grcl_backend_service_state_t * backend_service,
+  grcl_request_id_t request_id,
+  const void * response_payload,
+  size_t response_payload_size)
+{
+  grcl_inprocess_request_record_t * record;
+  grcl_result_t result;
+
+  if (backend_state == NULL || backend_service == NULL ||
+    (response_payload_size > 0u && response_payload == NULL)) {
+    return GRCL_ERROR_INVALID_ARGUMENT;
+  }
+  if (!backend_state->started) {
+    return GRCL_ERROR_BAD_STATE;
+  }
+  if (response_payload_size > GRCL_INPROCESS_MAX_PAYLOAD_BYTES) {
+    return GRCL_ERROR_PAYLOAD_TOO_LARGE;
+  }
+
+  record = grcl_inprocess_find_request_record(backend_state, request_id);
+  if (record == NULL || record->service != backend_service ||
+    record->state != GRCL_INPROCESS_REQUEST_STATE_TAKEN_REQUEST) {
+    return GRCL_ERROR_NOT_FOUND;
+  }
+  if (!grcl_inprocess_response_queue_has_capacity(&backend_state->pending_responses) ||
+    !grcl_inprocess_response_queue_has_capacity(&record->client->ready_responses)) {
+    return GRCL_ERROR_CAPACITY_EXCEEDED;
+  }
+
+  result = grcl_inprocess_response_queue_push(
+    &backend_state->pending_responses,
+    request_id,
+    record->client,
+    backend_service,
+    response_payload,
+    response_payload_size);
+  if (result != GRCL_OK) {
+    return result;
+  }
+
+  record->state = GRCL_INPROCESS_REQUEST_STATE_PENDING_RESPONSE;
+  return GRCL_OK;
+}
+
+static grcl_result_t grcl_inprocess_client_take_response_bytes(
+  grcl_backend_runtime_state_t * backend_state,
+  grcl_backend_client_state_t * backend_client,
+  grcl_request_id_t request_id,
+  void * out_response_payload,
+  size_t response_payload_capacity,
+  size_t * out_response_payload_size)
+{
+  grcl_inprocess_response_message_t * message;
+  grcl_inprocess_request_record_t * record;
+
+  if (backend_state == NULL || backend_client == NULL ||
+    out_response_payload_size == NULL ||
+    (response_payload_capacity > 0u && out_response_payload == NULL)) {
+    return GRCL_ERROR_INVALID_ARGUMENT;
+  }
+  if (!backend_state->started) {
+    return GRCL_ERROR_BAD_STATE;
+  }
+
+  record = grcl_inprocess_find_request_record(backend_state, request_id);
+  if (record == NULL || record->client != backend_client) {
+    return GRCL_ERROR_NOT_FOUND;
+  }
+
+  for (size_t i = 0u; i < backend_client->ready_responses.count; ++i) {
+    size_t index = (backend_client->ready_responses.head + i) % GRCL_INPROCESS_QUEUE_CAPACITY;
+    message = &backend_client->ready_responses.messages[index];
+    if (message->id != request_id) {
+      continue;
+    }
+
+    *out_response_payload_size = message->size;
+    if (response_payload_capacity < message->size) {
+      return GRCL_ERROR_CAPACITY_EXCEEDED;
+    }
+
+    if (message->size > 0u) {
+      memcpy(out_response_payload, message->data, message->size);
+    }
+    if (i == 0u) {
+      grcl_inprocess_response_queue_pop(&backend_client->ready_responses);
+    } else {
+      for (size_t j = i + 1u; j < backend_client->ready_responses.count; ++j) {
+        size_t from = (backend_client->ready_responses.head + j) % GRCL_INPROCESS_QUEUE_CAPACITY;
+        size_t to = (backend_client->ready_responses.head + j - 1u) % GRCL_INPROCESS_QUEUE_CAPACITY;
+        backend_client->ready_responses.messages[to] =
+          backend_client->ready_responses.messages[from];
+      }
+      --backend_client->ready_responses.count;
+    }
+    grcl_inprocess_clear_request_record(record);
+    return GRCL_OK;
+  }
+
+  return GRCL_ERROR_NO_DATA;
 }
 
 static grcl_result_t grcl_inprocess_create_executor(
@@ -735,6 +1350,84 @@ static grcl_result_t grcl_inprocess_dispatch_one_message(
   return GRCL_OK;
 }
 
+static grcl_result_t grcl_inprocess_dispatch_one_request(
+  grcl_backend_runtime_state_t * backend_state,
+  grcl_backend_executor_state_t * backend_executor)
+{
+  grcl_inprocess_request_message_t * message = NULL;
+  grcl_inprocess_request_record_t * record;
+  grcl_result_t result;
+
+  result = grcl_inprocess_request_queue_peek(&backend_state->pending_requests, &message);
+  if (result != GRCL_OK) {
+    return result == GRCL_ERROR_NO_DATA ? GRCL_OK : result;
+  }
+  if (!grcl_inprocess_executor_contains_node(backend_executor, message->client->node) ||
+    !grcl_inprocess_executor_contains_node(backend_executor, message->service->node)) {
+    return GRCL_ERROR_NO_DATA;
+  }
+  if (!grcl_inprocess_request_queue_has_capacity(&message->service->ready_requests)) {
+    return GRCL_ERROR_CAPACITY_EXCEEDED;
+  }
+
+  result = grcl_inprocess_request_queue_push(
+    &message->service->ready_requests,
+    message->id,
+    message->client,
+    message->service,
+    message->data,
+    message->size);
+  if (result != GRCL_OK) {
+    return result;
+  }
+
+  record = grcl_inprocess_find_request_record(backend_state, message->id);
+  if (record != NULL) {
+    record->state = GRCL_INPROCESS_REQUEST_STATE_READY_REQUEST;
+  }
+  grcl_inprocess_request_queue_pop(&backend_state->pending_requests);
+  return GRCL_OK;
+}
+
+static grcl_result_t grcl_inprocess_dispatch_one_response(
+  grcl_backend_runtime_state_t * backend_state,
+  grcl_backend_executor_state_t * backend_executor)
+{
+  grcl_inprocess_response_message_t * message = NULL;
+  grcl_inprocess_request_record_t * record;
+  grcl_result_t result;
+
+  result = grcl_inprocess_response_queue_peek(&backend_state->pending_responses, &message);
+  if (result != GRCL_OK) {
+    return result == GRCL_ERROR_NO_DATA ? GRCL_OK : result;
+  }
+  if (!grcl_inprocess_executor_contains_node(backend_executor, message->service->node) ||
+    !grcl_inprocess_executor_contains_node(backend_executor, message->client->node)) {
+    return GRCL_ERROR_NO_DATA;
+  }
+  if (!grcl_inprocess_response_queue_has_capacity(&message->client->ready_responses)) {
+    return GRCL_ERROR_CAPACITY_EXCEEDED;
+  }
+
+  result = grcl_inprocess_response_queue_push(
+    &message->client->ready_responses,
+    message->id,
+    message->client,
+    message->service,
+    message->data,
+    message->size);
+  if (result != GRCL_OK) {
+    return result;
+  }
+
+  record = grcl_inprocess_find_request_record(backend_state, message->id);
+  if (record != NULL) {
+    record->state = GRCL_INPROCESS_REQUEST_STATE_READY_RESPONSE;
+  }
+  grcl_inprocess_response_queue_pop(&backend_state->pending_responses);
+  return GRCL_OK;
+}
+
 static grcl_result_t grcl_inprocess_executor_spin_once(
   grcl_backend_runtime_state_t * backend_state,
   grcl_backend_executor_state_t * backend_executor,
@@ -768,6 +1461,30 @@ static grcl_result_t grcl_inprocess_executor_spin_once(
     }
   }
 
+  while (backend_state->pending_requests.count > 0u) {
+    grcl_result_t result = grcl_inprocess_dispatch_one_request(
+      backend_state,
+      backend_executor);
+    if (result == GRCL_ERROR_NO_DATA) {
+      break;
+    }
+    if (result != GRCL_OK) {
+      return result;
+    }
+  }
+
+  while (backend_state->pending_responses.count > 0u) {
+    grcl_result_t result = grcl_inprocess_dispatch_one_response(
+      backend_state,
+      backend_executor);
+    if (result == GRCL_ERROR_NO_DATA) {
+      break;
+    }
+    if (result != GRCL_OK) {
+      return result;
+    }
+  }
+
   return GRCL_OK;
 }
 
@@ -790,7 +1507,13 @@ static const grcl_backend_ops_t grcl_native_inprocess_backend_ops = {
   .publish_bytes = grcl_inprocess_publish_bytes,
   .subscription_take_bytes = grcl_inprocess_subscription_take_bytes,
   .create_service = grcl_inprocess_create_service,
+  .destroy_service = grcl_inprocess_destroy_service,
   .create_client = grcl_inprocess_create_client,
+  .destroy_client = grcl_inprocess_destroy_client,
+  .client_send_request_bytes = grcl_inprocess_client_send_request_bytes,
+  .service_take_request_bytes = grcl_inprocess_service_take_request_bytes,
+  .service_send_response_bytes = grcl_inprocess_service_send_response_bytes,
+  .client_take_response_bytes = grcl_inprocess_client_take_response_bytes,
   .create_executor = grcl_inprocess_create_executor,
   .destroy_executor = grcl_inprocess_destroy_executor,
   .executor_add_node = grcl_inprocess_executor_add_node,

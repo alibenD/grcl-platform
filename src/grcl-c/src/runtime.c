@@ -417,6 +417,26 @@ static void grcl_runtime_cleanup_endpoint_slot(
   endpoint->destroyed = 1;
 }
 
+static void grcl_runtime_unlink_endpoint_from_cleanup_list(
+  grcl_runtime_t * runtime,
+  grcl_endpoint_t * endpoint)
+{
+  grcl_endpoint_t ** current;
+
+  if (runtime == NULL || endpoint == NULL) {
+    return;
+  }
+
+  current = &runtime->all_endpoints;
+  while (*current != NULL) {
+    if (*current == endpoint) {
+      *current = endpoint->next_all;
+      return;
+    }
+    current = &(*current)->next_all;
+  }
+}
+
 static void grcl_runtime_cleanup_node_slot(
   grcl_runtime_t * runtime,
   grcl_node_t * node)
@@ -1041,8 +1061,8 @@ grcl_result_t grcl_node_create(
     &created->backend_state);
   if (result != GRCL_OK) {
     grcl_runtime_release_slot((void **)runtime->node_table, runtime->node_capacity, created);
-    free(created);
     runtime->all_nodes = created->next_all;
+    free(created);
     return result;
   }
 
@@ -1168,6 +1188,7 @@ grcl_result_t grcl_publisher_create(
     options,
     &created->backend_state);
   if (result != GRCL_OK) {
+    grcl_runtime_unlink_endpoint_from_cleanup_list(node->runtime, created->endpoint);
     grcl_runtime_cleanup_endpoint_slot(node->runtime, created->endpoint);
     free(created->endpoint);
     free(created);
@@ -1298,6 +1319,7 @@ grcl_result_t grcl_subscription_create(
     options,
     &created->backend_state);
   if (result != GRCL_OK) {
+    grcl_runtime_unlink_endpoint_from_cleanup_list(node->runtime, created->endpoint);
     grcl_runtime_cleanup_endpoint_slot(node->runtime, created->endpoint);
     free(created->endpoint);
     free(created);
@@ -1433,6 +1455,7 @@ grcl_result_t grcl_service_create(
     options,
     &created->backend_state);
   if (result != GRCL_OK) {
+    grcl_runtime_unlink_endpoint_from_cleanup_list(node->runtime, created->endpoint);
     grcl_runtime_cleanup_endpoint_slot(node->runtime, created->endpoint);
     free(created->endpoint);
     free(created);
@@ -1484,12 +1507,39 @@ grcl_result_t grcl_service_take_request_bytes(
   size_t * out_request_payload_size,
   grcl_request_id_t * out_request_id)
 {
-  (void)service;
-  (void)out_request_payload;
-  (void)request_payload_capacity;
-  (void)out_request_payload_size;
-  (void)out_request_id;
-  return GRCL_ERROR_UNSUPPORTED_CAPABILITY;
+  const grcl_backend_ops_t * ops;
+  grcl_runtime_t * runtime;
+
+  if (service == NULL || out_request_payload_size == NULL ||
+    out_request_id == NULL ||
+    (request_payload_capacity > 0u && out_request_payload == NULL)) {
+    return GRCL_ERROR_INVALID_ARGUMENT;
+  }
+  if (service->destroyed || service->node == NULL ||
+    service->node->runtime == NULL) {
+    return GRCL_ERROR_BAD_STATE;
+  }
+
+  runtime = service->node->runtime;
+  ops = runtime->backend == NULL ? NULL : runtime->backend->ops;
+  if (!grcl_backend_field_available(
+      ops,
+      offsetof(grcl_backend_ops_t, service_take_request_bytes),
+      sizeof(ops->service_take_request_bytes),
+      ops == NULL ? NULL : (const void *)ops->service_take_request_bytes)) {
+    return GRCL_ERROR_UNSUPPORTED_CAPABILITY;
+  }
+  if (runtime->state != GRCL_RUNTIME_LIFECYCLE_STATE_STARTED) {
+    return GRCL_ERROR_BAD_STATE;
+  }
+
+  return ops->service_take_request_bytes(
+    runtime->backend_state,
+    service->backend_state,
+    out_request_payload,
+    request_payload_capacity,
+    out_request_payload_size,
+    out_request_id);
 }
 
 grcl_result_t grcl_service_send_response_bytes(
@@ -1498,11 +1548,36 @@ grcl_result_t grcl_service_send_response_bytes(
   const void * response_payload,
   size_t response_payload_size)
 {
-  (void)service;
-  (void)request_id;
-  (void)response_payload;
-  (void)response_payload_size;
-  return GRCL_ERROR_UNSUPPORTED_CAPABILITY;
+  const grcl_backend_ops_t * ops;
+  grcl_runtime_t * runtime;
+
+  if (service == NULL || (response_payload_size > 0u && response_payload == NULL)) {
+    return GRCL_ERROR_INVALID_ARGUMENT;
+  }
+  if (service->destroyed || service->node == NULL ||
+    service->node->runtime == NULL) {
+    return GRCL_ERROR_BAD_STATE;
+  }
+
+  runtime = service->node->runtime;
+  ops = runtime->backend == NULL ? NULL : runtime->backend->ops;
+  if (!grcl_backend_field_available(
+      ops,
+      offsetof(grcl_backend_ops_t, service_send_response_bytes),
+      sizeof(ops->service_send_response_bytes),
+      ops == NULL ? NULL : (const void *)ops->service_send_response_bytes)) {
+    return GRCL_ERROR_UNSUPPORTED_CAPABILITY;
+  }
+  if (runtime->state != GRCL_RUNTIME_LIFECYCLE_STATE_STARTED) {
+    return GRCL_ERROR_BAD_STATE;
+  }
+
+  return ops->service_send_response_bytes(
+    runtime->backend_state,
+    service->backend_state,
+    request_id,
+    response_payload,
+    response_payload_size);
 }
 
 grcl_result_t grcl_client_create(
@@ -1556,6 +1631,7 @@ grcl_result_t grcl_client_create(
     options,
     &created->backend_state);
   if (result != GRCL_OK) {
+    grcl_runtime_unlink_endpoint_from_cleanup_list(node->runtime, created->endpoint);
     grcl_runtime_cleanup_endpoint_slot(node->runtime, created->endpoint);
     free(created->endpoint);
     free(created);
@@ -1606,11 +1682,37 @@ grcl_result_t grcl_client_send_request_bytes(
   size_t request_payload_size,
   grcl_request_id_t * out_request_id)
 {
-  (void)client;
-  (void)request_payload;
-  (void)request_payload_size;
-  (void)out_request_id;
-  return GRCL_ERROR_UNSUPPORTED_CAPABILITY;
+  const grcl_backend_ops_t * ops;
+  grcl_runtime_t * runtime;
+
+  if (client == NULL || out_request_id == NULL ||
+    (request_payload_size > 0u && request_payload == NULL)) {
+    return GRCL_ERROR_INVALID_ARGUMENT;
+  }
+  if (client->destroyed || client->node == NULL ||
+    client->node->runtime == NULL) {
+    return GRCL_ERROR_BAD_STATE;
+  }
+
+  runtime = client->node->runtime;
+  ops = runtime->backend == NULL ? NULL : runtime->backend->ops;
+  if (!grcl_backend_field_available(
+      ops,
+      offsetof(grcl_backend_ops_t, client_send_request_bytes),
+      sizeof(ops->client_send_request_bytes),
+      ops == NULL ? NULL : (const void *)ops->client_send_request_bytes)) {
+    return GRCL_ERROR_UNSUPPORTED_CAPABILITY;
+  }
+  if (runtime->state != GRCL_RUNTIME_LIFECYCLE_STATE_STARTED) {
+    return GRCL_ERROR_BAD_STATE;
+  }
+
+  return ops->client_send_request_bytes(
+    runtime->backend_state,
+    client->backend_state,
+    request_payload,
+    request_payload_size,
+    out_request_id);
 }
 
 grcl_result_t grcl_client_take_response_bytes(
@@ -1620,12 +1722,38 @@ grcl_result_t grcl_client_take_response_bytes(
   size_t response_payload_capacity,
   size_t * out_response_payload_size)
 {
-  (void)client;
-  (void)request_id;
-  (void)out_response_payload;
-  (void)response_payload_capacity;
-  (void)out_response_payload_size;
-  return GRCL_ERROR_UNSUPPORTED_CAPABILITY;
+  const grcl_backend_ops_t * ops;
+  grcl_runtime_t * runtime;
+
+  if (client == NULL || out_response_payload_size == NULL ||
+    (response_payload_capacity > 0u && out_response_payload == NULL)) {
+    return GRCL_ERROR_INVALID_ARGUMENT;
+  }
+  if (client->destroyed || client->node == NULL ||
+    client->node->runtime == NULL) {
+    return GRCL_ERROR_BAD_STATE;
+  }
+
+  runtime = client->node->runtime;
+  ops = runtime->backend == NULL ? NULL : runtime->backend->ops;
+  if (!grcl_backend_field_available(
+      ops,
+      offsetof(grcl_backend_ops_t, client_take_response_bytes),
+      sizeof(ops->client_take_response_bytes),
+      ops == NULL ? NULL : (const void *)ops->client_take_response_bytes)) {
+    return GRCL_ERROR_UNSUPPORTED_CAPABILITY;
+  }
+  if (runtime->state != GRCL_RUNTIME_LIFECYCLE_STATE_STARTED) {
+    return GRCL_ERROR_BAD_STATE;
+  }
+
+  return ops->client_take_response_bytes(
+    runtime->backend_state,
+    client->backend_state,
+    request_id,
+    out_response_payload,
+    response_payload_capacity,
+    out_response_payload_size);
 }
 
 grcl_result_t grcl_executor_create(
