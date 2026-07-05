@@ -2,13 +2,13 @@
 
 ## Purpose
 
-This document defines the first public shape of the `grcl-c` contract before runtime and backend
-behavior is implemented. It records the accepted header baseline and the constraints later
-implementation goals must preserve.
+This document is the canonical design home for the `grcl-c` core contract. It owns the public C
+ABI shape, the accepted G2/M1/M3/M4 baselines, and the handoff constraints that later backend,
+runtime, and SDK implementation goals must preserve.
 
-This is the canonical design home for the `grcl-c` core contract. It owns the public C ABI shape,
-the G2 closeout baseline, and the handoff constraints that later backend SPI and runtime
-implementation goals must preserve.
+`grcl-c` is no longer only a pre-implementation header design. It now has a runnable native-backend
+local-core baseline, contract-hardening tests, and runnable C examples. This document therefore
+records both the public shape and the completion target for that local-core product surface.
 
 ## G2-F Closeout Baseline
 
@@ -269,6 +269,83 @@ GRCL_ERROR_NO_DATA = 0x0404,
 GRCL_ERROR_TYPE_MISMATCH = 0x0303,
 GRCL_ERROR_PAYLOAD_TOO_LARGE = 0x0203
 ```
+
+## M4 Stabilization Baseline
+
+M4 does not add a new public feature family. It hardens the completed M3 local-core surface with
+negative-path, ownership, capacity, and local conformance evidence.
+
+The M4 baseline now proves:
+
+- lifecycle and ownership contract behavior through
+  `src/grcl-c/tests/core_lifecycle_contract_test.c`
+- messaging and executor contract behavior through
+  `src/grcl-c/tests/core_messaging_contract_test.c`
+- runtime-local params and capability boundary behavior through
+  `src/grcl-c/tests/core_params_capability_contract_test.c`
+- local conformance composition through `src/grcl-c/tests/run_m4_contract_tests.sh` and
+  `scripts/run-conformance.sh`
+
+M4 therefore leaves M5 with a narrower job than M3 had: M5 is not asked to invent another core C
+feature family. M5 is asked to determine whether the existing native-backend local-core `grcl-c`
+surface is already complete for product use from C and, if not, to close only the remaining narrow
+gaps that block a faithful `grcl-cpp` wrapper and runnable C/C++ parity.
+
+## M5 Local Core Product Completion Target
+
+M5 treats `grcl-c` as the semantic source of truth for the first usable GRCL core product
+baseline. "Complete" in M5 means complete for the native in-process backend and single-process
+local-core surface. It does not mean complete for ROS2, networking, simulator, MCU, gateway,
+management plane, distributed graph, distributed params, or release distribution.
+
+### Native-Backend Local-Core Surface Inventory
+
+| Area | Public `grcl-c` contract | Current evidence | M5 completion rule |
+|---|---|---|---|
+| runtime lifecycle | `grcl_runtime_create`, `grcl_runtime_init_with_storage`, `grcl_runtime_start`, `grcl_runtime_stop`, `grcl_runtime_destroy` | `src/grcl-c/include/grcl/c/runtime.h`, `src/grcl-c/tests/runtime_lifecycle_test.c`, `src/grcl-c/tests/core_lifecycle_contract_test.c` | treat the existing lifecycle API as the baseline; only narrow fixes or append-only clarifications are allowed if failing tests prove a blocking gap |
+| node ownership | `grcl_node_create`, `grcl_node_destroy`, `grcl_node_get_runtime` | `runtime.h`, `src/grcl-c/tests/object_ownership_test.c`, `src/grcl-c/tests/core_lifecycle_contract_test.c` | M5 may not invent new node semantics; it may only close wrapper-blocking or example-blocking gaps |
+| pub/sub | `grcl_publisher_create`, `grcl_publisher_destroy`, `grcl_publisher_get_endpoint`, `grcl_publisher_publish_bytes`, `grcl_subscription_create`, `grcl_subscription_destroy`, `grcl_subscription_get_endpoint`, `grcl_subscription_take_bytes` | `runtime.h`, `src/grcl-c/tests/pub_sub_test.c`, `src/grcl-c/tests/core_messaging_contract_test.c`, `examples/c/pub_sub_example.c` | bytes-oriented local delivery is the approved product surface; no IDL/codegen, serialization, zero-copy, or transport behavior may be added |
+| service/client | `grcl_service_create`, `grcl_service_destroy`, `grcl_service_get_endpoint`, `grcl_service_take_request_bytes`, `grcl_service_send_response_bytes`, `grcl_client_create`, `grcl_client_destroy`, `grcl_client_get_endpoint`, `grcl_client_send_request_bytes`, `grcl_client_take_response_bytes` | `runtime.h`, `src/grcl-c/tests/service_client_test.c`, `src/grcl-c/tests/core_messaging_contract_test.c`, `examples/c/service_client_example.c` | spin-driven local request/reply is the approved product surface; no blocking call, future, timeout policy, or transport behavior may be added |
+| executor | `grcl_executor_create`, `grcl_executor_destroy`, `grcl_executor_add_node`, `grcl_executor_remove_node`, `grcl_executor_spin_once` | `runtime.h`, `src/grcl-c/tests/object_ownership_test.c`, `src/grcl-c/tests/core_messaging_contract_test.c`, all M3 C examples | `spin_once` remains bounded and non-blocking; M5 may not introduce threads or wait semantics |
+| runtime-local params | `grcl_runtime_param_set`, `grcl_runtime_param_get`, `grcl_runtime_param_list`, `grcl_param_record_t`, `grcl_param_type_t` | `runtime.h`, `src/grcl-c/tests/params_test.c`, `src/grcl-c/tests/core_params_capability_contract_test.c`, `examples/c/params_example.c` | params remain runtime-local and M5-complete at `set/get/list`; unset/delete, node-scoped params, callbacks, watchers, constraints, and distributed sync remain out of scope |
+| capability and negotiation | `grcl_runtime_get_capabilities`, `grcl_runtime_negotiate_capabilities` | `runtime.h`, `src/grcl-c/tests/backend_capability_test.c`, `src/grcl-c/tests/core_params_capability_contract_test.c` | M5 may expose the same semantics to `grcl-cpp`, but may not replace the hybrid C ABI or merge capability with availability or health |
+| diagnostics | `grcl_runtime_get_diagnostics` | `runtime.h`, `src/grcl-c/tests/diagnostics_negative_state_test.c` | caller-buffer diagnostics remain the approved baseline; no management snapshot, stream, or event feed behavior |
+| type support | `grcl_type_support_t` identity descriptor in `types.h` | `src/grcl-c/include/grcl/c/types.h`, pub/sub and service/client tests/examples | M5 keeps type support as an identity descriptor only; no serializer or schema runtime is introduced |
+| endpoint exposure | `grcl_*_get_endpoint` getters plus opaque `grcl_endpoint_t` forward declaration | `runtime.h`, `src/grcl-c/tests/object_ownership_test.c` | endpoint getters are treated as ownership and identity escape hatches only; M5 does not require a first-class endpoint inspection or operation API |
+
+### M5 C-Side Acceptance Matrix
+
+M5 must use current runnable evidence, not only prose, to decide whether the `grcl-c` local-core
+surface is complete. The required evidence is:
+
+| Acceptance area | Required evidence |
+|---|---|
+| public header and ABI hygiene | `src/grcl-c/tests/compile_headers_smoke.c`, `src/grcl-c/tests/compile_headers_smoke.cpp`, `python3 scripts/check-c-abi.py` via `scripts/run-conformance.sh` |
+| lifecycle, storage, capability, diagnostics baseline | `src/grcl-c/tests/run_m1_tests.sh` |
+| contract hardening | `src/grcl-c/tests/run_m4_contract_tests.sh` |
+| local core behavior smoke acceptance | `examples/c/run_m3_examples.sh` |
+| full local conformance composition | `scripts/run-conformance.sh` |
+
+Capability query/negotiation and diagnostics are part of the local-core contract and must stay
+test-backed, but M5 does not require them to grow into standalone user-facing example families.
+The user-facing example burden in M5 remains centered on lifecycle, pub/sub, service/client, and
+runtime-local params.
+
+If M5 identifies a real C-side gap, the gap must be proven by a failing targeted C test or example
+before implementation changes begin. If no such gap exists, M5 must treat the current `grcl-c`
+surface as complete enough to serve as the semantic source for `grcl-cpp`.
+
+### M5 C-Side Non-Goals
+
+M5 must not expand `grcl-c` into:
+
+- ROS2, DDS, sockets, shared memory, multi-process transport, simulator, MCU, gateway, or remote
+  management behavior
+- blocking waits, futures, background threads, wait sets, or executor concurrency policy
+- graph cache APIs, management snapshots, event streams, or auth
+- serialization design, IDL/codegen, zero-copy, or transport sessions
+- node-scoped params, distributed params, param watchers, descriptors, constraints, or unset/delete
+  beyond the approved `set/get/list` runtime-local param surface
 
 ## Naming Rules
 

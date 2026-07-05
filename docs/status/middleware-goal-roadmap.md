@@ -293,7 +293,7 @@ IDL/codegen, and `grcl-py` expansion beyond the completed G6 boundary skeleton.
 Current M5 status:
 
 - M5 authorization status: `complete`
-- M5 planning status: `M5-A complete; M5-B design closure is next`
-- M5 implementation status: `not started; M5-B design closure is the next gate`
+- M5 planning status: `M5-A and M5-B complete`
+- M5 implementation status: `not started; M5-C grcl-c local-core closeout is the next gate`
 - M5 plan:
   [M5 Local Core Product And GRCL-CPP Completion Plan](../plans/2026-07-05-m5-local-core-product-and-grcl-cpp-completion-plan.md)

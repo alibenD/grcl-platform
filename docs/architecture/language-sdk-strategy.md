@@ -65,6 +65,60 @@ independent lifecycle states, transport behavior, backend objects, scheduling po
 call semantics. If a desired C++ API cannot be explained as a direct wrapper over `grcl-c`, M5
 must stop and return to the C design homes first.
 
+### M5 GRCL-CPP Wrapper Families
+
+M5 `grcl-cpp` is required to cover the full approved local-core C surface. The wrapper families are:
+
+| Wrapper family | Required responsibility | Source `grcl-c` surface |
+|---|---|---|
+| `Result` | direct result-code mapping with no incompatible error taxonomy | `grcl_result_t` |
+| `Runtime` | lifecycle ownership, capability query, negotiation forwarding, diagnostics forwarding, runtime-local params forwarding | `grcl_runtime_*`, `grcl_runtime_param_*` |
+| `Node` | move-only node ownership and runtime association | `grcl_node_*` |
+| `Executor` | move-only executor ownership, node membership, bounded `spin_once` forwarding | `grcl_executor_*` |
+| `Publisher` | move-only publisher ownership plus bytes publish forwarding | `grcl_publisher_*` |
+| `Subscription` | move-only subscription ownership plus bytes take forwarding | `grcl_subscription_*` |
+| `Service` | move-only service ownership plus request take and response send forwarding | `grcl_service_*` |
+| `Client` | move-only client ownership plus request send and response take forwarding | `grcl_client_*` |
+| runtime metadata forwarding | direct capability query, capability negotiation, and diagnostics retrieval forwarding without policy rewrite | `grcl_runtime_get_capabilities`, `grcl_runtime_negotiate_capabilities`, `grcl_runtime_get_diagnostics` |
+| lightweight type-support adapter | non-owning or value-style access to `grcl_type_support_t` identity data where needed for construction | `grcl_type_support_t` |
+
+M5 does not require a second semantic layer above those wrappers. In particular, M5 does not
+require templates, codegen, IDL integration, serialization helpers, futures, blocking service
+calls, graph observers, or a package distribution story.
+
+### M5 GRCL-CPP Surface Rules
+
+- Public C++ wrappers remain move-only by default unless shared ownership is explicitly proven
+  necessary by the `grcl-c` contract. M5 assumes direct ownership, not reference-counted ownership.
+- Public methods should mirror `grcl-c` behavior closely enough that test cases can be translated
+  between C and C++ without changing semantic expectations.
+- Bytes-oriented methods remain acceptable in C++ for M5. Convenience overloads are allowed only
+  when they preserve the same copy/capacity semantics as the underlying C calls.
+- Runtime-local params remain runtime-local in C++ as well. `grcl-cpp` must not invent node-scoped
+  or distributed param semantics.
+- Capability query, negotiation, and diagnostics may be wrapped as direct forwarding methods or
+  helper records, but they must continue to expose the underlying `grcl-c` meaning rather than a
+  rewritten policy layer.
+
+### M5 GRCL-CPP Acceptance Matrix
+
+`grcl-cpp` may be called complete for M5 only when all of the following exist:
+
+| Acceptance area | Required evidence |
+|---|---|
+| runtime wrapper baseline | C++ tests covering create/init/start/stop/destroy, move-only ownership, and storage-backed lifecycle |
+| capability/negotiation/diagnostics forwarding | targeted C++ runtime-wrapper tests covering capability query, negotiation result forwarding, diagnostics retrieval, and representative negative-path semantics |
+| node and executor wrappers | C++ tests covering node ownership, executor membership, and bounded `spin_once` forwarding |
+| pub/sub wrappers | C++ tests plus a runnable pub/sub example |
+| service/client wrappers | C++ tests plus a runnable service/client example |
+| runtime-local params wrappers | C++ tests plus a runnable params example |
+| combined wrapper flow | a runnable combined core middleware C++ example |
+| conformance integration | top-level local conformance includes the approved C++ wrapper/example stage |
+
+For M5, "full wrapper" means full coverage of the approved native-backend local-core C surface. It
+does not mean stable package distribution, broad ergonomic sugar, async APIs, or cross-backend SDK
+coverage.
+
 ## C++ SDK
 
 Responsibilities:
@@ -86,6 +140,16 @@ G6 `grcl-cpp` skeleton requirements:
 - result wrappers preserve `grcl_result_t` without adding incompatible categories.
 - compile-only or smoke verification must use local artifact-root output, not a repo-wide build
   system.
+
+Current G6 implementation evidence:
+
+- `src/grcl-cpp/include/grcl/cpp/result.hpp`
+- `src/grcl-cpp/include/grcl/cpp/runtime.hpp`
+- `src/grcl-cpp/tests/runtime_wrapper_smoke.cpp`
+- `src/grcl-cpp/tests/run_g6_cpp_tests.sh`
+
+This evidence proves only the minimal runtime ownership boundary, not full `grcl-cpp` parity with
+the approved local-core C surface.
 
 Forbidden:
 

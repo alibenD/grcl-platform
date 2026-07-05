@@ -21,8 +21,8 @@ Surface And GRCL-CPP Completion.
 - Code implementation: active only inside the approved M5 local-core product scope
 - Completed work: M1 first runnable `grcl-c` core with null/native-test backend, using task briefs,
   implementation subagents, independent audit subagents, and TDD-style verification
-- Allowed work now: M5-B design closure and review baseline are the next authorized batch; later
-  M5 implementation batches may proceed only after M5-B design review passes
+- Allowed work now: M5-C `grcl-c` local-core surface closeout is the next authorized batch; later
+  M5 implementation batches remain dependency-ordered behind it
 - Blocked outside M5 without a new user-approved goal window: ROS2, DDS, sockets, shared memory,
   multi-process transport, simulator backend, MCU runtime, gateway, management plane, auth, remote
   management, event streams, Docker, CI, external `grcl` migration, IDL/codegen, C++/Python
@@ -115,7 +115,7 @@ Surface And GRCL-CPP Completion.
 | GQ-084 | Execute M4-G closeout verification and durable status update | GQ-083 | complete | closeout audit status `accepted_with_notes`; full repo/workspace/override conformance, M4 runner, M1 harness, M3 examples, SDK boundary, docs, diff hygiene, and artifact scan passed |
 | GQ-085 | Authorize M5 Local Core Product Surface And GRCL-CPP Completion | GQ-084 | complete | user set the current goal to fully complete `grcl-c` local core plus full `grcl-cpp` wrapping, passing core tests, and runnable examples |
 | GQ-086 | File M5 goal-specific plan and durable queue state | GQ-085 | complete | `docs/plans/2026-07-05-m5-local-core-product-and-grcl-cpp-completion-plan.md`, current context, this queue, roadmap, and navigation updated |
-| GQ-087 | Run M5 design closure and review baseline | GQ-086 | pending | canonical design homes must define the exact local-core completion target and `grcl-cpp` wrapper surface before implementation |
+| GQ-087 | Run M5 design closure and review baseline | GQ-086 | complete | canonical design homes updated; API review `accepted_with_notes`; C++ wrapper review `accepted_with_notes`; test-plan review `rejected` then design fix plus re-review `accepted` under `.local/agentic-runs/2026-07-05-m5-local-core-product-and-grcl-cpp-completion/` |
 | GQ-088 | Execute M5 `grcl-c` local-core surface closeout | GQ-087 | pending | failing C tests, narrow C/native fixes, and independent audit |
 | GQ-089 | Execute M5 `grcl-cpp` runtime, node, and executor wrappers | GQ-088 | pending | C++ ownership wrappers, tests, and independent audit |
 | GQ-090 | Execute M5 `grcl-cpp` pub/sub wrappers and example | GQ-089 | pending | C++ pub/sub wrappers, tests, example, and independent audit |
@@ -175,4 +175,4 @@ Wrapper Skeletons is complete after G6-C/G6-D/G6-E independent audit acceptance 
 verification. M3 Core Middleware Contract And Native In-Process Backend is complete under GQ-068
 through GQ-077. M4 GRCL-C Core Contract Stabilization And Conformance Expansion is complete under
 GQ-078 through GQ-084. M5 Local Core Product Surface And GRCL-CPP Completion is authorized under
-GQ-085 and currently sits at GQ-086 complete with GQ-087 as the next dependency-ordered batch.
+GQ-085. GQ-086 and GQ-087 are complete, and GQ-088 is now the next dependency-ordered batch.

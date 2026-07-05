@@ -137,9 +137,10 @@ Steps:
 - [ ] Close the local-core component inventory and identify any remaining `grcl-c` contract gaps
   that block a stable native-backend product baseline.
 - [ ] Define the `grcl-cpp` wrapper surface for runtime, node, executor, publisher, subscription,
-  service, client, and runtime-local params.
-- [ ] Define the local acceptance matrix for C tests, C++ tests, C examples, C++ examples, and
-  top-level conformance integration.
+  service, client, runtime-local params, and runtime metadata forwarding
+  (`capability`/`negotiation`/`diagnostics`).
+- [ ] Define the local acceptance matrix for C tests, C++ tests, C examples, C++ examples,
+  runtime metadata forwarding, and top-level conformance integration.
 - [ ] Dispatch architecture/API, C++ wrapper, and test-plan reviews.
 - [ ] If any review rejects the design, update the canonical design homes before implementation.
 
@@ -191,7 +192,8 @@ Files:
 Steps:
 
 - [ ] Write failing C++ tests for runtime ownership, node ownership, executor membership, move-only
-  semantics, and forwarding of `grcl-c` result behavior.
+  semantics, forwarding of `grcl-c` result behavior, capability query, capability negotiation, and
+  diagnostics retrieval.
 - [ ] Run the targeted C++ runner and record RED.
 - [ ] Implement the minimum wrapper code to make the tests pass without inventing new semantics.
 - [ ] Re-run the targeted C++ runner plus relevant C and conformance runners; record GREEN.
@@ -201,6 +203,8 @@ Exit criteria:
 
 - Runtime, node, and executor wrappers are usable from C++ while remaining semantically equivalent
   to `grcl-c`.
+- Capability query, negotiation, and diagnostics forwarding are explicitly test-backed in the same
+  runtime-wrapper batch; they are not inferred from lifecycle-only evidence.
 - Wrapper code remains free of backend-private, ROS2, socket, or threading leakage.
 
 ### M5-E: GRCL-CPP Pub/Sub Wrappers And Examples
@@ -296,7 +300,8 @@ Steps:
 
 - [ ] Run final M5 verification: top-level conformance from repository root, workspace root, and
   artifact-root override; targeted C runner; targeted C++ runner; C example runner; C++ example
-  runner; docs check; SDK boundary drift check; artifact-pollution scan.
+  runner; docs check; SDK boundary drift check; artifact-pollution scan. The targeted C++ runner
+  must include capability query, negotiation, and diagnostics forwarding coverage.
 - [ ] Dispatch independent closeout audit.
 - [ ] After audit acceptance only, mark M5 complete in durable status documents.
 - [ ] Commit the closeout as a task-bounded commit sequence.

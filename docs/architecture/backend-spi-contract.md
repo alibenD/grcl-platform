@@ -9,7 +9,9 @@ GRCL semantics by accident.
 
 G3 produced the first SPI shape as a design baseline. M1 materialized lifecycle, capability, and
 diagnostics hooks through a private null/native-test backend. M3 extends the SPI design to local
-in-process messaging while preserving backend containment.
+in-process messaging while preserving backend containment. M5 keeps that containment and uses the
+current native in-process backend as the local-core product baseline for `grcl-c` and `grcl-cpp`
+completion.
 
 ## Backend Families
 
@@ -427,6 +429,40 @@ M3 must not implement sockets, shared memory, ROS2, simulator runtime, MCU runti
 management snapshots, auth, remote management, event streams, package/build policy, or external
 `grcl` migration.
 
+## M5 Native-Backend Product Completion Rule
+
+M5 is not a backend-family expansion goal. Its SPI responsibility is narrower: determine whether
+the current native in-process backend plus the existing public `grcl-c` surface is already
+sufficient to support full local-core use from both C and `grcl-cpp`.
+
+Rules:
+
+- M5 should prefer zero SPI expansion. If the current operation table and native backend behavior
+  already support the approved C surface, `grcl-cpp` must wrap that surface rather than reopening
+  SPI design.
+- Any M5 SPI change must be justified by a failing local-core C or C++ test/example that cannot be
+  fixed in the core or wrapper layers without changing backend contract behavior.
+- Any M5 SPI change must preserve append-only `struct_size` discipline and backend containment.
+- M5 must not introduce transport hooks, thread hooks, wait hooks, discovery streams, graph cache
+  hooks, or distributed param hooks.
+
+### M5 Native Backend Acceptance Matrix
+
+The native backend is sufficient for M5 only if all of the following remain true:
+
+| Area | Required native-backend behavior | Required evidence |
+|---|---|---|
+| lifecycle/materialization | core-owned public objects remain valid and backend-private state stays private | `src/grcl-c/tests/run_m1_tests.sh`, `src/grcl-c/tests/core_lifecycle_contract_test.c` |
+| local pub/sub | publish copies into backend-owned storage, `spin_once` drives deterministic delivery, and `take` reports no-data and capacity boundaries correctly | `src/grcl-c/tests/pub_sub_test.c`, `src/grcl-c/tests/core_messaging_contract_test.c`, `examples/c/pub_sub_example.c` |
+| local service/client | request ids remain correlated through spin-driven local request/reply | `src/grcl-c/tests/service_client_test.c`, `src/grcl-c/tests/core_messaging_contract_test.c`, `examples/c/service_client_example.c` |
+| executor integration | backend participates only through bounded, non-blocking `spin_once` behavior | `src/grcl-c/tests/core_messaging_contract_test.c`, all M3 C examples |
+| runtime-local params | backend-owned param table copies values and reports capacity boundaries | `src/grcl-c/tests/params_test.c`, `src/grcl-c/tests/core_params_capability_contract_test.c`, `examples/c/params_example.c` |
+| capability/diagnostics | native backend reports only implemented local-core capability and diagnostics facts | `src/grcl-c/tests/backend_capability_test.c`, `src/grcl-c/tests/diagnostics_negative_state_test.c`, `src/grcl-c/tests/core_params_capability_contract_test.c` |
+
+If M5 C++ parity work reveals a missing behavior here, the first question is whether the gap is a
+wrapper gap or a core gap. Reopen SPI only when the evidence shows the native backend contract
+itself is insufficient.
+
 ## Baseline Decisions
 
 - Backend implementations are internal to the `grcl-c` core contract boundary.
@@ -450,3 +486,5 @@ management snapshots, auth, remote management, event streams, package/build poli
 - Publish/subscribe, service/client, executor scheduling, and graph delta semantics remain outside
   the completed M1 minimum target and enter scope only through the approved M3 in-process native
   backend goal.
+- M5 uses the completed M3/M4 native backend as the current local-core product baseline and should
+  avoid widening SPI scope unless failing parity evidence proves a real backend-contract gap.
