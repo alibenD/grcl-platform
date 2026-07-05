@@ -92,6 +92,31 @@ class Runtime {
     return result;
   }
 
+  [[nodiscard]] Result get_capabilities(
+    ::grcl_runtime_capability_record_t * out_record) const noexcept
+  {
+    return ::grcl_runtime_get_capabilities(handle_, out_record);
+  }
+
+  [[nodiscard]] Result negotiate_capabilities(
+    const ::grcl_runtime_capability_request_t * request,
+    ::grcl_capability_negotiation_result_t * out_result) const noexcept
+  {
+    return ::grcl_runtime_negotiate_capabilities(handle_, request, out_result);
+  }
+
+  [[nodiscard]] Result get_diagnostics(
+    ::grcl_diagnostic_record_t * out_records,
+    size_t record_capacity,
+    size_t * out_record_count) const noexcept
+  {
+    return ::grcl_runtime_get_diagnostics(
+      handle_,
+      out_records,
+      record_capacity,
+      out_record_count);
+  }
+
   [[nodiscard]] ::grcl_runtime_t * get() const noexcept
   {
     return handle_;

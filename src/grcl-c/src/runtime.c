@@ -318,19 +318,6 @@ static void grcl_runtime_destroy_backend(grcl_runtime_t * runtime)
   runtime->backend_state = NULL;
 }
 
-static size_t grcl_runtime_live_slot_count(void ** table, size_t capacity)
-{
-  size_t count = 0u;
-
-  for (size_t i = 0u; i < capacity; ++i) {
-    if (table[i] != NULL) {
-      ++count;
-    }
-  }
-
-  return count;
-}
-
 static grcl_result_t grcl_runtime_assign_slot(
   void ** table,
   size_t capacity,

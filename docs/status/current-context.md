@@ -133,10 +133,17 @@ multi-repository orchestration, and generated artifacts need a stable workspace-
   satisfied by current repository evidence and the full local verification ladder
   (`run_m1_tests.sh`, `run_m4_contract_tests.sh`, `run_m3_examples.sh`,
   `scripts/run-conformance.sh`) passed green from the workspace root.
-- M5-D `grcl-cpp` runtime, node, and executor wrappers is now the next authorized implementation
-  batch. M5 implementation batches must remain inside the approved local-core scope and continue to
-  use task briefs, implementation subagents, TDD-style verification, and independent audit
-  subagents.
+- M5-D `grcl-cpp` runtime, node, and executor wrappers is complete after implementation report and
+  independent audit `accepted_with_notes`. M5-D added move-only `Node` and `Executor` wrappers,
+  extended `Runtime` with capability query, capability negotiation, and diagnostics forwarding,
+  added a dedicated `run_m5_cpp_tests.sh` runner plus `runtime_node_executor_test.cpp`, and updated
+  the existing G6 smoke runner to link the native in-process backend required by the current core
+  runtime selection path. M5-D also applied one narrow `grcl-c` compile-hygiene unblock in
+  `src/grcl-c/src/runtime.c` by removing an unused static helper that failed under the accepted
+  `-Werror` runner policy.
+- M5-E `grcl-cpp` pub/sub wrappers and example is now the next authorized implementation batch. M5
+  implementation batches must remain inside the approved local-core scope and continue to use task
+  briefs, implementation subagents, TDD-style verification, and independent audit subagents.
 - M5 does not authorize ROS2, DDS, sockets, shared memory, networking, multi-process transport,
   simulator backend, MCU runtime, gateway runtime, management plane, auth, remote management,
   event streams, CI, Docker, package manager, CMake, colcon, release packaging, external `grcl`

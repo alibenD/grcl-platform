@@ -10,8 +10,11 @@ The current skeleton provides:
 
 - `grcl::Result` as a direct alias of `grcl_result_t`
 - `grcl::Runtime` as a minimal RAII wrapper over one `grcl_runtime_t *`
-- start/stop/destroy forwarding without introducing new runtime semantics
-- a local smoke test and compile script that build directly against the existing `grcl-c`
+- runtime capability query, negotiation, and diagnostics forwarding without introducing new policy
+- `grcl::Node` as a move-only ownership wrapper over one `grcl_node_t *`
+- `grcl::Executor` as a move-only ownership wrapper over one `grcl_executor_t *`
+- start/stop/destroy and node/executor forwarding without introducing new runtime semantics
+- local smoke tests and compile scripts that build directly against the existing `grcl-c`
   implementation
 
-No SDK behavior beyond this ownership boundary is implemented in this skeleton phase.
+Publisher/subscription, service/client, params, and runnable C++ examples remain later M5 batches.
