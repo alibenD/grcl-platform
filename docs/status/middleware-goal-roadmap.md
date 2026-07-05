@@ -265,6 +265,6 @@ Current M4 status:
 
 - M4 planning status: `complete`
 - M4 design review status: `complete after API re-review accepted; backend and test-plan reviews accepted with notes`
-- M4 implementation status: `active at M4-D messaging and executor contract tests`
+- M4 implementation status: `active at M4-E runtime params and capability contract tests`
 - M4 plan:
   [M4 GRCL-C Core Contract Stabilization Plan](../plans/2026-07-05-m4-grcl-c-core-contract-stabilization-plan.md)

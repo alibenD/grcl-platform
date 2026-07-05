@@ -21,7 +21,7 @@ active under the user's approved goal request.
   review gate acceptance
 - Completed work: M1 first runnable `grcl-c` core with null/native-test backend, using task briefs,
   implementation subagents, independent audit subagents, and TDD-style verification
-- Allowed work now: M4-D messaging and executor contract tests through TDD implementation
+- Allowed work now: M4-E runtime params and capability contract tests through TDD implementation
   subagent and independent audit
 - Blocked outside M3 without a new user-approved goal window: ROS2, DDS, sockets, shared memory,
   multi-process transport, simulator backend, MCU runtime, gateway, management plane, auth, remote
@@ -109,8 +109,8 @@ active under the user's approved goal request.
 | GQ-078 | File M4 GRCL-C core contract stabilization plan and durable queue | GQ-077 | complete | `docs/plans/2026-07-05-m4-grcl-c-core-contract-stabilization-plan.md`; recovery docs and navigation updated; `git diff --check` and `python3 scripts/check-docs.py` passed |
 | GQ-079 | Run M4 API, backend containment, and test-plan design reviews | GQ-078 | complete | API re-review `accepted`; backend containment and test-plan reviews `accepted_with_notes`; destroyed runtime UAF boundary fixed in M4 plan and `grcl-c` API design home |
 | GQ-080 | Execute M4-C core lifecycle and ownership contract tests | GQ-079 | complete | audit status `accepted`; `runtime.c` undersized options drift fixed; M4 runner added; M1 harness and M3 examples remained green |
-| GQ-081 | Execute M4-D messaging and executor contract tests | GQ-080 | in_progress | requires TDD implementation subagent and independent audit; include missing M3 SPI hook public-result checks where practical |
-| GQ-082 | Execute M4-E runtime params and capability contract tests | GQ-081 | pending | requires M4-D audit acceptance |
+| GQ-081 | Execute M4-D messaging and executor contract tests | GQ-080 | complete | audit status `accepted_with_notes`; bounded `spin_once` contract implemented; non-blocking note to consider a response-type-only mismatch assertion later |
+| GQ-082 | Execute M4-E runtime params and capability contract tests | GQ-081 | in_progress | requires TDD implementation subagent and independent audit |
 | GQ-083 | Execute M4-F local conformance integration | GQ-082 | pending | requires M4-E audit acceptance |
 | GQ-084 | Execute M4-G closeout verification and durable status update | GQ-083 | pending | requires M4-F audit acceptance and independent closeout audit |
 
@@ -164,5 +164,5 @@ Conformance Harness v0.1 is complete after G5-G independent audit acceptance. G6
 Wrapper Skeletons is complete after G6-C/G6-D/G6-E independent audit acceptance and G6-F closeout
 verification. M3 Core Middleware Contract And Native In-Process Backend is complete under GQ-068
 through GQ-077. M4 GRCL-C Core Contract Stabilization And Conformance Expansion is active under
-GQ-078 through GQ-084, with GQ-081 as the current execution point. No post-M4 implementation
+GQ-078 through GQ-084, with GQ-082 as the current execution point. No post-M4 implementation
 milestone is authorized from this queue state alone.
