@@ -107,8 +107,9 @@ multi-repository orchestration, and generated artifacts need a stable workspace-
   Docker, package/build-system rollout, IDL/codegen, C++/Python example acceptance, or external
   `grcl` migration.
 - M4-B design review is complete: API re-review accepted after narrowing destroyed-runtime handle
-  semantics; backend containment and test-plan reviews accepted with notes. The current execution
-  point is M4-C core lifecycle and ownership contract tests.
+  semantics; backend containment and test-plan reviews accepted with notes. M4-C core lifecycle and
+  ownership contract tests are complete after independent audit acceptance. The current execution
+  point is M4-D messaging and executor contract tests.
 - Management-plane concept modeling is deferred as future G10 input unless explicitly reprioritized.
 - Runtime capability exchange is a design decision, not an implemented runtime feature.
 - Active goal execution is tracked in `docs/status/goal-execution-queue.md`.
