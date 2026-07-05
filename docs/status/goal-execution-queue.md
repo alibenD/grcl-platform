@@ -102,8 +102,8 @@ user-approved plan.
 | GQ-072 | Execute M3-E pub/sub routing batch | GQ-071 | complete | M3-E re-audit status `accepted_with_notes` in `.local/agentic-runs/2026-07-04-m3-core-middleware-native-backend/m3-e-pub-sub-routing/reaudit-report.md`; pub/sub tests and M1 harness passed |
 | GQ-073 | Execute M3-F service/client routing batch | GQ-072 | complete | M3-F audit status `accepted_with_notes` in `.local/agentic-runs/2026-07-04-m3-core-middleware-native-backend/m3-f-service-client-routing/audit-report.md`; service/client tests, M1 harness, and ASan smoke passed |
 | GQ-074 | Execute M3-G local runtime params batch | GQ-073 | complete | M3-G audit status `accepted` in `.local/agentic-runs/2026-07-04-m3-core-middleware-native-backend/m3-g-local-runtime-params/audit-report.md`; params tests and M1 harness passed |
-| GQ-075 | Execute M3-H native backend capability update batch | GQ-074 | in_progress | requires M3-H task brief, TDD implementation subagent, and independent audit |
-| GQ-076 | Execute M3-I C examples batch | GQ-075 | pending | requires M3-H audit acceptance |
+| GQ-075 | Execute M3-H native backend capability update batch | GQ-074 | complete | M3-H audit status `accepted` in `.local/agentic-runs/2026-07-04-m3-core-middleware-native-backend/m3-h-native-backend-capability-update/audit-report.md`; capability tests and M1 harness passed |
+| GQ-076 | Execute M3-I C examples batch | GQ-075 | in_progress | requires M3-I task brief, TDD implementation subagent, and independent audit |
 | GQ-077 | Execute M3-J conformance integration and closeout | GQ-076 | pending | requires M3-I audit acceptance |
 
 ## Execution Rules

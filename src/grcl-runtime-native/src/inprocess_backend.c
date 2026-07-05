@@ -607,16 +607,26 @@ static grcl_result_t grcl_inprocess_get_capabilities(
   out_record->summary_flags =
     GRCL_CAPABILITY_SUMMARY_FLAG_BOUNDED_CAPACITIES |
     GRCL_CAPABILITY_SUMMARY_FLAG_DETERMINISTIC_DESTROY |
-    GRCL_CAPABILITY_SUMMARY_FLAG_BASIC_DIAGNOSTICS;
+    GRCL_CAPABILITY_SUMMARY_FLAG_POLL_EXECUTOR |
+    GRCL_CAPABILITY_SUMMARY_FLAG_SEQUENTIAL_EXECUTOR |
+    GRCL_CAPABILITY_SUMMARY_FLAG_BASIC_DIAGNOSTICS |
+    GRCL_CAPABILITY_SUMMARY_FLAG_RUNTIME_LOCAL_PARAMS;
   out_record->max_payload_bytes = GRCL_INPROCESS_MAX_PAYLOAD_BYTES;
   out_record->max_entities = 32u;
   out_record->max_nodes = 8u;
   out_record->max_endpoints = 32u;
   out_record->max_publishers = 16u;
   out_record->max_subscriptions = 16u;
+  out_record->max_services = 16u;
+  out_record->max_clients = 16u;
   out_record->message_buffer_bytes =
     GRCL_INPROCESS_MAX_PAYLOAD_BYTES * GRCL_INPROCESS_QUEUE_CAPACITY;
   out_record->executor_state_bytes = sizeof(grcl_backend_executor_state_t);
+  out_record->max_parameters = GRCL_INPROCESS_MAX_PARAMETERS;
+  out_record->parameter_name_buffer_bytes =
+    GRCL_INPROCESS_PARAMETER_NAME_BYTES;
+  out_record->parameter_value_buffer_bytes =
+    GRCL_INPROCESS_PARAMETER_VALUE_BYTES;
   return GRCL_OK;
 }
 
