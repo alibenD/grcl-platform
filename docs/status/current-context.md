@@ -110,8 +110,9 @@ multi-repository orchestration, and generated artifacts need a stable workspace-
   semantics; backend containment and test-plan reviews accepted with notes. M4-C core lifecycle and
   ownership contract tests are complete after independent audit acceptance. M4-D messaging and
   executor contract tests are complete after independent audit acceptance with a non-blocking
-  response-type-mismatch coverage note. The current execution point is M4-E runtime params and
-  capability contract tests.
+  response-type-mismatch coverage note. M4-E runtime params and capability contract tests are
+  complete after independent audit acceptance. The current execution point is M4-F local
+  conformance integration.
 - Management-plane concept modeling is deferred as future G10 input unless explicitly reprioritized.
 - Runtime capability exchange is a design decision, not an implemented runtime feature.
 - Active goal execution is tracked in `docs/status/goal-execution-queue.md`.

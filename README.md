@@ -19,8 +19,8 @@ and is treated here as the future `grcl-cpp` module candidate, not as the whole 
 - G5 Conformance Harness v0.1: `complete under task briefs, TDD-style verification, and independent audit`
 - G6 Language SDK Wrapper Skeletons: `complete under task briefs, TDD-style verification, and independent audit`
 - M3 Core Middleware Contract And Native In-Process Backend: `complete under task briefs, TDD-style verification, and independent audit`
-- M4 GRCL-C Core Contract Stabilization And Conformance Expansion: `M4-E active`
-- Primary current output: M4-E runtime params and capability contract tests under TDD subagent and independent audit gates
+- M4 GRCL-C Core Contract Stabilization And Conformance Expansion: `M4-F active`
+- Primary current output: M4-F local conformance integration for the M4 contract runner
 - Autonomous Goal Runner mode completed for M1, G5, G6, and M3; M4 is active under its own approved goal
 - G1-A through G1-E passed independent audit
 - M1-B through M1-G passed independent audit, with M1-G accepted with non-blocking repository
