@@ -31,7 +31,7 @@ export GRCL_PLATFORM_ARTIFACT_ROOT="$artifact_root"
 runner_output_root="$GRCL_PLATFORM_ARTIFACT_ROOT/g5/conformance"
 
 stage_index=0
-total_stages=8
+total_stages=9
 
 run_stage() {
   stage_index=$((stage_index + 1))
@@ -84,6 +84,9 @@ run_stage "SDK boundary drift checks" \
 run_stage "M3 core middleware examples" \
   examples/c/run_m3_examples.sh
 
+run_stage "M4 core contract tests" \
+  src/grcl-c/tests/run_m4_contract_tests.sh
+
 summary_path="$runner_output_root/runner-summary.txt"
 cat >"$summary_path" <<EOF
 local conformance runner: ok
@@ -98,6 +101,7 @@ stages:
 - M1 runnable harness
 - SDK boundary drift checks
 - M3 core middleware examples
+- M4 core contract tests
 EOF
 
 printf 'PASS conformance runner (%s)\n' "$summary_path"

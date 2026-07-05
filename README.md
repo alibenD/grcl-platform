@@ -51,6 +51,7 @@ Current local verification commands:
 
 ```bash
 scripts/run-conformance.sh
+src/grcl-c/tests/run_m4_contract_tests.sh
 examples/c/run_m3_examples.sh
 ```
 
@@ -79,6 +80,7 @@ examples/c/run_m3_examples.sh
 - [Container Workspace Strategy](docs/architecture/container-workspace-strategy.md)
 - [Conformance And CI Strategy](docs/architecture/conformance-and-ci-strategy.md)
 - Local conformance runner: `scripts/run-conformance.sh`
+- M4 contract runner: `src/grcl-c/tests/run_m4_contract_tests.sh`
 - M3 C examples runner: `examples/c/run_m3_examples.sh`
 - SDK boundary drift checker: `scripts/check-sdk-boundaries.py`
 - [Management Plane Concept And Scope](docs/architecture/management-plane-concept-and-scope.md)

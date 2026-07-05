@@ -104,6 +104,18 @@ release readiness, ROS2 behavior, transport interoperability, sockets, threads, 
 behavior, distributed params, MCU runtime behavior, simulator behavior, management-plane behavior,
 auth, remote management, event streams, SDK stability, or C++/Python example acceptance.
 
+## M4 Local Contract Hardening Conformance
+
+M4 adds a ninth local stage to `scripts/run-conformance.sh` after the M3 C examples stage. The
+stage runs `src/grcl-c/tests/run_m4_contract_tests.sh` and hardens the completed M3 `grcl-c` local
+contract with negative-path, ownership, messaging, executor, runtime-param, and capability
+assertions.
+
+M4 conformance remains local contract hardening only. It does not claim CI rollout, Docker
+support, package distribution, release readiness, ROS2 or transport stability, simulator support,
+MCU runtime stability, management-plane behavior, SDK stability, or any new runtime/backend/public
+ABI surface beyond the already approved M3 local contract.
+
 ## Required Local Commands
 
 Before any documentation-only architecture iteration is called complete:
@@ -129,7 +141,7 @@ report under `GRCL_PLATFORM_ARTIFACT_ROOT/g6/sdk-boundaries/`.
 `scripts/run-conformance.sh` is the top-level local runner. It may be invoked from the workspace
 root as `src/grcl-platform/scripts/run-conformance.sh` or from the repository root as
 `scripts/run-conformance.sh`. It preserves an existing `GRCL_PLATFORM_ARTIFACT_ROOT`, otherwise
-defaults generated outputs to `/Users/aliben/Project/grcl-platform_ws/artifacts`, runs the eight
+defaults generated outputs to `/Users/aliben/Project/grcl-platform_ws/artifacts`, runs the nine
 local stages in order, stops on the first failure, and keeps runner-owned summary metadata under
 `GRCL_PLATFORM_ARTIFACT_ROOT/g5/conformance/`.
 
@@ -143,6 +155,7 @@ Current runner stages:
 6. M1 runnable harness
 7. SDK boundary drift checks
 8. M3 core middleware examples
+9. M4 core contract tests
 
 ## Artifact Ownership
 
