@@ -59,5 +59,6 @@ compile_and_run_example() {
 }
 
 compile_and_run_example "pub_sub_example"
+compile_and_run_example "service_client_example"
 
 printf 'PASS m5 cpp example harness (%s)\n' "$output_root"
