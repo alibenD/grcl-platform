@@ -1767,7 +1767,7 @@ static grcl_result_t grcl_inprocess_executor_spin_once(
       continue;
     }
 
-    while (publisher->pending.count > 0u) {
+    if (publisher->pending.count > 0u) {
       grcl_result_t result = grcl_inprocess_dispatch_one_message(
         backend_state,
         backend_executor,
@@ -1778,24 +1778,24 @@ static grcl_result_t grcl_inprocess_executor_spin_once(
     }
   }
 
-  while (backend_state->pending_requests.count > 0u) {
+  if (backend_state->pending_requests.count > 0u) {
     grcl_result_t result = grcl_inprocess_dispatch_one_request(
       backend_state,
       backend_executor);
     if (result == GRCL_ERROR_NO_DATA) {
-      break;
+      return GRCL_OK;
     }
     if (result != GRCL_OK) {
       return result;
     }
   }
 
-  while (backend_state->pending_responses.count > 0u) {
+  if (backend_state->pending_responses.count > 0u) {
     grcl_result_t result = grcl_inprocess_dispatch_one_response(
       backend_state,
       backend_executor);
     if (result == GRCL_ERROR_NO_DATA) {
-      break;
+      return GRCL_OK;
     }
     if (result != GRCL_OK) {
       return result;

@@ -749,11 +749,21 @@ static int test_queue_saturation_and_executor_membership_bounds(void)
         request,
         sizeof(request),
         &request_ids[8u]),
-      GRCL_ERROR_CAPACITY_EXCEEDED) != 0 ||
-    expect_result("dispatch request queue", grcl_executor_spin_once(executor, 0u), GRCL_OK) != 0) {
+      GRCL_ERROR_CAPACITY_EXCEEDED) != 0) {
     (void)grcl_runtime_stop(runtime);
     (void)grcl_runtime_destroy(runtime);
     return 1;
+  }
+
+  for (size_t i = 0u; i < 8u; ++i) {
+    if (expect_result(
+        "dispatch one pending request",
+        grcl_executor_spin_once(executor, 0u),
+        GRCL_OK) != 0) {
+      (void)grcl_runtime_stop(runtime);
+      (void)grcl_runtime_destroy(runtime);
+      return 1;
+    }
   }
 
   for (size_t i = 0u; i < 8u; ++i) {
@@ -776,11 +786,18 @@ static int test_queue_saturation_and_executor_membership_bounds(void)
     }
   }
 
+  for (size_t i = 0u; i < 8u; ++i) {
+    if (expect_result(
+        "dispatch one pending response",
+        grcl_executor_spin_once(executor, 0u),
+        GRCL_OK) != 0) {
+      (void)grcl_runtime_stop(runtime);
+      (void)grcl_runtime_destroy(runtime);
+      return 1;
+    }
+  }
+
   if (expect_result(
-      "dispatch response queue",
-      grcl_executor_spin_once(executor, 0u),
-      GRCL_OK) != 0 ||
-    expect_result(
       "send request after response queue filled",
       grcl_client_send_request_bytes(
         client,

@@ -8,7 +8,8 @@ include_dir="$repo_root/src/grcl-c/include"
 runtime_source="$repo_root/src/grcl-c/src/runtime.c"
 null_backend_source="$repo_root/src/grcl-runtime-native/src/null_backend.c"
 inprocess_backend_source="$repo_root/src/grcl-runtime-native/src/inprocess_backend.c"
-contract_test_source="$repo_root/src/grcl-c/tests/core_lifecycle_contract_test.c"
+lifecycle_test_source="$repo_root/src/grcl-c/tests/core_lifecycle_contract_test.c"
+messaging_test_source="$repo_root/src/grcl-c/tests/core_messaging_contract_test.c"
 
 default_workspace_root=
 if [ "$(basename -- "$(dirname -- "$repo_root")")" = "src" ]; then
@@ -29,7 +30,8 @@ fi
 output_root="$artifact_root/m4/grcl-c/tests"
 mkdir -p "$output_root"
 
-contract_binary="$output_root/core_lifecycle_contract_test"
+lifecycle_binary="$output_root/core_lifecycle_contract_test"
+messaging_binary="$output_root/core_messaging_contract_test"
 
 run_step() {
   step_name=$1
@@ -45,8 +47,12 @@ run_step() {
 
 run_step "m4 lifecycle contract compile" \
   cc -std=c11 -I "$include_dir" "$runtime_source" "$null_backend_source" \
-    "$inprocess_backend_source" "$contract_test_source" -o "$contract_binary"
+    "$inprocess_backend_source" "$lifecycle_test_source" -o "$lifecycle_binary"
+run_step "m4 lifecycle contract run" "$lifecycle_binary"
 
-run_step "m4 lifecycle contract run" "$contract_binary"
+run_step "m4 messaging contract compile" \
+  cc -std=c11 -I "$include_dir" "$runtime_source" "$null_backend_source" \
+    "$inprocess_backend_source" "$messaging_test_source" -o "$messaging_binary"
+run_step "m4 messaging contract run" "$messaging_binary"
 
 printf 'PASS m4 contract harness (%s)\n' "$output_root"

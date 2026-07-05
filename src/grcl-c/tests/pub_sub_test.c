@@ -547,9 +547,24 @@ static int test_payload_and_queue_capacity_errors(void)
   if (expect_result(
       "publish queue saturated",
       grcl_publisher_publish_bytes(publisher, payload, sizeof(payload)),
-      GRCL_ERROR_CAPACITY_EXCEEDED) != 0 ||
-    expect_result("spin fills subscription queue", grcl_executor_spin_once(executor, 0u), GRCL_OK) != 0 ||
-    expect_result(
+      GRCL_ERROR_CAPACITY_EXCEEDED) != 0) {
+    (void)grcl_runtime_stop(runtime);
+    (void)grcl_runtime_destroy(runtime);
+    return 1;
+  }
+
+  for (size_t i = 0u; i < 8u; ++i) {
+    if (expect_result(
+        "spin advances one queued message",
+        grcl_executor_spin_once(executor, 0u),
+        GRCL_OK) != 0) {
+      (void)grcl_runtime_stop(runtime);
+      (void)grcl_runtime_destroy(runtime);
+      return 1;
+    }
+  }
+
+  if (expect_result(
       "publish after pending queue drained",
       grcl_publisher_publish_bytes(publisher, payload, sizeof(payload)),
       GRCL_OK) != 0 ||
