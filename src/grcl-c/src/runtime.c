@@ -374,6 +374,11 @@ static int grcl_type_support_valid(const grcl_type_support_t * type_support)
   return type_support != NULL;
 }
 
+static int grcl_struct_size_at_least(size_t actual, size_t required)
+{
+  return actual >= required;
+}
+
 static void grcl_executor_detach_node(grcl_executor_t * executor, grcl_node_t * node)
 {
   if (executor == NULL || node == NULL || executor->members == NULL) {
@@ -809,7 +814,9 @@ grcl_result_t grcl_runtime_create(
 {
   grcl_result_t backend_result;
 
-  if (runtime == NULL) {
+  if (runtime == NULL ||
+    (options != NULL &&
+    !grcl_struct_size_at_least(options->struct_size, sizeof(*options)))) {
     return GRCL_ERROR_INVALID_ARGUMENT;
   }
 
@@ -1028,6 +1035,7 @@ grcl_result_t grcl_node_create(
   grcl_result_t result;
 
   if (runtime == NULL || options == NULL || node == NULL ||
+    !grcl_struct_size_at_least(options->struct_size, sizeof(*options)) ||
     !grcl_required_name_valid(options->node_name)) {
     return GRCL_ERROR_INVALID_ARGUMENT;
   }
@@ -1773,7 +1781,8 @@ grcl_result_t grcl_executor_create(
   grcl_executor_t * created;
   grcl_result_t result;
 
-  if (runtime == NULL || options == NULL || executor == NULL) {
+  if (runtime == NULL || options == NULL || executor == NULL ||
+    !grcl_struct_size_at_least(options->struct_size, sizeof(*options))) {
     return GRCL_ERROR_INVALID_ARGUMENT;
   }
   if (!grcl_runtime_is_object_mutation_allowed(runtime)) {
