@@ -21,7 +21,7 @@ and is treated here as the future `grcl-cpp` module candidate, not as the whole 
 - M3 Core Middleware Contract And Native In-Process Backend: `complete under task briefs, TDD-style verification, and independent audit`
 - M4 GRCL-C Core Contract Stabilization And Conformance Expansion: `complete under task briefs, TDD-style verification, and independent audit`
 - M5 Local Core Product Surface And GRCL-CPP Completion: `active goal; M5-A plan and durable queue filing complete`
-- Primary current output: M5-B design closure complete; next batch is M5-C `grcl-c` local-core surface closeout
+- Primary current output: M5-C `grcl-c` local-core closeout complete; next batch is M5-D `grcl-cpp` runtime/node/executor wrappers
 - Autonomous Goal Runner mode completed for M1, G5, G6, M3, and M4, and is now re-opened inside the approved M5 scope
 - G1-A through G1-E passed independent audit
 - M1-B through M1-G passed independent audit, with M1-G accepted with non-blocking repository

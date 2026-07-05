@@ -127,9 +127,16 @@ multi-repository orchestration, and generated artifacts need a stable workspace-
   completion target explicit, keeps endpoint exposure as opaque identity escape hatches only, keeps
   runtime-local params complete at `set/get/list`, and assigns capability/negotiation/diagnostics
   forwarding evidence to the M5-D C++ runtime-wrapper batch.
-- M5-C `grcl-c` local-core surface closeout is the next authorized implementation batch. M5
-  implementation batches must remain inside the approved local-core scope and continue to use task
-  briefs, implementation subagents, TDD-style verification, and independent audit subagents.
+- M5-C `grcl-c` local-core surface closeout is complete after implementation report and independent
+  audit `accepted_with_notes`. M5-C required no `grcl-c`, native-backend, C test, C example, or
+  canonical design source changes: the accepted M5-B C-side completion boundary was already
+  satisfied by current repository evidence and the full local verification ladder
+  (`run_m1_tests.sh`, `run_m4_contract_tests.sh`, `run_m3_examples.sh`,
+  `scripts/run-conformance.sh`) passed green from the workspace root.
+- M5-D `grcl-cpp` runtime, node, and executor wrappers is now the next authorized implementation
+  batch. M5 implementation batches must remain inside the approved local-core scope and continue to
+  use task briefs, implementation subagents, TDD-style verification, and independent audit
+  subagents.
 - M5 does not authorize ROS2, DDS, sockets, shared memory, networking, multi-process transport,
   simulator backend, MCU runtime, gateway runtime, management plane, auth, remote management,
   event streams, CI, Docker, package manager, CMake, colcon, release packaging, external `grcl`

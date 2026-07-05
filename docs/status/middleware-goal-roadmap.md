@@ -294,6 +294,6 @@ Current M5 status:
 
 - M5 authorization status: `complete`
 - M5 planning status: `M5-A and M5-B complete`
-- M5 implementation status: `not started; M5-C grcl-c local-core closeout is the next gate`
+- M5 implementation status: `M5-C complete; M5-D grcl-cpp runtime/node/executor batch is the next gate`
 - M5 plan:
   [M5 Local Core Product And GRCL-CPP Completion Plan](../plans/2026-07-05-m5-local-core-product-and-grcl-cpp-completion-plan.md)
