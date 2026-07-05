@@ -80,7 +80,7 @@ multi-repository orchestration, and generated artifacts need a stable workspace-
   audit, and G6-E SDK boundary drift checks passed independent audit. The local conformance runner
   now includes documentation, schema fixture, C ABI/header, M1 harness, and SDK boundary drift
   stages.
-- M3 Core Middleware Contract And Native In-Process Backend is active under a user-approved plan:
+- M3 Core Middleware Contract And Native In-Process Backend is complete under a user-approved plan:
   [M3 Core Middleware Native Backend Plan](../plans/2026-07-04-m3-core-middleware-native-backend-plan.md).
   M3 is limited to `grcl-c` core middleware contracts, backend SPI v0.2 design, an in-process
   native backend, TDD implementation batches, C examples, and local conformance integration.
@@ -91,9 +91,11 @@ multi-repository orchestration, and generated artifacts need a stable workspace-
   `accepted_with_notes`. M3-F service/client routing is complete after independent audit
   `accepted_with_notes`. M3-G local runtime params is complete after independent audit `accepted`.
   M3-H native backend capability update is complete after independent audit `accepted`. M3-I C
-  examples is complete after re-audit `accepted`; M3-J conformance integration and closeout is the
-  active implementation batch. M3-D audit recorded a non-blocking `runtime.c` create-failure cleanup
-  hardening note; M3-F implemented a narrow cleanup hardening change when that path became testable.
+  examples is complete after re-audit `accepted`. M3-J conformance integration and closeout is
+  complete after independent closeout audit `accepted`; the local conformance runner now includes
+  the M3 core middleware examples stage. M3-D audit recorded a non-blocking `runtime.c`
+  create-failure cleanup hardening note; M3-F implemented a narrow cleanup hardening change when
+  that path became testable.
 - post-M3 implementation remains unauthorized unless a new user-approved goal window records a
   goal-specific plan, allowed files, verification strategy, implementation subagents, and
   independent audit gates.
@@ -261,12 +263,11 @@ Option A, and then authorized goal-driven G6 implementation. That G6 implementat
 complete after G6-F closeout verification and independent audit acceptance. The main agent may not
 auto-advance into G7 or any later milestone without a new user-approved goal window.
 
-The user later authorized M3 Core Middleware Contract And Native In-Process Backend. M3 may proceed
-through design, subagent design review, TDD implementation batches, independent audits, examples,
-local conformance integration, and closeout inside the approved M3 scope. M3 does not authorize
-ROS2, DDS, sockets, shared memory, multi-process transport, simulator backend, MCU runtime,
-gateway, management plane, auth, remote management, event streams, CI, Docker, package manager,
-CMake, colcon, IDL/codegen, external `grcl` migration, or C++/Python example acceptance.
+The user later authorized M3 Core Middleware Contract And Native In-Process Backend. That M3 window
+is now complete after M3-J closeout audit acceptance and local conformance integration. M3 did not
+authorize ROS2, DDS, sockets, shared memory, multi-process transport, simulator backend, MCU
+runtime, gateway, management plane, auth, remote management, event streams, CI, Docker, package
+manager, CMake, colcon, IDL/codegen, external `grcl` migration, or C++/Python example acceptance.
 
 Stop conditions for this continuous window:
 

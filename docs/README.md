@@ -15,7 +15,7 @@ creating parallel index or review-pack files.
 | Review SDK direction | [Language SDK Strategy](architecture/language-sdk-strategy.md) | [SDK Platform Governance](architecture/sdk-platform-governance.md), [ADR-0003](adr/ADR-0003-language-sdks-over-grcl-c.md) |
 | Review M2/G6 SDK boundary baseline | [Language SDK Strategy](architecture/language-sdk-strategy.md) | [G6 Language SDK Wrapper Skeletons Plan](plans/2026-07-04-g6-language-sdk-wrapper-skeletons-plan.md), [SDK Platform Governance](architecture/sdk-platform-governance.md) |
 | Review M3 core middleware design | [GRCL-C API Shape](architecture/grcl-c-api-shape.md) | [Backend SPI Contract](architecture/backend-spi-contract.md), [M3 Core Middleware Native Backend Plan](plans/2026-07-04-m3-core-middleware-native-backend-plan.md) |
-| Run the local conformance harness | [Conformance And CI Strategy](architecture/conformance-and-ci-strategy.md) | `../scripts/run-conformance.sh`, [G5 Conformance Harness Plan](plans/2026-07-04-g5-conformance-harness-plan.md) |
+| Run the local conformance harness | [Conformance And CI Strategy](architecture/conformance-and-ci-strategy.md) | `../scripts/run-conformance.sh`, `../examples/c/run_m3_examples.sh`, [G5 Conformance Harness Plan](plans/2026-07-04-g5-conformance-harness-plan.md) |
 | Recover current execution state | [Current Context](status/current-context.md) | [Goal Execution Queue](status/goal-execution-queue.md), [Middleware Goal Roadmap](status/middleware-goal-roadmap.md) |
 | Audit a completed task | [Goal Execution Queue](status/goal-execution-queue.md) | `.local/agentic-runs/<plan-id>/<task-id>/ledger.md` and audit reports |
 
@@ -84,6 +84,7 @@ Environment, conformance, and delivery:
 - [Container Workspace Strategy](architecture/container-workspace-strategy.md)
 - [Conformance And CI Strategy](architecture/conformance-and-ci-strategy.md)
 - Local runner: `../scripts/run-conformance.sh`
+- M3 C examples runner: `../examples/c/run_m3_examples.sh`
 - SDK boundary drift checker: `../scripts/check-sdk-boundaries.py`
 - [Task Workflow Governance](architecture/task-workflow-governance.md)
 - [Agentic Delivery Governance](architecture/agentic-delivery-governance.md)
@@ -125,6 +126,7 @@ Current recovery and queue state:
 
 - `grcl-c` public headers: `../src/grcl-c/include/grcl/c/`
 - `grcl-c` compile-only smoke tests: `../src/grcl-c/tests/`
+- M3 C example sources and runner: `../examples/c/`
 - Schema artifacts: [Schema Artifact Index](../schemas/README.md)
 - Runtime capability fixtures: `../tests/conformance/runtime-capability/`
 - MCU profile fixtures: `../tests/conformance/mcu-profiles/`

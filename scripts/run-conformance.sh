@@ -31,7 +31,7 @@ export GRCL_PLATFORM_ARTIFACT_ROOT="$artifact_root"
 runner_output_root="$GRCL_PLATFORM_ARTIFACT_ROOT/g5/conformance"
 
 stage_index=0
-total_stages=7
+total_stages=8
 
 run_stage() {
   stage_index=$((stage_index + 1))
@@ -81,6 +81,9 @@ run_stage "M1 runnable harness" \
 run_stage "SDK boundary drift checks" \
   python3 scripts/check-sdk-boundaries.py
 
+run_stage "M3 core middleware examples" \
+  examples/c/run_m3_examples.sh
+
 summary_path="$runner_output_root/runner-summary.txt"
 cat >"$summary_path" <<EOF
 local conformance runner: ok
@@ -94,6 +97,7 @@ stages:
 - C ABI/header checks
 - M1 runnable harness
 - SDK boundary drift checks
+- M3 core middleware examples
 EOF
 
 printf 'PASS conformance runner (%s)\n' "$summary_path"

@@ -32,7 +32,7 @@ diagnostics core with a private null/native-test backend. G5 Conformance Harness
 and provides the local contract-drift harness. G6 Language SDK Wrapper Skeletons is complete as M2
 Cross-Language SDK Boundary Baseline: `grcl-cpp` and `grcl-py` wrapper skeletons exist, Python
 binding Option A is recorded, and SDK boundary drift checks are integrated into the local
-conformance runner. M3 Core Middleware Contract And Native In-Process Backend is active under a
+conformance runner. M3 Core Middleware Contract And Native In-Process Backend is complete under a
 goal-specific plan and is limited to local in-process native backend behavior for C examples.
 
 ## Model And Effort Policy
@@ -226,7 +226,7 @@ Current M3 status:
 
 - M3 planning status: `complete`
 - M3 design review status: `complete`
-- M3 implementation status: `active at M3-J conformance integration and closeout`
+- M3 implementation status: `complete after M3-J conformance integration and closeout audit`
 - M3 plan:
   [M3 Core Middleware Native Backend Plan](../plans/2026-07-04-m3-core-middleware-native-backend-plan.md)
 
@@ -239,5 +239,5 @@ complete. M1 First Runnable GRCL-C Core With Null/Native Backend is complete, lo
 independently audited with notes. G5 Conformance Harness v0.1 is complete after independent audit
 acceptance. G6 Language SDK Wrapper Skeletons is complete after task briefs, TDD-style verification,
 implementation subagents, and independent audit. M3 Core Middleware Contract And Native In-Process
-Backend is active under a goal-specific plan. No further auto-advance beyond M3 is authorized from
-this roadmap state alone.
+Backend is complete under a goal-specific plan. No further auto-advance beyond M3 is authorized
+from this roadmap state alone.

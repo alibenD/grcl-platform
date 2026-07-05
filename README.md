@@ -18,9 +18,9 @@ and is treated here as the future `grcl-cpp` module candidate, not as the whole 
 - M1 First Runnable GRCL-C Core With Null/Native Backend: `complete under task briefs, TDD-style verification, and independent audit`
 - G5 Conformance Harness v0.1: `complete under task briefs, TDD-style verification, and independent audit`
 - G6 Language SDK Wrapper Skeletons: `complete under task briefs, TDD-style verification, and independent audit`
-- M3 Core Middleware Contract And Native In-Process Backend: `design and review active`
-- Primary current output: M3 core middleware API/SPI design, native in-process backend plan, and TDD test matrix
-- Autonomous Goal Runner mode completed for M1, G5, and G6; M3 is active under its own approved plan
+- M3 Core Middleware Contract And Native In-Process Backend: `complete under task briefs, TDD-style verification, and independent audit`
+- Primary current output: completed M3 core middleware API/SPI baseline, native in-process backend implementation, C examples, and local conformance stage
+- Autonomous Goal Runner mode completed for M1, G5, G6, and M3
 - G1-A through G1-E passed independent audit
 - M1-B through M1-G passed independent audit, with M1-G accepted with non-blocking repository
   hygiene notes
@@ -45,6 +45,13 @@ multi-repository orchestration share one workspace boundary. The Git repository 
 Build and test scripts must write generated files under `grcl-platform_ws/artifacts` by default,
 unless `GRCL_PLATFORM_ARTIFACT_ROOT` is set explicitly. `artifacts/` is generated state and scripts
 must create it on demand before writing outputs.
+
+Current local verification commands:
+
+```bash
+scripts/run-conformance.sh
+examples/c/run_m3_examples.sh
+```
 
 ## Document Entry Points
 
@@ -71,6 +78,7 @@ must create it on demand before writing outputs.
 - [Container Workspace Strategy](docs/architecture/container-workspace-strategy.md)
 - [Conformance And CI Strategy](docs/architecture/conformance-and-ci-strategy.md)
 - Local conformance runner: `scripts/run-conformance.sh`
+- M3 C examples runner: `examples/c/run_m3_examples.sh`
 - SDK boundary drift checker: `scripts/check-sdk-boundaries.py`
 - [Management Plane Concept And Scope](docs/architecture/management-plane-concept-and-scope.md)
 - [Management Plane Decision Scope](docs/architecture/management-plane-decision-scope.md)

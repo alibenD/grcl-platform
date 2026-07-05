@@ -93,14 +93,16 @@ private native boundary rather than treating `grcl-cpp` as the semantic source.
 
 ## M3 Local Core Middleware Conformance
 
-M3 adds a local core middleware stage only after the M3 C tests and C examples pass independently.
-The stage must validate that the in-process native backend supports the approved local contract:
-pub/sub bytes delivery, service/client request/reply, executor pull dispatch, runtime-local params,
-and deterministic cleanup.
+M3 adds a local core middleware stage to `scripts/run-conformance.sh` after the existing G5/G6
+drift checks. The stage runs `examples/c/run_m3_examples.sh` only after the M3 C tests and C
+examples pass independently. It validates the approved local contract for the in-process native
+backend: pub/sub bytes delivery, service/client request/reply, executor pull dispatch,
+runtime-local params, and deterministic cleanup.
 
-M3 conformance is still local. It must not claim transport interoperability, ROS2 behavior, MCU
-runtime behavior, simulator behavior, distributed graph behavior, distributed params, SDK stability,
-CI rollout, Docker support, package distribution, or release readiness.
+M3 conformance is still local. It must not claim CI rollout, Docker support, package distribution,
+release readiness, ROS2 behavior, transport interoperability, sockets, threads, distributed graph
+behavior, distributed params, MCU runtime behavior, simulator behavior, management-plane behavior,
+auth, remote management, event streams, SDK stability, or C++/Python example acceptance.
 
 ## Required Local Commands
 
@@ -124,16 +126,23 @@ workspace artifact root default.
 socket, threading, Docker, CI, package, and repo-wide build-system drift, and writes its generated
 report under `GRCL_PLATFORM_ARTIFACT_ROOT/g6/sdk-boundaries/`.
 
-`scripts/run-conformance.sh` is the top-level local runner. It may be invoked from the
-workspace root as `src/grcl-platform/scripts/run-conformance.sh` or from the repository root as
+`scripts/run-conformance.sh` is the top-level local runner. It may be invoked from the workspace
+root as `src/grcl-platform/scripts/run-conformance.sh` or from the repository root as
 `scripts/run-conformance.sh`. It preserves an existing `GRCL_PLATFORM_ARTIFACT_ROOT`, otherwise
-defaults generated outputs to `/Users/aliben/Project/grcl-platform_ws/artifacts`, runs the six local
-stages in order, stops on the first failure, and keeps runner-owned summary metadata under
+defaults generated outputs to `/Users/aliben/Project/grcl-platform_ws/artifacts`, runs the eight
+local stages in order, stops on the first failure, and keeps runner-owned summary metadata under
 `GRCL_PLATFORM_ARTIFACT_ROOT/g5/conformance/`.
 
-After M3 implementation passes independent audit, the runner should add an M3 core middleware stage
-after SDK boundary drift checks. Until then, the six-stage runner remains the current executable
-baseline.
+Current runner stages:
+
+1. artifact root hygiene
+2. documentation checks
+3. runtime capability fixtures
+4. MCU profile fixtures
+5. C ABI/header checks
+6. M1 runnable harness
+7. SDK boundary drift checks
+8. M3 core middleware examples
 
 ## Artifact Ownership
 
