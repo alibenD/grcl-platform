@@ -294,6 +294,6 @@ Current M5 status:
 
 - M5 authorization status: `complete`
 - M5 planning status: `M5-A and M5-B complete`
-- M5 implementation status: `M5-C through M5-E and M5-F1 service/client complete; M5-F2 runtime-local params is the next gate before M5 closeout`
+- M5 implementation status: `M5-C through M5-F complete; M5 C++ conformance integration and closeout is the next gate`
 - M5 plan:
   [M5 Local Core Product And GRCL-CPP Completion Plan](../plans/2026-07-05-m5-local-core-product-and-grcl-cpp-completion-plan.md)

@@ -15,8 +15,17 @@ The current skeleton provides:
 - `grcl::Executor` as a move-only ownership wrapper over one `grcl_executor_t *`
 - `grcl::Publisher` as a move-only ownership wrapper over one `grcl_publisher_t *`
 - `grcl::Subscription` as a move-only ownership wrapper over one `grcl_subscription_t *`
+- `grcl::Service` as a move-only ownership wrapper over one `grcl_service_t *`
+- `grcl::Client` as a move-only ownership wrapper over one `grcl_client_t *`
+- `grcl::Params` as a thin non-owning runtime-local params facade over one `grcl_runtime_t *`
 - start/stop/destroy and node/executor forwarding without introducing new runtime semantics
 - local smoke tests and compile scripts that build directly against the existing `grcl-c`
   implementation
 
-Service/client, params, and broader runnable C++ examples remain later M5 batches.
+`grcl::Params` preserves the raw `grcl-c` runtime-local parameter contract:
+
+- `set` forwards `grcl_param_record_t` directly and preserves copy-in behavior
+- `get` forwards caller-provided output buffers and required-size reporting
+- `list` forwards newline-delimited caller-buffer output and param-count reporting
+
+Broader combined runnable C++ examples remain later M5 batches.

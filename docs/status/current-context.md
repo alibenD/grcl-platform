@@ -153,8 +153,14 @@ multi-repository orchestration, and generated artifacts need a stable workspace-
   service/client test, added the first runnable C++ service/client example plus runner coverage,
   and preserved direct `grcl-c` request/reply semantics with explicit `grcl_request_id_t`
   correlation and executor-driven delivery.
-- M5-F2 `grcl-cpp` runtime-local params wrappers is now the next authorized internal subtask under
-  GQ-091. M5 implementation batches must remain inside the approved local-core scope and continue
+- M5-F2 `grcl-cpp` runtime-local params wrappers is complete as the second internal subtask under
+  GQ-091 after implementation report and independent audit `accepted_with_notes`. M5-F2 added a
+  thin non-owning `Params` facade over runtime-local `grcl-c` params, extended the dedicated M5
+  C++ runner with a focused params test, added the first runnable C++ params example plus runner
+  coverage, and preserved raw `grcl_param_record_t` plus caller-buffer semantics without typed or
+  distributed-param invention.
+- M5 C++ conformance integration and closeout is now the next authorized implementation batch under
+  GQ-092. M5 implementation batches must remain inside the approved local-core scope and continue
   to use task briefs, implementation subagents, TDD-style verification, and independent audit
   subagents.
 - M5 does not authorize ROS2, DDS, sockets, shared memory, networking, multi-process transport,
