@@ -38,6 +38,33 @@ The selected G6 Python binding substrate is Option A: a private `ctypes` or dyna
 boundary with package distribution deferred. Implementation must stop if real shared-library
 production, native extension framework selection, or package policy becomes required.
 
+## M5 Local Core SDK Completion Target
+
+M5 is the next approved implementation goal after G6, M3, and M4. It upgrades `grcl-cpp` from a
+boundary skeleton into the first feature-complete language wrapper for the approved local-core GRCL
+surface.
+
+M5 `grcl-cpp` target surface:
+
+- runtime lifecycle and ownership
+- node ownership
+- executor membership and `spin_once` forwarding
+- publisher and subscription lifecycle plus local bytes data path
+- service and client lifecycle plus spin-driven request/reply
+- runtime-local parameter set/get/list forwarding
+- capability query, negotiation, and diagnostics forwarding where the C mapping is direct
+
+M5 does not change the required layering:
+
+```text
+grcl-cpp -> grcl-c
+```
+
+The wrapper may improve ownership ergonomics and type safety, but it must not introduce
+independent lifecycle states, transport behavior, backend objects, scheduling policy, or blocking
+call semantics. If a desired C++ API cannot be explained as a direct wrapper over `grcl-c`, M5
+must stop and return to the C design homes first.
+
 ## C++ SDK
 
 Responsibilities:
@@ -130,3 +157,7 @@ G6 remains a boundary baseline, not a stable SDK release. Package distribution, 
 production, native extension framework selection, data-path APIs, graph behavior, transport, ROS2,
 MCU runtime, simulator, management-plane behavior, auth, remote management, event streams, CI,
 Docker, and external `grcl` migration remain deferred to later goal-specific plans.
+
+M5 is the first goal allowed to expand `grcl-cpp` beyond that boundary baseline, but only for the
+already approved native-backend local-core C surface. `grcl-py` remains at the G6 boundary stage
+until a separate goal authorizes broader SDK expansion.

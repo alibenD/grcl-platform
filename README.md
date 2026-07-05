@@ -11,7 +11,7 @@ and is treated here as the future `grcl-cpp` module candidate, not as the whole 
 ## Current Status
 
 - Architecture phase: `active`
-- Runtime/product code implementation phase: `paused pending next user-approved goal`
+- Runtime/product code implementation phase: `active under M5 Local Core Product Surface And GRCL-CPP Completion`
 - Bounded G1 contract-artifact creation: `complete under task briefs and independent audit`
 - G2 `grcl-c` ABI Contract v0.1: `complete`
 - G3 Backend SPI API Shape v0.1 design baseline: `complete`
@@ -20,8 +20,9 @@ and is treated here as the future `grcl-cpp` module candidate, not as the whole 
 - G6 Language SDK Wrapper Skeletons: `complete under task briefs, TDD-style verification, and independent audit`
 - M3 Core Middleware Contract And Native In-Process Backend: `complete under task briefs, TDD-style verification, and independent audit`
 - M4 GRCL-C Core Contract Stabilization And Conformance Expansion: `complete under task briefs, TDD-style verification, and independent audit`
-- Primary current output: M4 complete; next implementation milestone requires a new user-approved goal
-- Autonomous Goal Runner mode completed for M1, G5, G6, M3, and M4
+- M5 Local Core Product Surface And GRCL-CPP Completion: `active goal; M5-A plan and durable queue filing complete`
+- Primary current output: M5 active; next batch is M5-B design closure for local-core product completion
+- Autonomous Goal Runner mode completed for M1, G5, G6, M3, and M4, and is now re-opened inside the approved M5 scope
 - G1-A through G1-E passed independent audit
 - M1-B through M1-G passed independent audit, with M1-G accepted with non-blocking repository
   hygiene notes
@@ -100,6 +101,7 @@ examples/c/run_m3_examples.sh
 - [G6 Language SDK Wrapper Skeletons Plan](docs/plans/2026-07-04-g6-language-sdk-wrapper-skeletons-plan.md)
 - [M3 Core Middleware Native Backend Plan](docs/plans/2026-07-04-m3-core-middleware-native-backend-plan.md)
 - [M4 GRCL-C Core Contract Stabilization Plan](docs/plans/2026-07-05-m4-grcl-c-core-contract-stabilization-plan.md)
+- [M5 Local Core Product And GRCL-CPP Completion Plan](docs/plans/2026-07-05-m5-local-core-product-and-grcl-cpp-completion-plan.md)
 - [ADR-0010 GRCL-C Capability ABI Representation](docs/adr/ADR-0010-grcl-c-capability-abi-representation.md)
 
 ## Repository Policy

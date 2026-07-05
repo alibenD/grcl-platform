@@ -34,8 +34,10 @@ Cross-Language SDK Boundary Baseline: `grcl-cpp` and `grcl-py` wrapper skeletons
 binding Option A is recorded, and SDK boundary drift checks are integrated into the local
 conformance runner. M3 Core Middleware Contract And Native In-Process Backend is complete under a
 goal-specific plan and is limited to local in-process native backend behavior for C examples. M4
-GRCL-C Core Contract Stabilization And Conformance Expansion is active as the post-M3 hardening
-goal.
+GRCL-C Core Contract Stabilization And Conformance Expansion is complete after closeout audit
+acceptance. M5 Local Core Product Surface And GRCL-CPP Completion is now the active milestone: it
+targets a feature-complete native-backend local-core product surface in `grcl-c`, full `grcl-cpp`
+wrapping of that surface, and passing C/C++ tests plus runnable C/C++ examples.
 
 ## Model And Effort Policy
 
@@ -88,6 +90,7 @@ bar for the task, and must record the chosen policy in each task brief.
 | G6 | Language SDK Wrapper Skeletons | `grcl-cpp` and `grcl-py` wrappers over `grcl-c` handles | SDK skeletons wrap core handles without independent lifecycle semantics |
 | M3 | Core Middleware Contract And Native In-Process Backend | sub/pub, service/client, executor pull, local runtime params, C examples, native in-process backend | C examples run through local backend and conformance without transport or ROS2 scope |
 | M4 | GRCL-C Core Contract Stabilization And Conformance Expansion | negative-path C contract tests, boundary hardening, dedicated M4 runner, local conformance stage | M3 `grcl-c` local core behavior is backed by contract tests and conformance without adding new feature areas |
+| M5 | Local Core Product Surface And GRCL-CPP Completion | completed native-backend `grcl-c` local-core surface, full `grcl-cpp` wrapper, C/C++ tests, C/C++ examples, local C++ conformance stage | native-backend local core is usable from both C and C++ without independent SDK semantics or out-of-scope platform expansion |
 | G7 | Simulator Runtime v0.1 | deterministic simulator backend for graph, capability, diagnostics, and snapshot validation | Middleware semantics can be tested without ROS2 or hardware |
 | G8 | ROS2 Adapter Design And Skeleton | ROS2 backend skeleton, graph projection rules, `rcl`/`rmw`/`rclcpp` containment | ROS2 types remain backend-private; GRCL runtime participant mapping is explicit |
 | G9 | MCU And Gateway Profile Runtime | profile-limited MCU adapters and gateway representation path | MCU profiles avoid full-graph assumptions; gateway representation is testable |
@@ -242,8 +245,10 @@ complete. M1 First Runnable GRCL-C Core With Null/Native Backend is complete, lo
 independently audited with notes. G5 Conformance Harness v0.1 is complete after independent audit
 acceptance. G6 Language SDK Wrapper Skeletons is complete after task briefs, TDD-style verification,
 implementation subagents, and independent audit. M3 Core Middleware Contract And Native In-Process
-Backend is complete under a goal-specific plan. No further auto-advance beyond M3 is authorized
-from this roadmap state alone.
+Backend is complete under a goal-specific plan. M4 GRCL-C Core Contract Stabilization And
+Conformance Expansion is complete after closeout audit acceptance. M5 Local Core Product Surface
+And GRCL-CPP Completion is the current goal and requires its own design review, task briefs,
+implementation subagents, and independent audits.
 
 ## M4 Scope
 
@@ -268,3 +273,27 @@ Current M4 status:
 - M4 implementation status: `complete after M4-G closeout audit accepted with notes`
 - M4 plan:
   [M4 GRCL-C Core Contract Stabilization Plan](../plans/2026-07-05-m4-grcl-c-core-contract-stabilization-plan.md)
+
+## M5 Scope
+
+M5 Local Core Product Surface And GRCL-CPP Completion includes:
+
+- completion of the native-backend local-core `grcl-c` surface as the semantic source of truth:
+  runtime, node, publisher, subscription, service, client, executor, type support,
+  runtime-local params, capability, and diagnostics.
+- full `grcl-cpp` wrapping of that approved local-core surface.
+- local C and C++ tests plus runnable C and C++ examples.
+- top-level local conformance expansion for the approved C++ parity surface.
+
+M5 excludes ROS2, DDS, sockets, shared memory, networking, multi-process transport, simulator
+backend, MCU runtime, gateway runtime, management plane, auth, remote management, event streams,
+CI, Docker, package manager, CMake, colcon, release packaging, external `grcl` migration,
+IDL/codegen, and `grcl-py` expansion beyond the completed G6 boundary skeleton.
+
+Current M5 status:
+
+- M5 authorization status: `complete`
+- M5 planning status: `M5-A complete; M5-B design closure is next`
+- M5 implementation status: `not started; M5-B design closure is the next gate`
+- M5 plan:
+  [M5 Local Core Product And GRCL-CPP Completion Plan](../plans/2026-07-05-m5-local-core-product-and-grcl-cpp-completion-plan.md)

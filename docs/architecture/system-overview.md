@@ -48,7 +48,7 @@ The architecture has six design layers:
 
 ## Non-Goals For The Current Phase
 
-- Do not expand runtime code outside the active M3 in-process native backend scope.
+- Do not expand runtime code outside the active M5 local-core product completion scope.
 - Do not migrate the current `github.com/alibenD/grcl` C++ package until repository topology is
   reviewed.
 - Do not create a public SDK marketplace before manifest, permissions, conformance, and signing
@@ -62,13 +62,13 @@ See [system-overview.mmd](../assets/system-overview.mmd).
 
 | Subsystem | Owns | Does not own | Related ADRs | Current goal stage |
 |---|---|---|---|---|
-| `grcl-c` core contract | Public C ABI, opaque handles, result model, options structs, lifecycle declarations, storage, capability query declarations, M3 core messaging API shape | Backend implementation, SDK convenience APIs, transport internals | [ADR-0002](../adr/ADR-0002-grcl-c-as-core-contract.md), [ADR-0005](../adr/ADR-0005-grcl-c-handle-and-lifecycle-contract.md), [ADR-0010](../adr/ADR-0010-grcl-c-capability-abi-representation.md) | M3 design active |
+| `grcl-c` core contract | Public C ABI, opaque handles, result model, options structs, lifecycle declarations, storage, capability query declarations, and the local-core messaging surface | Backend implementation, SDK convenience APIs, transport internals | [ADR-0002](../adr/ADR-0002-grcl-c-as-core-contract.md), [ADR-0005](../adr/ADR-0005-grcl-c-handle-and-lifecycle-contract.md), [ADR-0010](../adr/ADR-0010-grcl-c-capability-abi-representation.md) | M4 stabilization complete; M5 local-core product completion active |
 | Runtime capability and graph | Capability, availability, health, graph projection, negotiation schema, runtime participant model | Wire protocol, management transport, backend-specific discovery internals | [ADR-0004](../adr/ADR-0004-runtime-capability-exchange-and-scoped-graph.md), [ADR-0006](../adr/ADR-0006-runtime-capability-schema.md), [ADR-0010](../adr/ADR-0010-grcl-c-capability-abi-representation.md) | G1 schema artifacts complete; G2 ABI mapping complete |
-| Backend SPI | Backend registration shape, lifecycle hooks, capability hooks, M3 in-process messaging hooks, graph/diagnostics hooks, adapter containment | ROS2 public API design, transport internals, SDK semantics | [ADR-0008](../adr/ADR-0008-backend-spi-contract.md) | M3 SPI v0.2 design active |
+| Backend SPI | Backend registration shape, lifecycle hooks, capability hooks, in-process messaging hooks, graph/diagnostics hooks, adapter containment | ROS2 public API design, transport internals, SDK semantics | [ADR-0008](../adr/ADR-0008-backend-spi-contract.md) | M3 local-native baseline complete; M5 productization may consume narrow approved refinements |
 | MCU/RTOS profiles | Profile descriptors, subset rules, storage and executor constraints | Full desktop runtime requirements | [ADR-0007](../adr/ADR-0007-mcu-runtime-profile-contract.md) | G1 fixtures complete; runtime implementation pending |
-| Language SDKs | C++, Python, and future SDK layering over `grcl-c` handles | Independent runtime semantics or backend-private type exposure | [ADR-0003](../adr/ADR-0003-language-sdks-over-grcl-c.md), [ADR-0009](../adr/ADR-0009-language-sdk-binding-contract.md) | G6 wrapper skeletons complete; M3 C examples only |
+| Language SDKs | C++, Python, and future SDK layering over `grcl-c` handles | Independent runtime semantics or backend-private type exposure | [ADR-0003](../adr/ADR-0003-language-sdks-over-grcl-c.md), [ADR-0009](../adr/ADR-0009-language-sdk-binding-contract.md) | G6 wrapper skeletons complete; M5 full `grcl-cpp` core wrapper active |
 | Management plane | Future read-only snapshot contract, CLI/debug/dashboard data shape, diagnostics visibility | v1 auth, remote control, event streams, SDK permission enforcement | future G10 ADR | G10 deferred |
-| Conformance | Header hygiene, schema fixtures, C ABI compile-only checks, local contract-drift gates, M3 example validation, future CI-oriented gates | Runtime claims without corresponding runnable evidence | architecture decision docs only | G5/G6 local harness complete; M3 stage planned |
+| Conformance | Header hygiene, schema fixtures, C ABI compile-only checks, local contract-drift gates, M3/M4 runnable validation, and future C++ parity gates | Runtime claims without corresponding runnable evidence | architecture decision docs only | G5/G6/M3/M4 local harness complete; M5 C++ parity stage planned |
 
 ## Design Traceability
 

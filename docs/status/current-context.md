@@ -32,7 +32,7 @@ multi-repository orchestration, and generated artifacts need a stable workspace-
 ## Current Development Mode
 
 - M1 implementation is complete under the user-approved Autonomous Goal Runner window.
-- Runtime/product code implementation outside the completed M1 scope remains paused.
+- Runtime/product code implementation is re-opened only inside the user-approved M5 scope.
 - Autonomous Goal Runner mode was authorized for M1 implementation-stage task briefs,
   implementation subagents, and independent audit subagents.
 - G1 v0.1 Contract Artifacts is complete.
@@ -115,6 +115,19 @@ multi-repository orchestration, and generated artifacts need a stable workspace-
   independent audit acceptance. M4-G closeout verification is complete after closeout audit
   acceptance with notes. No post-M4 implementation milestone is authorized without a new
   user-approved goal.
+- The user has now approved M5 Local Core Product Surface And GRCL-CPP Completion as the next
+  active implementation milestone. M5 normalizes the user's broad end-state request into one
+  concrete target: complete the native-backend local-core product surface in `grcl-c`, fully wrap
+  that surface in `grcl-cpp`, and verify it with passing core tests plus runnable C and C++
+  examples.
+- M5-A plan and durable queue filing is complete. M5-B design closure is the next gate before
+  implementation. M5 implementation batches must remain inside the approved local-core scope and
+  continue to use task briefs, implementation subagents, TDD-style verification, and independent
+  audit subagents.
+- M5 does not authorize ROS2, DDS, sockets, shared memory, networking, multi-process transport,
+  simulator backend, MCU runtime, gateway runtime, management plane, auth, remote management,
+  event streams, CI, Docker, package manager, CMake, colcon, release packaging, external `grcl`
+  migration, IDL/codegen, or `grcl-py` expansion beyond the completed G6 boundary skeleton.
 - Management-plane concept modeling is deferred as future G10 input unless explicitly reprioritized.
 - Runtime capability exchange is a design decision, not an implemented runtime feature.
 - Active goal execution is tracked in `docs/status/goal-execution-queue.md`.
@@ -200,6 +213,7 @@ demand by scripts before writing build, test, coverage, log, or generated files.
 - [G6 Language SDK Wrapper Skeletons Plan](../plans/2026-07-04-g6-language-sdk-wrapper-skeletons-plan.md)
 - [M3 Core Middleware Native Backend Plan](../plans/2026-07-04-m3-core-middleware-native-backend-plan.md)
 - [M4 GRCL-C Core Contract Stabilization Plan](../plans/2026-07-05-m4-grcl-c-core-contract-stabilization-plan.md)
+- [M5 Local Core Product And GRCL-CPP Completion Plan](../plans/2026-07-05-m5-local-core-product-and-grcl-cpp-completion-plan.md)
 
 The architecture plan records the current system design baseline. The module skeleton plan is the
 accepted G1 execution baseline for the current batch closeout. The middleware goal roadmap records
@@ -293,12 +307,19 @@ authorize ROS2, networking, simulator, MCU runtime, management plane, auth, remo
 event streams, CI, Docker, package/build-system rollout, IDL/codegen, C++/Python example
 acceptance, or external `grcl` migration.
 
+The user later authorized M5 Local Core Product Surface And GRCL-CPP Completion. M5 may proceed
+through goal-specific planning, design review, TDD implementation batches, local conformance
+expansion, and closeout inside the approved local-core scope. M5 does not authorize ROS2, DDS,
+networking, simulator, MCU runtime, gateway runtime, management plane, auth, remote management,
+event streams, CI, Docker, package/build-system rollout, release packaging, IDL/codegen, external
+`grcl` migration, or `grcl-py` expansion beyond the completed G6 boundary skeleton.
+
 Stop conditions for this continuous window:
 
 - independent audit returns `rejected`
 - a new ABI, schema, or protocol decision is needed beyond the accepted G2 plan and ADR-0010
-- a later batch would need to expand scope into backend SPI implementation, runtime behavior, SDK
-  implementation, build scripts, Dockerfiles, CI, or repo migration
+- a later batch would need to expand scope into ROS2, transport, threading, serialization,
+  `grcl-py` expansion, management plane, build-system rollout, CI, or repo migration
 - verification fails with no narrow corrective task available inside the current batch boundary
 - the next batch needs a wider write set than its prepared brief and that widening changes product
   or architecture meaning

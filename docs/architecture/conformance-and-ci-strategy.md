@@ -116,6 +116,17 @@ support, package distribution, release readiness, ROS2 or transport stability, s
 MCU runtime stability, management-plane behavior, SDK stability, or any new runtime/backend/public
 ABI surface beyond the already approved M3 local contract.
 
+## M5 Planned Local C++ Wrapper And Example Conformance
+
+M5 is the next approved milestone after M4. It will add a local C++ parity stage only after the
+`grcl-cpp` wrappers, C++ tests, and C++ examples exist and pass independently. That future stage
+must validate that the C++ layer remains a faithful wrapper over the approved native-backend local
+core C surface.
+
+M5 conformance must remain local. It must not claim package distribution, repo-wide build-system
+rollout, CI rollout, cross-platform installer support, ROS2 stability, transport interoperability,
+simulator behavior, MCU runtime behavior, management-plane behavior, or Python SDK stability.
+
 ## Required Local Commands
 
 Before any documentation-only architecture iteration is called complete:
