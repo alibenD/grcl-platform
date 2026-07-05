@@ -8,6 +8,9 @@
 
 #define GRCL_INPROCESS_MAX_PAYLOAD_BYTES 1024u
 #define GRCL_INPROCESS_QUEUE_CAPACITY 8u
+#define GRCL_INPROCESS_MAX_PARAMETERS 8u
+#define GRCL_INPROCESS_PARAMETER_NAME_BYTES 128u
+#define GRCL_INPROCESS_PARAMETER_VALUE_BYTES 1024u
 
 typedef struct grcl_inprocess_message {
   size_t size;
@@ -63,6 +66,15 @@ typedef struct grcl_inprocess_response_queue {
   size_t head;
   size_t count;
 } grcl_inprocess_response_queue_t;
+
+typedef struct grcl_inprocess_param_entry {
+  int in_use;
+  size_t name_offset;
+  size_t name_size;
+  grcl_param_type_t type;
+  size_t value_offset;
+  size_t value_size;
+} grcl_inprocess_param_entry_t;
 
 struct grcl_backend_node_state {
   struct grcl_backend_node_state * next;
@@ -122,6 +134,12 @@ struct grcl_backend_runtime_state {
   grcl_inprocess_request_queue_t pending_requests;
   grcl_inprocess_response_queue_t pending_responses;
   grcl_inprocess_request_record_t request_records[GRCL_INPROCESS_QUEUE_CAPACITY * 4u];
+  grcl_inprocess_param_entry_t params[GRCL_INPROCESS_MAX_PARAMETERS];
+  size_t param_count;
+  size_t param_name_bytes_used;
+  size_t param_value_bytes_used;
+  unsigned char param_name_storage[GRCL_INPROCESS_PARAMETER_NAME_BYTES];
+  unsigned char param_value_storage[GRCL_INPROCESS_PARAMETER_VALUE_BYTES];
 };
 
 static char * grcl_inprocess_copy_string(const char * value)
@@ -141,6 +159,68 @@ static char * grcl_inprocess_copy_string(const char * value)
 
   memcpy(copy, value, bytes);
   return copy;
+}
+
+static int grcl_inprocess_name_valid(const char * value)
+{
+  return value != NULL && value[0] != '\0';
+}
+
+static int grcl_inprocess_param_type_valid(grcl_param_type_t type)
+{
+  return type == GRCL_PARAM_TYPE_BOOL ||
+    type == GRCL_PARAM_TYPE_INT64 ||
+    type == GRCL_PARAM_TYPE_UINT64 ||
+    type == GRCL_PARAM_TYPE_FLOAT64 ||
+    type == GRCL_PARAM_TYPE_STRING ||
+    type == GRCL_PARAM_TYPE_BYTES;
+}
+
+static const char * grcl_inprocess_param_name(
+  const grcl_backend_runtime_state_t * backend_state,
+  const grcl_inprocess_param_entry_t * entry)
+{
+  if (backend_state == NULL || entry == NULL || !entry->in_use) {
+    return NULL;
+  }
+
+  return (const char *)(backend_state->param_name_storage + entry->name_offset);
+}
+
+static const unsigned char * grcl_inprocess_param_value(
+  const grcl_backend_runtime_state_t * backend_state,
+  const grcl_inprocess_param_entry_t * entry)
+{
+  if (backend_state == NULL || entry == NULL || !entry->in_use) {
+    return NULL;
+  }
+
+  return backend_state->param_value_storage + entry->value_offset;
+}
+
+static grcl_inprocess_param_entry_t * grcl_inprocess_find_param_entry(
+  grcl_backend_runtime_state_t * backend_state,
+  const char * name)
+{
+  if (backend_state == NULL || !grcl_inprocess_name_valid(name)) {
+    return NULL;
+  }
+
+  for (size_t i = 0u; i < GRCL_INPROCESS_MAX_PARAMETERS; ++i) {
+    grcl_inprocess_param_entry_t * entry = &backend_state->params[i];
+    const char * entry_name = NULL;
+
+    if (!entry->in_use) {
+      continue;
+    }
+
+    entry_name = grcl_inprocess_param_name(backend_state, entry);
+    if (entry_name != NULL && strcmp(entry_name, name) == 0) {
+      return entry;
+    }
+  }
+
+  return NULL;
 }
 
 static grcl_result_t grcl_inprocess_queue_push(
@@ -589,6 +669,233 @@ static grcl_result_t grcl_inprocess_get_diagnostics(
   }
 
   *out_record_count = 0u;
+  return GRCL_OK;
+}
+
+static grcl_result_t grcl_inprocess_runtime_param_set(
+  grcl_backend_runtime_state_t * backend_state,
+  const grcl_param_record_t * param)
+{
+  grcl_inprocess_param_entry_t * existing_entry;
+  grcl_inprocess_param_entry_t new_entries[GRCL_INPROCESS_MAX_PARAMETERS];
+  unsigned char new_name_storage[GRCL_INPROCESS_PARAMETER_NAME_BYTES];
+  unsigned char new_value_storage[GRCL_INPROCESS_PARAMETER_VALUE_BYTES];
+  size_t name_bytes_used = 0u;
+  size_t value_bytes_used = 0u;
+  size_t entry_count = 0u;
+  size_t name_size;
+  int replaced = 0;
+
+  if (backend_state == NULL || param == NULL ||
+    !grcl_inprocess_name_valid(param->name) ||
+    !grcl_inprocess_param_type_valid(param->type) ||
+    (param->value_size > 0u && param->value == NULL)) {
+    return GRCL_ERROR_INVALID_ARGUMENT;
+  }
+
+  existing_entry = grcl_inprocess_find_param_entry(backend_state, param->name);
+  if (existing_entry == NULL &&
+    backend_state->param_count >= GRCL_INPROCESS_MAX_PARAMETERS) {
+    return GRCL_ERROR_CAPACITY_EXCEEDED;
+  }
+
+  memset(new_entries, 0, sizeof(new_entries));
+  memset(new_name_storage, 0, sizeof(new_name_storage));
+  memset(new_value_storage, 0, sizeof(new_value_storage));
+  name_size = strlen(param->name) + 1u;
+
+  for (size_t i = 0u; i < GRCL_INPROCESS_MAX_PARAMETERS; ++i) {
+    const grcl_inprocess_param_entry_t * source = &backend_state->params[i];
+    const char * source_name = NULL;
+    const unsigned char * source_value = NULL;
+    const char * write_name = NULL;
+    const void * write_value = NULL;
+    size_t write_name_size = 0u;
+    size_t write_value_size = 0u;
+    grcl_param_type_t write_type = GRCL_PARAM_TYPE_UNKNOWN;
+
+    if (!source->in_use) {
+      continue;
+    }
+
+    if (source == existing_entry) {
+      write_name = param->name;
+      write_name_size = name_size;
+      write_value = param->value;
+      write_value_size = param->value_size;
+      write_type = param->type;
+      replaced = 1;
+    } else {
+      source_name = grcl_inprocess_param_name(backend_state, source);
+      source_value = grcl_inprocess_param_value(backend_state, source);
+      write_name = source_name;
+      write_name_size = source->name_size;
+      write_value = source_value;
+      write_value_size = source->value_size;
+      write_type = source->type;
+    }
+
+    if (name_bytes_used + write_name_size > GRCL_INPROCESS_PARAMETER_NAME_BYTES ||
+      value_bytes_used + write_value_size > GRCL_INPROCESS_PARAMETER_VALUE_BYTES) {
+      return GRCL_ERROR_CAPACITY_EXCEEDED;
+    }
+
+    memcpy(new_name_storage + name_bytes_used, write_name, write_name_size);
+    if (write_value_size > 0u) {
+      memcpy(new_value_storage + value_bytes_used, write_value, write_value_size);
+    }
+
+    new_entries[entry_count].in_use = 1;
+    new_entries[entry_count].name_offset = name_bytes_used;
+    new_entries[entry_count].name_size = write_name_size;
+    new_entries[entry_count].type = write_type;
+    new_entries[entry_count].value_offset = value_bytes_used;
+    new_entries[entry_count].value_size = write_value_size;
+
+    name_bytes_used += write_name_size;
+    value_bytes_used += write_value_size;
+    ++entry_count;
+  }
+
+  if (!replaced) {
+    if (name_bytes_used + name_size > GRCL_INPROCESS_PARAMETER_NAME_BYTES ||
+      value_bytes_used + param->value_size > GRCL_INPROCESS_PARAMETER_VALUE_BYTES) {
+      return GRCL_ERROR_CAPACITY_EXCEEDED;
+    }
+
+    memcpy(new_name_storage + name_bytes_used, param->name, name_size);
+    if (param->value_size > 0u) {
+      memcpy(new_value_storage + value_bytes_used, param->value, param->value_size);
+    }
+
+    new_entries[entry_count].in_use = 1;
+    new_entries[entry_count].name_offset = name_bytes_used;
+    new_entries[entry_count].name_size = name_size;
+    new_entries[entry_count].type = param->type;
+    new_entries[entry_count].value_offset = value_bytes_used;
+    new_entries[entry_count].value_size = param->value_size;
+
+    name_bytes_used += name_size;
+    value_bytes_used += param->value_size;
+    ++entry_count;
+  }
+
+  memset(backend_state->params, 0, sizeof(backend_state->params));
+  memset(backend_state->param_name_storage, 0, sizeof(backend_state->param_name_storage));
+  memset(backend_state->param_value_storage, 0, sizeof(backend_state->param_value_storage));
+  memcpy(backend_state->params, new_entries, sizeof(new_entries));
+  if (name_bytes_used > 0u) {
+    memcpy(backend_state->param_name_storage, new_name_storage, name_bytes_used);
+  }
+  if (value_bytes_used > 0u) {
+    memcpy(backend_state->param_value_storage, new_value_storage, value_bytes_used);
+  }
+  backend_state->param_count = entry_count;
+  backend_state->param_name_bytes_used = name_bytes_used;
+  backend_state->param_value_bytes_used = value_bytes_used;
+  return GRCL_OK;
+}
+
+static grcl_result_t grcl_inprocess_runtime_param_get(
+  grcl_backend_runtime_state_t * backend_state,
+  const char * name,
+  grcl_param_record_t * out_param,
+  void * value_buffer,
+  size_t value_buffer_capacity,
+  size_t * out_value_size)
+{
+  grcl_inprocess_param_entry_t * entry;
+  const char * stored_name;
+  const unsigned char * stored_value;
+
+  if (backend_state == NULL || !grcl_inprocess_name_valid(name) ||
+    out_param == NULL || out_value_size == NULL ||
+    (value_buffer_capacity > 0u && value_buffer == NULL)) {
+    return GRCL_ERROR_INVALID_ARGUMENT;
+  }
+
+  memset(out_param, 0, sizeof(*out_param));
+  entry = grcl_inprocess_find_param_entry(backend_state, name);
+  if (entry == NULL) {
+    return GRCL_ERROR_NOT_FOUND;
+  }
+
+  *out_value_size = entry->value_size;
+  if (value_buffer_capacity < entry->value_size) {
+    return GRCL_ERROR_CAPACITY_EXCEEDED;
+  }
+
+  stored_name = grcl_inprocess_param_name(backend_state, entry);
+  stored_value = grcl_inprocess_param_value(backend_state, entry);
+  out_param->struct_size = sizeof(*out_param);
+  out_param->abi_version = GRCL_C_ABI_VERSION_CURRENT;
+  out_param->name = stored_name;
+  out_param->type = entry->type;
+  out_param->value = value_buffer;
+  out_param->value_size = entry->value_size;
+  if (entry->value_size > 0u) {
+    memcpy(value_buffer, stored_value, entry->value_size);
+  }
+
+  return GRCL_OK;
+}
+
+static grcl_result_t grcl_inprocess_runtime_param_list(
+  grcl_backend_runtime_state_t * backend_state,
+  char * out_names,
+  size_t names_capacity,
+  size_t * out_names_size,
+  size_t * out_param_count)
+{
+  size_t required_size = 0u;
+  size_t written = 0u;
+
+  if (backend_state == NULL || out_names_size == NULL || out_param_count == NULL ||
+    (names_capacity > 0u && out_names == NULL)) {
+    return GRCL_ERROR_INVALID_ARGUMENT;
+  }
+
+  *out_param_count = backend_state->param_count;
+  for (size_t i = 0u; i < backend_state->param_count; ++i) {
+    const grcl_inprocess_param_entry_t * entry = &backend_state->params[i];
+
+    if (!entry->in_use) {
+      continue;
+    }
+
+    required_size += entry->name_size - 1u;
+    if (written + 1u < backend_state->param_count) {
+      required_size += 1u;
+    }
+    ++written;
+  }
+  *out_names_size = required_size;
+
+  if (names_capacity < required_size) {
+    return GRCL_ERROR_CAPACITY_EXCEEDED;
+  }
+
+  written = 0u;
+  for (size_t i = 0u; i < backend_state->param_count; ++i) {
+    const grcl_inprocess_param_entry_t * entry = &backend_state->params[i];
+    const char * stored_name;
+    size_t copy_size;
+
+    if (!entry->in_use) {
+      continue;
+    }
+
+    stored_name = grcl_inprocess_param_name(backend_state, entry);
+    copy_size = entry->name_size - 1u;
+    if (copy_size > 0u) {
+      memcpy(out_names + written, stored_name, copy_size);
+      written += copy_size;
+    }
+    if (written < required_size) {
+      out_names[written++] = '\n';
+    }
+  }
+
   return GRCL_OK;
 }
 
@@ -1518,7 +1825,10 @@ static const grcl_backend_ops_t grcl_native_inprocess_backend_ops = {
   .destroy_executor = grcl_inprocess_destroy_executor,
   .executor_add_node = grcl_inprocess_executor_add_node,
   .executor_remove_node = grcl_inprocess_executor_remove_node,
-  .executor_spin_once = grcl_inprocess_executor_spin_once
+  .executor_spin_once = grcl_inprocess_executor_spin_once,
+  .runtime_param_set = grcl_inprocess_runtime_param_set,
+  .runtime_param_get = grcl_inprocess_runtime_param_get,
+  .runtime_param_list = grcl_inprocess_runtime_param_list
 };
 
 static const grcl_backend_descriptor_t grcl_native_inprocess_backend_descriptor_record = {

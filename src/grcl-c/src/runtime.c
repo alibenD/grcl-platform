@@ -214,6 +214,14 @@ static int grcl_runtime_is_object_mutation_allowed(const grcl_runtime_t * runtim
     runtime->state == GRCL_RUNTIME_LIFECYCLE_STATE_STOPPED);
 }
 
+static int grcl_runtime_is_live(const grcl_runtime_t * runtime)
+{
+  return runtime != NULL &&
+    (runtime->state == GRCL_RUNTIME_LIFECYCLE_STATE_INITIALIZED ||
+    runtime->state == GRCL_RUNTIME_LIFECYCLE_STATE_STARTED ||
+    runtime->state == GRCL_RUNTIME_LIFECYCLE_STATE_STOPPED);
+}
+
 static int grcl_backend_field_available(
   const grcl_backend_ops_t * ops,
   size_t field_offset,
@@ -2055,9 +2063,28 @@ grcl_result_t grcl_runtime_param_set(
   grcl_runtime_t * runtime,
   const grcl_param_record_t * param)
 {
-  (void)runtime;
-  (void)param;
-  return GRCL_ERROR_UNSUPPORTED_CAPABILITY;
+  const grcl_backend_ops_t * ops;
+
+  if (runtime == NULL || param == NULL ||
+    !grcl_required_name_valid(param->name) ||
+    param->type == GRCL_PARAM_TYPE_UNKNOWN ||
+    (param->value_size > 0u && param->value == NULL)) {
+    return GRCL_ERROR_INVALID_ARGUMENT;
+  }
+  if (!grcl_runtime_is_live(runtime)) {
+    return GRCL_ERROR_BAD_STATE;
+  }
+
+  ops = runtime->backend == NULL ? NULL : runtime->backend->ops;
+  if (!grcl_backend_field_available(
+      ops,
+      offsetof(grcl_backend_ops_t, runtime_param_set),
+      sizeof(ops->runtime_param_set),
+      ops == NULL ? NULL : (const void *)ops->runtime_param_set)) {
+    return GRCL_ERROR_UNSUPPORTED_CAPABILITY;
+  }
+
+  return ops->runtime_param_set(runtime->backend_state, param);
 }
 
 grcl_result_t grcl_runtime_param_get(
@@ -2068,13 +2095,33 @@ grcl_result_t grcl_runtime_param_get(
   size_t value_buffer_capacity,
   size_t * out_value_size)
 {
-  (void)runtime;
-  (void)name;
-  (void)out_param;
-  (void)value_buffer;
-  (void)value_buffer_capacity;
-  (void)out_value_size;
-  return GRCL_ERROR_UNSUPPORTED_CAPABILITY;
+  const grcl_backend_ops_t * ops;
+
+  if (runtime == NULL || !grcl_required_name_valid(name) ||
+    out_param == NULL || out_value_size == NULL ||
+    (value_buffer_capacity > 0u && value_buffer == NULL)) {
+    return GRCL_ERROR_INVALID_ARGUMENT;
+  }
+  if (!grcl_runtime_is_live(runtime)) {
+    return GRCL_ERROR_BAD_STATE;
+  }
+
+  ops = runtime->backend == NULL ? NULL : runtime->backend->ops;
+  if (!grcl_backend_field_available(
+      ops,
+      offsetof(grcl_backend_ops_t, runtime_param_get),
+      sizeof(ops->runtime_param_get),
+      ops == NULL ? NULL : (const void *)ops->runtime_param_get)) {
+    return GRCL_ERROR_UNSUPPORTED_CAPABILITY;
+  }
+
+  return ops->runtime_param_get(
+    runtime->backend_state,
+    name,
+    out_param,
+    value_buffer,
+    value_buffer_capacity,
+    out_value_size);
 }
 
 grcl_result_t grcl_runtime_param_list(
@@ -2084,10 +2131,29 @@ grcl_result_t grcl_runtime_param_list(
   size_t * out_names_size,
   size_t * out_param_count)
 {
-  (void)runtime;
-  (void)out_names;
-  (void)names_capacity;
-  (void)out_names_size;
-  (void)out_param_count;
-  return GRCL_ERROR_UNSUPPORTED_CAPABILITY;
+  const grcl_backend_ops_t * ops;
+
+  if (runtime == NULL || out_names_size == NULL || out_param_count == NULL ||
+    (names_capacity > 0u && out_names == NULL)) {
+    return GRCL_ERROR_INVALID_ARGUMENT;
+  }
+  if (!grcl_runtime_is_live(runtime)) {
+    return GRCL_ERROR_BAD_STATE;
+  }
+
+  ops = runtime->backend == NULL ? NULL : runtime->backend->ops;
+  if (!grcl_backend_field_available(
+      ops,
+      offsetof(grcl_backend_ops_t, runtime_param_list),
+      sizeof(ops->runtime_param_list),
+      ops == NULL ? NULL : (const void *)ops->runtime_param_list)) {
+    return GRCL_ERROR_UNSUPPORTED_CAPABILITY;
+  }
+
+  return ops->runtime_param_list(
+    runtime->backend_state,
+    out_names,
+    names_capacity,
+    out_names_size,
+    out_param_count);
 }

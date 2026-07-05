@@ -16,6 +16,7 @@ diagnostics_negative_state_source="$repo_root/src/grcl-c/tests/diagnostics_negat
 object_ownership_source="$repo_root/src/grcl-c/tests/object_ownership_test.c"
 pub_sub_source="$repo_root/src/grcl-c/tests/pub_sub_test.c"
 service_client_source="$repo_root/src/grcl-c/tests/service_client_test.c"
+params_source="$repo_root/src/grcl-c/tests/params_test.c"
 
 default_workspace_root=
 if [ "$(basename -- "$(dirname -- "$repo_root")")" = "src" ]; then
@@ -44,6 +45,7 @@ diagnostics_negative_state_binary="$output_root/diagnostics_negative_state_test"
 object_ownership_binary="$output_root/object_ownership_test"
 pub_sub_binary="$output_root/pub_sub_test"
 service_client_binary="$output_root/service_client_test"
+params_binary="$output_root/params_test"
 
 run_step() {
   step_name=$1
@@ -98,5 +100,10 @@ run_step "service/client compile" \
   cc -std=c11 -I "$include_dir" "$runtime_source" "$null_backend_source" \
     "$inprocess_backend_source" "$service_client_source" -o "$service_client_binary"
 run_step "service/client run" "$service_client_binary"
+
+run_step "params compile" \
+  cc -std=c11 -I "$include_dir" "$runtime_source" "$null_backend_source" \
+    "$inprocess_backend_source" "$params_source" -o "$params_binary"
+run_step "params run" "$params_binary"
 
 printf 'PASS m1 test harness (%s)\n' "$output_root"

@@ -86,14 +86,13 @@ multi-repository orchestration, and generated artifacts need a stable workspace-
   native backend, TDD implementation batches, C examples, and local conformance integration.
   Design review has passed after architecture review `accepted_with_notes`, ABI/SPI re-review
   `accepted_with_notes`, and test-plan re-review `accepted`. M3-C API/SPI header contract is
-  complete after independent audit `accepted_with_notes`; M3-D core object ownership is the active
-  implementation batch. M3-D may extend `null/native-test` with object-lifecycle no-op backend
-  hooks only; it must not implement pub/sub delivery, service/client routing, executor dispatch, or
-  params. M3-D is complete after independent audit `accepted_with_notes`. M3-E pub/sub routing is
-  complete after re-audit `accepted_with_notes`. M3-F service/client routing is complete after
-  independent audit `accepted_with_notes`; M3-G local runtime params is the active implementation
-  batch. M3-D audit recorded a non-blocking `runtime.c` create-failure cleanup hardening note; M3-F
-  implemented a narrow cleanup hardening change when that path became testable.
+  complete after independent audit `accepted_with_notes`. M3-D core object ownership is complete
+  after independent audit `accepted_with_notes`. M3-E pub/sub routing is complete after re-audit
+  `accepted_with_notes`. M3-F service/client routing is complete after independent audit
+  `accepted_with_notes`. M3-G local runtime params is complete after independent audit `accepted`;
+  M3-H native backend capability update is the active implementation batch. M3-D audit recorded a
+  non-blocking `runtime.c` create-failure cleanup hardening note; M3-F implemented a narrow cleanup
+  hardening change when that path became testable.
 - post-M3 implementation remains unauthorized unless a new user-approved goal window records a
   goal-specific plan, allowed files, verification strategy, implementation subagents, and
   independent audit gates.
