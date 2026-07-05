@@ -11,18 +11,17 @@ user-approved G5 implementation window is complete after G5-G independent audit 
 Language SDK Wrapper Skeletons is complete after G6-C/G6-D/G6-E independent audit acceptance and
 G6-F closeout. M3 Core Middleware Contract And Native In-Process Backend is complete after M3-J
 closeout audit acceptance. M4 GRCL-C Core Contract Stabilization And Conformance Expansion is
-active under the user's approved goal request.
+complete after M4-G closeout audit acceptance.
 
 ## Boundaries
 
 - Workspace root: `/Users/aliben/Project/grcl-platform_ws`
 - Repository root: `/Users/aliben/Project/grcl-platform_ws/src/grcl-platform`
-- Code implementation: M4 contract-hardening batches are active after M4 plan filing and design
-  review gate acceptance
+- Code implementation: paused pending the next user-approved goal
 - Completed work: M1 first runnable `grcl-c` core with null/native-test backend, using task briefs,
   implementation subagents, independent audit subagents, and TDD-style verification
-- Allowed work now: M4-F local conformance integration for the M4 contract runner through
-  implementation subagent and independent audit
+- Allowed work now: no post-M4 implementation milestone is authorized without a new
+  user-approved goal
 - Blocked outside M3 without a new user-approved goal window: ROS2, DDS, sockets, shared memory,
   multi-process transport, simulator backend, MCU runtime, gateway, management plane, auth, remote
   management, event streams, Docker, CI, external `grcl` migration, IDL/codegen, C++/Python
@@ -111,8 +110,8 @@ active under the user's approved goal request.
 | GQ-080 | Execute M4-C core lifecycle and ownership contract tests | GQ-079 | complete | audit status `accepted`; `runtime.c` undersized options drift fixed; M4 runner added; M1 harness and M3 examples remained green |
 | GQ-081 | Execute M4-D messaging and executor contract tests | GQ-080 | complete | audit status `accepted_with_notes`; bounded `spin_once` contract implemented; non-blocking note to consider a response-type-only mismatch assertion later |
 | GQ-082 | Execute M4-E runtime params and capability contract tests | GQ-081 | complete | audit status `accepted`; params/capability contract tests added to M4 runner; no production source changes required |
-| GQ-083 | Execute M4-F local conformance integration | GQ-082 | in_progress | requires implementation subagent and independent audit; local runner only, no CI/Docker/package rollout |
-| GQ-084 | Execute M4-G closeout verification and durable status update | GQ-083 | pending | requires M4-F audit acceptance and independent closeout audit |
+| GQ-083 | Execute M4-F local conformance integration | GQ-082 | complete | audit status `accepted`; top-level local conformance runner now includes 9 stages with M4 contract tests after M3 examples |
+| GQ-084 | Execute M4-G closeout verification and durable status update | GQ-083 | complete | closeout audit status `accepted_with_notes`; full repo/workspace/override conformance, M4 runner, M1 harness, M3 examples, SDK boundary, docs, diff hygiene, and artifact scan passed |
 
 ## Execution Rules
 
@@ -138,13 +137,12 @@ active under the user's approved goal request.
   M3 scope: in-process native backend, C API/SPI contract, executor pull, pub/sub bytes,
   service/client bytes, local runtime params, C tests, C examples, and local conformance
   integration.
-- M4 GRCL-C Core Contract Stabilization And Conformance Expansion is active. It authorizes only
-  the approved M4 scope after design review gates pass: contract-hardening tests for the completed
-  M3 `grcl-c` surface, narrow fixes driven by failing contract tests, local conformance expansion,
-  and closeout. M4 explicitly does not authorize new public feature areas, ROS2, networking,
-  simulator, MCU runtime, management plane, auth, remote management, event streams, Docker, CI,
-  package/build-system rollout, external `grcl` migration, IDL/codegen, or C++/Python example
-  acceptance.
+- M4 GRCL-C Core Contract Stabilization And Conformance Expansion is complete. It delivered
+  contract-hardening tests for the completed M3 `grcl-c` surface, narrow fixes driven by failing
+  contract tests, local conformance expansion, and closeout. M4 did not authorize or introduce new
+  public feature areas, ROS2, networking, simulator, MCU runtime, management plane, auth, remote
+  management, event streams, Docker, CI, package/build-system rollout, external `grcl` migration,
+  IDL/codegen, or C++/Python example acceptance.
 - If a future task becomes implementation work, use file-based task briefs and independent audit
   subagents according to `docs/architecture/agentic-delivery-governance.md`.
 - If validation fails, update this queue with the failure and fix task before claiming completion.
@@ -163,6 +161,6 @@ local harness, artifact-root behavior, report/audit inventory, and forbidden-sco
 Conformance Harness v0.1 is complete after G5-G independent audit acceptance. G6 Language SDK
 Wrapper Skeletons is complete after G6-C/G6-D/G6-E independent audit acceptance and G6-F closeout
 verification. M3 Core Middleware Contract And Native In-Process Backend is complete under GQ-068
-through GQ-077. M4 GRCL-C Core Contract Stabilization And Conformance Expansion is active under
-GQ-078 through GQ-084, with GQ-083 as the current execution point. No post-M4 implementation
-milestone is authorized from this queue state alone.
+through GQ-077. M4 GRCL-C Core Contract Stabilization And Conformance Expansion is complete under
+GQ-078 through GQ-084. No post-M4 implementation milestone is authorized from this queue state
+alone.

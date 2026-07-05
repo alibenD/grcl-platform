@@ -11,7 +11,7 @@ and is treated here as the future `grcl-cpp` module candidate, not as the whole 
 ## Current Status
 
 - Architecture phase: `active`
-- Runtime/product code implementation phase: `paused except user-approved M4 contract-hardening batches`
+- Runtime/product code implementation phase: `paused pending next user-approved goal`
 - Bounded G1 contract-artifact creation: `complete under task briefs and independent audit`
 - G2 `grcl-c` ABI Contract v0.1: `complete`
 - G3 Backend SPI API Shape v0.1 design baseline: `complete`
@@ -19,9 +19,9 @@ and is treated here as the future `grcl-cpp` module candidate, not as the whole 
 - G5 Conformance Harness v0.1: `complete under task briefs, TDD-style verification, and independent audit`
 - G6 Language SDK Wrapper Skeletons: `complete under task briefs, TDD-style verification, and independent audit`
 - M3 Core Middleware Contract And Native In-Process Backend: `complete under task briefs, TDD-style verification, and independent audit`
-- M4 GRCL-C Core Contract Stabilization And Conformance Expansion: `M4-F active`
-- Primary current output: M4-F local conformance integration for the M4 contract runner
-- Autonomous Goal Runner mode completed for M1, G5, G6, and M3; M4 is active under its own approved goal
+- M4 GRCL-C Core Contract Stabilization And Conformance Expansion: `complete under task briefs, TDD-style verification, and independent audit`
+- Primary current output: M4 complete; next implementation milestone requires a new user-approved goal
+- Autonomous Goal Runner mode completed for M1, G5, G6, M3, and M4
 - G1-A through G1-E passed independent audit
 - M1-B through M1-G passed independent audit, with M1-G accepted with non-blocking repository
   hygiene notes

@@ -99,8 +99,8 @@ multi-repository orchestration, and generated artifacts need a stable workspace-
 - post-M3 implementation remains unauthorized unless a new user-approved goal window records a
   goal-specific plan, allowed files, verification strategy, implementation subagents, and
   independent audit gates.
-- M4 GRCL-C Core Contract Stabilization And Conformance Expansion is active under the user's
-  approved goal request. M4 is scoped to stabilizing the completed M3 `grcl-c` local core contract
+- M4 GRCL-C Core Contract Stabilization And Conformance Expansion is complete under the user's
+  approved goal request. M4 stabilized the completed M3 `grcl-c` local core contract
   through design review, negative-path contract tests, conformance expansion, implementation
   subagents, and independent audits. M4 does not authorize new public feature areas, ROS2,
   networking, simulator, MCU runtime, management plane, auth, remote management, event streams, CI,
@@ -111,8 +111,10 @@ multi-repository orchestration, and generated artifacts need a stable workspace-
   ownership contract tests are complete after independent audit acceptance. M4-D messaging and
   executor contract tests are complete after independent audit acceptance with a non-blocking
   response-type-mismatch coverage note. M4-E runtime params and capability contract tests are
-  complete after independent audit acceptance. The current execution point is M4-F local
-  conformance integration.
+  complete after independent audit acceptance. M4-F local conformance integration is complete after
+  independent audit acceptance. M4-G closeout verification is complete after closeout audit
+  acceptance with notes. No post-M4 implementation milestone is authorized without a new
+  user-approved goal.
 - Management-plane concept modeling is deferred as future G10 input unless explicitly reprioritized.
 - Runtime capability exchange is a design decision, not an implemented runtime feature.
 - Active goal execution is tracked in `docs/status/goal-execution-queue.md`.
