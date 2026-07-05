@@ -177,11 +177,9 @@ multi-repository orchestration, and generated artifacts need a stable workspace-
   `GRCL_PLATFORM_ARTIFACT_ROOT=/tmp/grcl-platform-m5-h-closeout scripts/run-conformance.sh`.
 - M5 Local Core Product Surface And GRCL-CPP Completion is now complete for the approved
   local-core/native-backend `grcl-c` plus `grcl-cpp` scope: the C and C++ local-core surfaces,
-  tests, examples, and top-level local conformance all pass with fresh evidence. This does not
-  mean the whole GRCL platform is complete, and it does not authorize any post-M5 implementation
-  milestone by itself.
-- Independent closeout audit remains the final coordination gate before the main agent closes the
-  thread goal or proposes any subsequent milestone.
+  tests, examples, and top-level local conformance all pass with fresh evidence, and the
+  independent closeout audit has been accepted. This does not mean the whole GRCL platform is
+  complete, and it does not authorize any post-M5 implementation milestone by itself.
 - M5 does not authorize ROS2, DDS, sockets, shared memory, networking, multi-process transport,
   simulator backend, MCU runtime, gateway runtime, management plane, auth, remote management,
   event streams, CI, Docker, package manager, CMake, colcon, release packaging, external `grcl`
@@ -371,8 +369,7 @@ scope is now complete under fresh local verification evidence for the local-core
 networking, simulator, MCU runtime, gateway runtime, management plane, auth, remote management,
 event streams, CI, Docker, package/build-system rollout, release packaging, IDL/codegen, external
 `grcl` migration, or `grcl-py` expansion beyond the completed G6 boundary skeleton, and it does
-not authorize a post-M5 milestone without an independent closeout audit plus a new user-approved
-goal window.
+not authorize a post-M5 milestone without a new user-approved goal window.
 
 Stop conditions for this continuous window:
 

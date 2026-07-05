@@ -11,7 +11,7 @@ and is treated here as the future `grcl-cpp` module candidate, not as the whole 
 ## Current Status
 
 - Architecture phase: `active`
-- Runtime/product code implementation phase: `no new post-M5 implementation milestone authorized; M5 local-core/native-backend plus grcl-cpp scope is locally verified and awaiting independent closeout audit`
+- Runtime/product code implementation phase: `M5 local-core/native-backend plus grcl-cpp scope is complete with accepted closeout audit; no new post-M5 implementation milestone is authorized from status alone`
 - Bounded G1 contract-artifact creation: `complete under task briefs and independent audit`
 - G2 `grcl-c` ABI Contract v0.1: `complete`
 - G3 Backend SPI API Shape v0.1 design baseline: `complete`
@@ -20,7 +20,7 @@ and is treated here as the future `grcl-cpp` module candidate, not as the whole 
 - G6 Language SDK Wrapper Skeletons: `complete under task briefs, TDD-style verification, and independent audit`
 - M3 Core Middleware Contract And Native In-Process Backend: `complete under task briefs, TDD-style verification, and independent audit`
 - M4 GRCL-C Core Contract Stabilization And Conformance Expansion: `complete under task briefs, TDD-style verification, and independent audit`
-- M5 Local Core Product Surface And GRCL-CPP Completion: `implementation and final local verification complete for the approved local-core/native-backend plus grcl-cpp scope; independent closeout audit remains the final gate`
+- M5 Local Core Product Surface And GRCL-CPP Completion: `complete for the approved local-core/native-backend plus grcl-cpp scope, with accepted closeout audit and passing local verification`
 - Primary current output: completed local-core/native-backend `grcl-c` baseline plus full approved `grcl-cpp` wrapper surface, with passing C/C++ tests, runnable C/C++ examples, and top-level local conformance
 - Autonomous Goal Runner mode completed for M1, G5, G6, M3, M4, and the approved M5 implementation scope; later milestones still require a new user-approved goal window
 - G1-A through G1-E passed independent audit

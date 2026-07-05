@@ -128,7 +128,7 @@ Current recovery and queue state:
 - [Middleware Goal Roadmap](status/middleware-goal-roadmap.md)
 - [Workspace Bootstrap](status/workspace-bootstrap.md)
 - M5 status boundary: local-core/native-backend `grcl-c` plus approved `grcl-cpp` scope is fully
-  implemented and locally verified; independent closeout audit remains the final milestone gate
+  implemented, locally verified, and closed by accepted independent closeout audit
 
 ## Current Artifacts
 

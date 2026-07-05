@@ -156,8 +156,8 @@ implementation batch.
   IDL/codegen, or C++/Python example acceptance.
 - M5 Local Core Product Surface And GRCL-CPP Completion is complete for the approved
   native-backend local-core `grcl-c` surface plus full `grcl-cpp` wrapping and local verification.
-  This queue state does not authorize any post-M5 implementation milestone; an independent closeout
-  audit and a new user-approved goal window remain required before later milestone work.
+  This queue state does not authorize any post-M5 implementation milestone; a new user-approved
+  goal window remains required before later milestone work.
 - If a future task becomes implementation work, use file-based task briefs and independent audit
   subagents according to `docs/architecture/agentic-delivery-governance.md`.
 - If validation fails, update this queue with the failure and fix task before claiming completion.
@@ -179,5 +179,4 @@ verification. M3 Core Middleware Contract And Native In-Process Backend is compl
 through GQ-077. M4 GRCL-C Core Contract Stabilization And Conformance Expansion is complete under
 GQ-078 through GQ-084. M5 Local Core Product Surface And GRCL-CPP Completion was authorized under
 GQ-085 and is now locally complete through GQ-092 for the approved local-core/native-backend plus
-`grcl-cpp` scope. The next dependency-ordered coordination step is the independent closeout audit,
-not automatic advancement into a later milestone.
+`grcl-cpp` scope with accepted closeout audit. No later milestone is automatically authorized.
