@@ -1,127 +1,49 @@
-# GRCL Platform Repository Rules
+# GRCL Platform AGENTS (Simplified)
 
-These rules are repository-local and define how agents should work in `grcl-platform`.
+## 目标与边界
+- 该文件定义 `src/grcl-platform` 仓库内的协作规则。
+- 规则为执行约束，不替代代码和文档作为真理来源。
 
-## Source Of Truth
+## 必须遵循的源与优先级
+- 优先级：仓库文档 > 任务文档 > 会话上下文。
+- 新会话应先读取：
+  - `docs/status/current-context.md`
+  - `README.md`
+  - `docs/adr/`
+  - `docs/architecture/`
+  - `docs/plans/`（如有）
+- 系统级与架构性决策必须在上述文档中留痕。
 
-- Do not rely on conversation history as the authoritative engineering record.
-- New sessions should recover current state from `docs/status/current-context.md`.
-- System-level decisions must be recorded in `docs/adr/`.
-- Current architecture specifications must be recorded in `docs/architecture/`.
-- Implementation sequencing must be recorded in `docs/plans/`.
-- If a decision affects an implementation repository, update this repository first, then update the
-  implementation repository.
+## 启动与路径约定
+- 工作区根：`/home/aliben/project/grcl-platform_ws`
+- 仓库根：`/home/aliben/project/grcl-platform_ws/src/grcl-platform`
+- 在工作区根执行仓库命令时优先使用 `git -C src/grcl-platform ...`。
+- 若历史对话与仓库文档冲突，先以仓库文档为准并确认后再修改。
 
-## Session Bootstrap
+## 任务分流与执行模式
+- 每个任务开始前先分类：架构设计、架构迭代、功能开发、缺陷修复、重构、测试/基础设施、文档行为变更、文档编辑、发布治理。
+- 影响行为、契约、队列/恢复状态、治理策略的工作不得使用文档编辑 fast-path。
+- 当前实现阶段若未过架构方案评审，默认不做运行时/SDK/构建系统代码开发；允许文档、架构分析与规划。
+- 实施任务须有 `docs/plans/` 任务计划（依赖、顺序、验证、用户评审点）。
+- 实施任务建议遵循 `one task -> one commit`，并在提交后更新一项可恢复状态面（如 `current-context`、计划、任务台账）。
 
-- Prefer opening long-running Codex sessions at the workspace root:
-  `/Users/aliben/Project/grcl-platform_ws`.
-- The repository root is `/Users/aliben/Project/grcl-platform_ws/src/grcl-platform`.
-- When running from the workspace root, use `git -C src/grcl-platform ...` for repository commands.
-- Read the workspace-root `AGENTS.md`, this file, `README.md`, and
-  `docs/status/current-context.md` before resuming architecture or implementation planning.
-- The workspace-root session boundary is preferred because Docker containers, future multi-repo
-  source trees, and generated artifacts need access to the whole workspace without repeated
-  permission escalation.
-- If prior chat history conflicts with repository documents, treat repository documents as the
-  baseline and ask for confirmation before editing.
+## 架构与实现边界
+- `grcl-c` 为运行时核心语义边界（生命周期、对象所有权、SPI、能力交换、语义一致性）。
+- `grcl-cpp`、`grcl-py` 与未来 SDK 不得定义独立运行时语义。
+- MCU/RTOS 运行时按声明的 profile 实现，不默认覆盖完整 GRCL。
+- ROS2 与 GRCL 图语义应明确区分：ROS2 为用户可见节点图，GRCL 为平台参与者图。
 
-## Current Development Mode
+## 子代理与审计
+- 允许实施任务下发给子代理，但上下文放在 `.local/agentic-runs/<plan-id>/<task-id>/`。
+- 实施结果需经过独立审计后，主代理确认通过后再进入下个任务。
+- 子代理超时、终止、或未返回结果时不构成完成证据。
 
-- GRCL implementation work is paused until the platform architecture plan is reviewed.
-- Do not create runtime code, SDK code, or build-system code unless the task plan explicitly moves
-  that work into an accepted implementation phase.
-- Documentation, architecture diagrams, dependency analysis, and task planning are allowed.
+## 完成与验收
+- 无验证证据不得宣告完成。
+- 验证无法本地执行时，必须记录明确阻塞原因（环境、权限、依赖）与可复现条件。
 
-## Architecture Rules
-
-- `grcl-c` is the core contract boundary for runtime lifecycle, object ownership, backend SPI,
-  capability exchange, controlled storage, and cross-language semantic consistency.
-- `grcl-cpp`, `grcl-py`, and future SDKs must not define independent runtime semantics.
-- MCU/RTOS runtimes implement declared profiles, not full GRCL by default.
-- Runtime capability exchange and scoped graph behavior must follow the platform architecture docs.
-- ROS2 compatibility must be described accurately: ROS2 exposes a node graph to users; GRCL's
-  runtime participant graph is a GRCL platform abstraction.
-
-## Planning Rules
-
-- Every non-trivial implementation effort must have a task plan in `docs/plans/`.
-- A task plan must include dependencies, sequencing, validation, and explicit user review points.
-- Architecture design, ADR writing, and task planning should use the highest-reasoning available
-  model policy, with GPT-5.5 high effort as the preferred baseline when available.
-- Do not mark a task completed without fresh verification evidence.
-- If verification cannot run locally, record the exact environmental blocker.
-
-## Task Workflow Rules
-
-- Follow [Task Workflow Governance](docs/architecture/task-workflow-governance.md) for repository
-  task classification, lifecycle states, fast-path limits, TDD policy, commit boundaries, and
-  durable recovery updates.
-- Every task must be classified before work begins. At minimum choose between `architecture design`,
-  `architecture iteration`, `feature dev`, `bug fix`, `refactor`, `test/infrastructure`,
-  `docs-only behavior change`, `docs/editorial`, and `release/governance`.
-- Use the canonical workflow unless the task is a true `docs/editorial` fast-path case.
-- `docs/editorial` fast path is only for spelling, link, formatting, or wording cleanup that does
-  not change behavior or governance meaning.
-- Tasks that change behavior, contract meaning, queue state, recovery state, or governance policy
-  must not use the editorial fast path.
-- Implementation-facing tasks must follow TDD. Write the failing test or reproduction first, verify
-  the expected failure, then implement the minimal fix or feature, then rerun focused and required
-  regression checks.
-- A task is not complete without a task-bounded commit. GRCL Platform uses `one task -> one
-  commit`.
-- After the commit, update at least one durable recovery surface such as `docs/status/current-context.md`,
-  the goal queue, the relevant plan, or the task ledger.
-
-## Agentic Delivery Rules
-
-- Follow [Task Workflow Governance](docs/architecture/task-workflow-governance.md) first, then
-  [Agentic Delivery Governance](docs/architecture/agentic-delivery-governance.md) for
-  implementation-stage task execution.
-- The main agent owns task queue management, context curation, subagent dispatch, audit gates, and
-  final status updates.
-- Implementation tasks should be dispatched to isolated subagents with self-contained task briefs.
-- Implementation subagents may use GPT-5.4 medium effort by default for narrow tasks, but the main
-  agent must escalate model capability for ABI, protocol, concurrency, cross-module, safety, or
-  architecture-sensitive work.
-- Every implementation subagent result must be followed by an independent audit subagent that
-  compares the implementation against the task plan, architecture documents, changed files, and
-  verification evidence.
-- The main agent must not proceed to the next implementation task until the independent audit
-  returns `accepted` or an explicitly justified `accepted_with_notes`.
-- If audit returns `rejected`, the main agent must create a narrow fix task and repeat the
-  implementation and audit loop.
-- Use file-based task exchange under `.local/agentic-runs/<plan-id>/<task-id>/`; do not rely on
-  chat history alone for subagent context.
-
-## Delegated Review And Completion Audit Rules
-
-- A delegated subagent review only counts as evidence after it returns a completed result and the
-  main agent inspects its findings or changes.
-- A timed-out, shutdown, interrupted, or non-returning subagent produces no completion evidence.
-- If delegated review was intended but does not complete, the main agent must run an explicit
-  substitute completion audit before claiming the affected goal, plan, or milestone is complete.
-- The substitute audit must derive requirements from the objective, user request, active plan, and
-  repository rules, then map each requirement to current-state evidence.
-- Documentation-only architecture, governance, and docs-behavior work must at minimum run git
-  status, diff hygiene, document inventory, internal link checks, and draft-marker scans before
-  completion is claimed.
-- Follow [Review And Verification Governance](docs/architecture/review-and-verification-governance.md)
-  for delegated review states, substitute audit requirements, and final reporting rules.
-
-## Build Artifact Rules
-
-- Do not run builds that write `build/`, `install/`, `log/`, virtual environments, wheels, or cache
-  directories into the repository root by default.
-- The repository must normally live under a workspace layout:
-  `grcl-platform_ws/src/grcl-platform`.
-- Local scripts must use an out-of-source artifact root. The default local artifact root is the
-  workspace-local directory `grcl-platform_ws/artifacts`.
-- The artifact directory is generated state. It may be absent or deleted, and scripts must create it
-  on demand before writing outputs.
-- Scripts must allow `GRCL_PLATFORM_ARTIFACT_ROOT` to override the default artifact root.
-- Colcon commands must pass explicit `--build-base`, `--install-base`, and `--log-base` paths under
-  the artifact root.
-- CMake commands must use explicit `-B` build directories under the artifact root.
-- CI should use `$RUNNER_TEMP/grcl-platform-artifacts` or an equivalent runner-local temp
-  directory.
+## 构建产物规则
+- 默认不在仓库根写入构建产物（`build/`、`install/`、`log/`、虚拟环境、缓存、wheel 等）。
+- 默认产物根：`grcl-platform_ws/artifacts`；可被 `GRCL_PLATFORM_ARTIFACT_ROOT` 覆盖。
+- `colcon` 必须显式使用产物根下的 `--build-base`、`--install-base`、`--log-base`。
+- `cmake` 必须使用 `-B <artifact_root/...>` 做 out-of-source 构建。
